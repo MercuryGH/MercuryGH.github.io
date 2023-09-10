@@ -157,6 +157,118 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="from Mercury">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">占坑问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-09-10 09:44:59 / Modified: 09:45:38" itemprop="dateCreated datePublished" datetime="2023-09-10T09:44:59+08:00">2023-09-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给定<span class="math inline">\(n\)</span>个球和<span class="math inline">\(n\)</span>个盒子，每个球会被串行地随机分配到一个盒子中。</p>
+<ol type="1">
+<li>求空盒的期望数目。</li>
+<li>求每个盒子装有的球的期望数目。</li>
+<li>若每个盒子都会在它已经装有<span class="math inline">\(1\)</span>个球时，拒绝装下其他的球，然后被拒绝的球消失。求消失的球的期望数目。</li>
+</ol>
+<p><strong>注：每个问题的条件相互独立。默认情况下，每个盒子可装任意多个球。</strong></p>
+<h2 id="解答">解答</h2>
+<ol type="1">
+<li>记<span class="math inline">\(X_i\in\{0,1\}\)</span>表示“第<span class="math inline">\(i\)</span>个盒子为空盒”，则</li>
+</ol>
+<p><span class="math display">\[
+P(X_i = 1) = \left(\frac{n - 1}{n} \right)^n
+\]</span></p>
+<p>故<span class="math inline">\(E(X_i)=\left(\frac{n - 1}{n} \right)^n\)</span>，空盒的期望数目<span class="math inline">\(E(\sum X_i) = \sum E(X_i) = n\left(\frac{n - 1}{n} \right)^n\)</span>。当<span class="math inline">\(n\)</span>充分大时，<span class="math inline">\(E(\sum X_i) = \frac{n}{\mathrm e}\)</span>。</p>
+<ol start="2" type="1">
+<li>记<span class="math inline">\(Y_i \in \{0,1\}\)</span>表示“第<span class="math inline">\(j\)</span>个盒子装有第<span class="math inline">\(i\)</span>个球”（由对称性，<span class="math inline">\(Y_i\)</span>与<span class="math inline">\(j\)</span>无关），则<span class="math inline">\(P(Y_i= 1) = \frac{1}{n}\)</span>。故每个盒子装有的球的期望数目为</li>
+</ol>
+<p><span class="math display">\[
+E(\sum Y_i) = \sum E(Y_i) = n \cdot \frac{1}{n} = 1.
+\]</span></p>
+<p>注意：若考虑用期望的定义计算：记<span class="math inline">\(T\)</span>表示“第<span class="math inline">\(j\)</span>个盒子里的球的数目”，则</p>
+<p><span class="math display">\[
+E(T) = 0 \cdot P(T=0) + 1 \cdot P(T=1) + \dots + n \cdot P(T=n) = \sum_{i=1}^n i P(T=i).
+\]</span></p>
+<p>而且我们已经知道<span class="math inline">\(E(T) = 1\)</span>。这个式子在下一题是有用的。</p>
+<ol start="3" type="1">
+<li>等价地，将题目的条件转化为：先假设每个盒子可装任意多个球，装完后，再统一地让超出容积的盒子里面的球消失。具体而言，在装完<span class="math inline">\(n\)</span>个球后，对第<span class="math inline">\(j\)</span>个盒子，若该盒子中装有<span class="math inline">\(k(k &gt; 1)\)</span>个球，则抛弃<span class="math inline">\(k - 1\)</span>个球，否则不抛弃。</li>
+</ol>
+<p>记<span class="math inline">\(S\)</span>表示“如此做后，第<span class="math inline">\(j\)</span>个盒子抛弃的球的个数”，由期望的线性性质，我们只需求<span class="math inline">\(nE(S)\)</span>。首先显然有</p>
+<p><span class="math display">\[
+E(S) = 1 \cdot P(S=1) + 2 \cdot P(S=2) + \dots + (n-1) \cdot P(S=n-1).
+\]</span></p>
+<p>注意到当<span class="math inline">\(S \geq 1\)</span>时，<span class="math inline">\(S\)</span>和<span class="math inline">\(T\)</span>的关系满足<span class="math inline">\(S = T - 1\)</span>。于是</p>
+<p><span class="math display">\[
+\begin{aligned}
+E(S) &amp;= 1 \cdot P(T = 2) + 2 \cdot P(T=3) + \dots + (n-1) \cdot P(T=n) \\
+&amp;= \sum_{i=1}^n (i-1)P(T=i)\\
+&amp;= \sum_{i=1}^n i P(T=i) - \sum_{i=1}^n P(T=i). \\
+&amp;= 1- (1- P(T=0)) \\
+&amp;= P(T=0) \\
+&amp;= \frac{n}{\mathrm e}.
+\end{aligned}
+\]</span></p>
+<p><strong>另解</strong></p>
+<p>由于在这种情况下，所有有球的盒子里都有且只有<span class="math inline">\(1\)</span>个球，所以在所有球都分配完毕后，有</p>
+<p><span class="math display">\[
+非空盒的数目 = 未消失的球的数目
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+空盒的数目 = 消失的球的数目。
+\]</span></p>
+<p>所以答案是空盒的期望数目。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/28/%E6%97%A0%E9%99%90%E9%87%8D%E6%8E%B7%E9%AA%B0%E5%AD%90%E7%9A%84%E6%94%B6%E7%9B%8A%E6%9C%9F%E6%9C%9B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -182,7 +294,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-07-28 21:06:10 / Modified: 21:07:24" itemprop="dateCreated datePublished" datetime="2023-07-28T21:06:10+08:00">2023-07-28</time>
+              <time title="Created: 2023-07-28 21:06:10 / Modified: 21:10:25" itemprop="dateCreated datePublished" datetime="2023-07-28T21:06:10+08:00">2023-07-28</time>
             </span>
 
           
@@ -242,7 +354,7 @@ E^* = \frac{N - e + 1}{N} \cdot \frac{N + e}{2} + \frac{e - 1}{N}(E^* - 1)
 <p><span class="math display">\[
 E^* = \frac{N^2+N+2-e-e^2}{2(N-e+2)}
 \]</span></p>
-<p>其中<span class="math inline">\(e \in \Z\)</span>，表示我们能接受的最差的采样结果。直觉上，<span class="math inline">\(e = \lceil E \rceil\)</span>或<span class="math inline">\(e = \lfloor E \rfloor\)</span>，然后需要代入上式求解<span class="math inline">\(E^*\)</span>。</p>
+<p>其中<span class="math inline">\(e \in \mathbb Z\)</span>，表示我们能接受的最差的采样结果。直觉上，<span class="math inline">\(e = \lceil E \rceil\)</span>或<span class="math inline">\(e = \lfloor E \rfloor\)</span>，然后需要代入上式求解<span class="math inline">\(E^*\)</span>。</p>
 <p>对于<span class="math inline">\(N = 100\)</span>的特例，我们计算一个具体的<span class="math inline">\(E^*\)</span>。首先</p>
 <p><span class="math display">\[
 E = 101 - 10\sqrt{2} \approx 86.8,
@@ -820,7 +932,7 @@ P(\xi = n) = \frac{(n-x)x^{n-1}}{n!},
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
