@@ -157,6 +157,201 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="from Mercury">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">兰彻斯特作战模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-12 16:42:26 / Modified: 16:42:52" itemprop="dateCreated datePublished" datetime="2023-10-12T16:42:26+08:00">2023-10-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.math.fsu.edu/~mesterto/NewCourses/MAP5932/2016/Notes/lecture02.pdf">MAP5932(MOW).dvi (fsu.edu)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27768067">策划冷知识--兰切斯特规律是个什么鬼？ - 知乎 (zhihu.com)</a></p>
+</blockquote>
+<p>考虑两军交战：</p>
+<ul>
+<li><span class="math inline">\(x(t)\)</span>，<span class="math inline">\(y(t)\)</span>分别表示<span class="math inline">\(t\)</span>时刻，甲方和乙方的兵力；</li>
+<li><span class="math inline">\(a\)</span>，<span class="math inline">\(b\)</span>分别表示乙、甲两方的单兵（作战单位）平均毁伤率。</li>
+</ul>
+<h2 id="第一线性律">第一线性律</h2>
+<p>第一线性律认为，战斗是一对一的，即在双方战线上战斗的士兵数目基本相同，且基本不变。进一步可认为始终双方仅派出一个作战单位对战。在此假设下，毁伤率仅与单兵毁伤率有关，对甲军兵力分析，有</p>
+<p><span class="math display">\[
+x(t) - x(t + \Delta t) = a \Delta t,
+\]</span></p>
+<p>令<span class="math inline">\(\Delta t \to 0\)</span>对称分析，可推导出系统微分方程组：</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm dt} = -a, \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b, \\
+\]</span></p>
+<p>初值条件<span class="math inline">\(x(0) = x_0, y(0) = y_0\)</span>为双方已知的起始兵力。</p>
+<p>该微分方程组是平凡的，<span class="math inline">\(x(t)\)</span>和<span class="math inline">\(y(t)\)</span>均为直线。</p>
+<h2 id="第二线性律">第二线性律</h2>
+<p>第二线性律用于仅进行炮火覆盖，而无直接短兵相接的情况。假设平均毁伤率</p>
+<ul>
+<li>与敌军当前剩余兵力成正比，因为剩余敌军越少，炮火覆盖的杀伤效果越差，</li>
+<li>与我军当前兵力成正比，因为我军兵力越多，炮火越密集。</li>
+</ul>
+<p>那么，对甲军兵力分析，有</p>
+<p><span class="math display">\[
+x(t) - x(t + \Delta t) = a x(t) y(t) \Delta t,
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm dt} = -a x(t) y(t), \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b x(t) y(t).
+\]</span></p>
+<p>进一步地，有</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm d y(t)} = \frac{a}{b},
+\]</span></p>
+<p>即<span class="math inline">\(x(t), y(t)\)</span>间成线性关系。</p>
+<p>下面推导解析表达。由线性关系可知</p>
+<p><span class="math display">\[
+x(t) = \frac{a}{b}y(t) + C,
+\]</span></p>
+<p>令<span class="math inline">\(t = 0\)</span>，代入初值条件得<span class="math inline">\(C = x_0 - \frac{a}{b}y_0\)</span>。故</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\mathrm d y(t)}{\mathrm dt} &amp;= -b x(t) y(t) \\ &amp;= -b \left (\frac{a}{b} y(t) + x_0 - \frac{a}{b}y_0 \right) y(t) \\ &amp;= -a y^2(t) - (bx_0 -ay_0 ) y(t).
+\end{aligned}
+\]</span></p>
+<p>解这个微分方程，可以令<span class="math inline">\(z = \frac{1}{y}\)</span>，化为一阶线性微分方程求解。解得</p>
+<p><span class="math display">\[
+y(t) = \frac{y_0 (k-1)}{k \mathrm e^{ay_0 (k-1)t} - 1}, \\
+x(t) = \frac{x_0 (1-k)}{ \mathrm e^{ay_0 (1-k)t} - k}.
+\]</span></p>
+<p>其中<span class="math inline">\(k = \frac{bx_0}{ay_0}\)</span>。当<span class="math inline">\(k = 1\)</span>时，上式为<span class="math inline">\(\frac{0}{0}\)</span>形式，可用洛必达法则得出</p>
+<p><span class="math display">\[
+y(t) = \frac{y_0}{ay_0 t + 1}, \\
+x(t) = \frac{x_0}{ay_0 t + 1}.
+\]</span></p>
+<p>求解出的函数<span class="math inline">\(x(t), y(t)\)</span>均呈衰减曲线，不存在零点，与炮火覆盖的假设相符。</p>
+<h2 id="平方律">平方律</h2>
+<p>平方律用于一般的直瞄射击情况。设双方的每件武器对敌方进行直瞄射击，一旦毁伤目标，则立即转移火力，向下一目标射击。双方的射击流都是泊松流。故平均毁伤率</p>
+<ul>
+<li>与我军当前兵力成正比，而与敌军当前兵力无关</li>
+</ul>
+<p>那么</p>
+<p><span class="math display">\[
+x(t) - x(t + \Delta t) = ay(t) \Delta t,
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t), \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b x(t).
+\]</span></p>
+<p>有</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm d y(t)} = \frac{ay(t)}{bx(t)},
+\]</span></p>
+<p>分离变量，两边积分得到</p>
+<p><span class="math display">\[
+bx^2(t) - ay^2(t) = C,
+\]</span></p>
+<p>令<span class="math inline">\(t=0\)</span>得<span class="math inline">\(C = bx_0^2 - ay_0^2\)</span>。故</p>
+<p><span class="math display">\[
+bx^2(t) - ay^2(t) = bx_0^2 - ay_0^2.
+\]</span></p>
+<p>下面推导解析表达。由</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t),
+\]</span></p>
+<p>两边对<span class="math inline">\(t\)</span>求导得</p>
+<p><span class="math display">\[
+\frac{\mathrm d^2 x(t)}{\mathrm dt^2} = -a\frac{\mathrm d y(t)}{\mathrm dt} = -abx(t).
+\]</span></p>
+<p>上述微分方程的特征方程为<span class="math inline">\(x^2 +ab = 0\)</span>，两根<span class="math inline">\(x = \pm \sqrt{ab}\)</span>，通解为<span class="math inline">\(x(t) = C_1 \mathrm e^{\sqrt{ab}t} + C_2 \mathrm e^{-\sqrt{ab}t}\)</span>。</p>
+<ul>
+<li>令<span class="math inline">\(t = 0\)</span>得<span class="math inline">\(C_1 + C_2 = x_0\)</span>，</li>
+<li>对<span class="math inline">\(t\)</span>求导后，有<span class="math inline">\(\frac{\mathrm d x(t)}{\mathrm dt} = \sqrt{ab}(C_1 \mathrm e^{\sqrt{ab}t} - C_2 \mathrm e^{-\sqrt{ab}t}) = -ay(t)\)</span>，令<span class="math inline">\(t=0\)</span>得<span class="math inline">\(\sqrt{ab}(C_1-C_2) = -ay_0\)</span>，</li>
+</ul>
+<p>解得<span class="math inline">\(C_1,C_2\)</span>，代回<span class="math inline">\(x(t)\)</span>得</p>
+<p><span class="math display">\[
+x(t) = \frac{1}{2}\left( \left(x_0 - \sqrt{\frac{a}{b}}y_0\right) \mathrm e^{\sqrt{ab}t} + \left(x_0 + \sqrt{\frac{a}{b}}y_0\right) \mathrm e^{-\sqrt{ab}t} \right).
+\]</span></p>
+<p>利用双曲函数表达，有</p>
+<p><span class="math display">\[
+x(t) = x_0 \cosh(\sqrt{ab} t) - \sqrt{\frac{a}{b}} y_0 \sinh(\sqrt{ab} t),
+\]</span></p>
+<p>由对称性得</p>
+<p><span class="math display">\[
+y(t) = y_0 \cosh(\sqrt{ab} t) - \sqrt{\frac{b}{a}} x_0 \sinh(\sqrt{ab} t).
+\]</span></p>
+<p>当<span class="math inline">\(x(t)\)</span>存在零点<span class="math inline">\(T\)</span>时，<span class="math inline">\(y&#39;(t)\)</span>满足<span class="math inline">\(y&#39;(T) = 0\)</span>，此零点即为战斗结束，甲方全军覆没，乙方获胜之时。令<span class="math inline">\(x(t) = 0, k = \mathrm e^{\sqrt{ab} t}\)</span>，得</p>
+<p><span class="math display">\[
+k = \sqrt \frac{\sqrt {ab} x_0y_0}{\sqrt{a} y_0 - \sqrt b x_0}, \\
+T = \frac{1}{2\sqrt{ab}} \ln \left( \frac{\sqrt {ab} x_0y_0}{\sqrt{a} y_0 - \sqrt b x_0}\right).
+\]</span></p>
+<p>最后，乙方剩余兵力可代入式<span class="math inline">\(bx^2(t) - ay^2(t) = bx_0^2 - ay_0^2\)</span>计算，为</p>
+<p><span class="math display">\[
+y(T) = \sqrt{ y_0^2 - \frac{b}{a}x_0^2 }.
+\]</span></p>
+<p>定量分析可得出如下结论：</p>
+<ul>
+<li>若<span class="math inline">\(ay_0^2 &gt; bx_0^2\)</span>，则对任意<span class="math inline">\(t\)</span>，有<span class="math inline">\(ay^2(t) &gt; bx^2(t)\)</span>，最终<span class="math inline">\(x(t)\)</span>在经过时间<span class="math inline">\(T\)</span>后变成<span class="math inline">\(0\)</span>，甲方被歼灭，乙方获胜。</li>
+<li>反之，若<span class="math inline">\(ay_0^2 &lt; bx_0^2\)</span>，则甲方获胜。</li>
+<li>若<span class="math inline">\(bx_0^2 = ay_0^2\)</span>，则双方同归于尽。</li>
+</ul>
+<h3 id="平方律下的战争代价">平方律下的战争代价</h3>
+<p>在乙方获胜的前提下，设乙方每投入一个战斗单位得代价为<span class="math inline">\(c_1\)</span>，每阵亡一个战斗单位得代价为<span class="math inline">\(c_2\)</span>，则乙方在战斗结束后，付出的总代价为</p>
+<p><span class="math display">\[
+f(y_0) = c_1 y_0 + c_2\sqrt{ y_0^2 - \frac{b}{a}x_0^2 }
+\]</span></p>
+<p>求<span class="math inline">\(\min f\)</span>，得使得代价最小化的战争投入</p>
+<p><span class="math display">\[
+y_0^* = \frac{\sqrt{b} (1 + \frac{c_2}{c_1})x_0}{\sqrt a \sqrt{1 + 2 \frac{c_2}{c_1}}}.
+\]</span></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/01/%E9%9D%A2%E8%AF%95%E6%8E%92%E7%8F%AD%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1024,14 +1219,14 @@ P(\xi = n) = \frac{(n-x)x^{n-1}}{n!},
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
