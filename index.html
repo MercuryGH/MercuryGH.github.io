@@ -180,10 +180,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-10-12 16:42:26 / Modified: 16:42:52" itemprop="dateCreated datePublished" datetime="2023-10-12T16:42:26+08:00">2023-10-12</time>
+              <time title="Created: 2023-10-12 16:42:26" itemprop="dateCreated datePublished" datetime="2023-10-12T16:42:26+08:00">2023-10-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-20 13:51:23" itemprop="dateModified" datetime="2023-10-20T13:51:23+08:00">2023-10-20</time>
+              </span>
 
           
 
@@ -205,135 +211,14 @@
 <li><span class="math inline">\(x(t)\)</span>，<span class="math inline">\(y(t)\)</span>分别表示<span class="math inline">\(t\)</span>时刻，甲方和乙方的兵力；</li>
 <li><span class="math inline">\(a\)</span>，<span class="math inline">\(b\)</span>分别表示乙、甲两方的单兵（作战单位）平均毁伤率。</li>
 </ul>
-<h2 id="第一线性律">第一线性律</h2>
-<p>第一线性律认为，战斗是一对一的，即在双方战线上战斗的士兵数目基本相同，且基本不变。进一步可认为始终双方仅派出一个作战单位对战。在此假设下，毁伤率仅与单兵毁伤率有关，对甲军兵力分析，有</p>
-<p><span class="math display">\[
-x(t) - x(t + \Delta t) = a \Delta t,
-\]</span></p>
-<p>令<span class="math inline">\(\Delta t \to 0\)</span>对称分析，可推导出系统微分方程组：</p>
-<p><span class="math display">\[
-\frac{\mathrm d x(t)}{\mathrm dt} = -a, \\
-\frac{\mathrm d y(t)}{\mathrm dt} = -b, \\
-\]</span></p>
-<p>初值条件<span class="math inline">\(x(0) = x_0, y(0) = y_0\)</span>为双方已知的起始兵力。</p>
-<p>该微分方程组是平凡的，<span class="math inline">\(x(t)\)</span>和<span class="math inline">\(y(t)\)</span>均为直线。</p>
-<h2 id="第二线性律">第二线性律</h2>
-<p>第二线性律用于仅进行炮火覆盖，而无直接短兵相接的情况。假设平均毁伤率</p>
-<ul>
-<li>与敌军当前剩余兵力成正比，因为剩余敌军越少，炮火覆盖的杀伤效果越差，</li>
-<li>与我军当前兵力成正比，因为我军兵力越多，炮火越密集。</li>
-</ul>
-<p>那么，对甲军兵力分析，有</p>
-<p><span class="math display">\[
-x(t) - x(t + \Delta t) = a x(t) y(t) \Delta t,
-\]</span></p>
-<p>故</p>
-<p><span class="math display">\[
-\frac{\mathrm d x(t)}{\mathrm dt} = -a x(t) y(t), \\
-\frac{\mathrm d y(t)}{\mathrm dt} = -b x(t) y(t).
-\]</span></p>
-<p>进一步地，有</p>
-<p><span class="math display">\[
-\frac{\mathrm d x(t)}{\mathrm d y(t)} = \frac{a}{b},
-\]</span></p>
-<p>即<span class="math inline">\(x(t), y(t)\)</span>间成线性关系。</p>
-<p>下面推导解析表达。由线性关系可知</p>
-<p><span class="math display">\[
-x(t) = \frac{a}{b}y(t) + C,
-\]</span></p>
-<p>令<span class="math inline">\(t = 0\)</span>，代入初值条件得<span class="math inline">\(C = x_0 - \frac{a}{b}y_0\)</span>。故</p>
-<p><span class="math display">\[
-\begin{aligned}
-\frac{\mathrm d y(t)}{\mathrm dt} &amp;= -b x(t) y(t) \\ &amp;= -b \left (\frac{a}{b} y(t) + x_0 - \frac{a}{b}y_0 \right) y(t) \\ &amp;= -a y^2(t) - (bx_0 -ay_0 ) y(t).
-\end{aligned}
-\]</span></p>
-<p>解这个微分方程，可以令<span class="math inline">\(z = \frac{1}{y}\)</span>，化为一阶线性微分方程求解。解得</p>
-<p><span class="math display">\[
-y(t) = \frac{y_0 (k-1)}{k \mathrm e^{ay_0 (k-1)t} - 1}, \\
-x(t) = \frac{x_0 (1-k)}{ \mathrm e^{ay_0 (1-k)t} - k}.
-\]</span></p>
-<p>其中<span class="math inline">\(k = \frac{bx_0}{ay_0}\)</span>。当<span class="math inline">\(k = 1\)</span>时，上式为<span class="math inline">\(\frac{0}{0}\)</span>形式，可用洛必达法则得出</p>
-<p><span class="math display">\[
-y(t) = \frac{y_0}{ay_0 t + 1}, \\
-x(t) = \frac{x_0}{ay_0 t + 1}.
-\]</span></p>
-<p>求解出的函数<span class="math inline">\(x(t), y(t)\)</span>均呈衰减曲线，不存在零点，与炮火覆盖的假设相符。</p>
-<h2 id="平方律">平方律</h2>
-<p>平方律用于一般的直瞄射击情况。设双方的每件武器对敌方进行直瞄射击，一旦毁伤目标，则立即转移火力，向下一目标射击。双方的射击流都是泊松流。故平均毁伤率</p>
-<ul>
-<li>与我军当前兵力成正比，而与敌军当前兵力无关</li>
-</ul>
-<p>那么</p>
-<p><span class="math display">\[
-x(t) - x(t + \Delta t) = ay(t) \Delta t,
-\]</span></p>
-<p>故</p>
-<p><span class="math display">\[
-\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t), \\
-\frac{\mathrm d y(t)}{\mathrm dt} = -b x(t).
-\]</span></p>
-<p>有</p>
-<p><span class="math display">\[
-\frac{\mathrm d x(t)}{\mathrm d y(t)} = \frac{ay(t)}{bx(t)},
-\]</span></p>
-<p>分离变量，两边积分得到</p>
-<p><span class="math display">\[
-bx^2(t) - ay^2(t) = C,
-\]</span></p>
-<p>令<span class="math inline">\(t=0\)</span>得<span class="math inline">\(C = bx_0^2 - ay_0^2\)</span>。故</p>
-<p><span class="math display">\[
-bx^2(t) - ay^2(t) = bx_0^2 - ay_0^2.
-\]</span></p>
-<p>下面推导解析表达。由</p>
-<p><span class="math display">\[
-\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t),
-\]</span></p>
-<p>两边对<span class="math inline">\(t\)</span>求导得</p>
-<p><span class="math display">\[
-\frac{\mathrm d^2 x(t)}{\mathrm dt^2} = -a\frac{\mathrm d y(t)}{\mathrm dt} = -abx(t).
-\]</span></p>
-<p>上述微分方程的特征方程为<span class="math inline">\(x^2 +ab = 0\)</span>，两根<span class="math inline">\(x = \pm \sqrt{ab}\)</span>，通解为<span class="math inline">\(x(t) = C_1 \mathrm e^{\sqrt{ab}t} + C_2 \mathrm e^{-\sqrt{ab}t}\)</span>。</p>
-<ul>
-<li>令<span class="math inline">\(t = 0\)</span>得<span class="math inline">\(C_1 + C_2 = x_0\)</span>，</li>
-<li>对<span class="math inline">\(t\)</span>求导后，有<span class="math inline">\(\frac{\mathrm d x(t)}{\mathrm dt} = \sqrt{ab}(C_1 \mathrm e^{\sqrt{ab}t} - C_2 \mathrm e^{-\sqrt{ab}t}) = -ay(t)\)</span>，令<span class="math inline">\(t=0\)</span>得<span class="math inline">\(\sqrt{ab}(C_1-C_2) = -ay_0\)</span>，</li>
-</ul>
-<p>解得<span class="math inline">\(C_1,C_2\)</span>，代回<span class="math inline">\(x(t)\)</span>得</p>
-<p><span class="math display">\[
-x(t) = \frac{1}{2}\left( \left(x_0 - \sqrt{\frac{a}{b}}y_0\right) \mathrm e^{\sqrt{ab}t} + \left(x_0 + \sqrt{\frac{a}{b}}y_0\right) \mathrm e^{-\sqrt{ab}t} \right).
-\]</span></p>
-<p>利用双曲函数表达，有</p>
-<p><span class="math display">\[
-x(t) = x_0 \cosh(\sqrt{ab} t) - \sqrt{\frac{a}{b}} y_0 \sinh(\sqrt{ab} t),
-\]</span></p>
-<p>由对称性得</p>
-<p><span class="math display">\[
-y(t) = y_0 \cosh(\sqrt{ab} t) - \sqrt{\frac{b}{a}} x_0 \sinh(\sqrt{ab} t).
-\]</span></p>
-<p>当<span class="math inline">\(x(t)\)</span>存在零点<span class="math inline">\(T\)</span>时，<span class="math inline">\(y&#39;(t)\)</span>满足<span class="math inline">\(y&#39;(T) = 0\)</span>，此零点即为战斗结束，甲方全军覆没，乙方获胜之时。令<span class="math inline">\(x(t) = 0, k = \mathrm e^{\sqrt{ab} t}\)</span>，得</p>
-<p><span class="math display">\[
-k = \sqrt \frac{\sqrt {ab} x_0y_0}{\sqrt{a} y_0 - \sqrt b x_0}, \\
-T = \frac{1}{2\sqrt{ab}} \ln \left( \frac{\sqrt {ab} x_0y_0}{\sqrt{a} y_0 - \sqrt b x_0}\right).
-\]</span></p>
-<p>最后，乙方剩余兵力可代入式<span class="math inline">\(bx^2(t) - ay^2(t) = bx_0^2 - ay_0^2\)</span>计算，为</p>
-<p><span class="math display">\[
-y(T) = \sqrt{ y_0^2 - \frac{b}{a}x_0^2 }.
-\]</span></p>
-<p>定量分析可得出如下结论：</p>
-<ul>
-<li>若<span class="math inline">\(ay_0^2 &gt; bx_0^2\)</span>，则对任意<span class="math inline">\(t\)</span>，有<span class="math inline">\(ay^2(t) &gt; bx^2(t)\)</span>，最终<span class="math inline">\(x(t)\)</span>在经过时间<span class="math inline">\(T\)</span>后变成<span class="math inline">\(0\)</span>，甲方被歼灭，乙方获胜。</li>
-<li>反之，若<span class="math inline">\(ay_0^2 &lt; bx_0^2\)</span>，则甲方获胜。</li>
-<li>若<span class="math inline">\(bx_0^2 = ay_0^2\)</span>，则双方同归于尽。</li>
-</ul>
-<h3 id="平方律下的战争代价">平方律下的战争代价</h3>
-<p>在乙方获胜的前提下，设乙方每投入一个战斗单位得代价为<span class="math inline">\(c_1\)</span>，每阵亡一个战斗单位得代价为<span class="math inline">\(c_2\)</span>，则乙方在战斗结束后，付出的总代价为</p>
-<p><span class="math display">\[
-f(y_0) = c_1 y_0 + c_2\sqrt{ y_0^2 - \frac{b}{a}x_0^2 }
-\]</span></p>
-<p>求<span class="math inline">\(\min f\)</span>，得使得代价最小化的战争投入</p>
-<p><span class="math display">\[
-y_0^* = \frac{\sqrt{b} (1 + \frac{c_2}{c_1})x_0}{\sqrt a \sqrt{1 + 2 \frac{c_2}{c_1}}}.
-\]</span></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -375,10 +260,16 @@ y_0^* = \frac{\sqrt{b} (1 + \frac{c_2}{c_1})x_0}{\sqrt a \sqrt{1 + 2 \frac{c_2}{
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-10-01 18:39:52 / Modified: 18:40:47" itemprop="dateCreated datePublished" datetime="2023-10-01T18:39:52+08:00">2023-10-01</time>
+              <time title="Created: 2023-10-01 18:39:52" itemprop="dateCreated datePublished" datetime="2023-10-01T18:39:52+08:00">2023-10-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-20 13:52:03" itemprop="dateModified" datetime="2023-10-20T13:52:03+08:00">2023-10-20</time>
+              </span>
 
           
 
@@ -397,28 +288,14 @@ y_0^* = \frac{\sqrt{b} (1 + \frac{c_2}{c_1})x_0}{\sqrt a \sqrt{1 + 2 \frac{c_2}{
 <li>第<span class="math inline">\(j\)</span>场面试最多可容纳<span class="math inline">\(a_j\)</span>人。</li>
 </ul>
 <p>问是否存在方案，使得每个人都能参与面试。</p>
-<p><strong>例1</strong> <span class="math inline">\(n=3, m = 4\)</span>，</p>
-<p><span class="math display">\[
-S_1 = \{1, 2\}, \\
-S_2 = \{1, 3,4\}, \\
-S_3 = \{2\}, \\
-a_m = \{ 1, 1, 1, 2 \}
-\]</span></p>
-<p>存在方案<span class="math inline">\(\{(1, 1), (2, 4), (3, 2)\}\)</span>或<span class="math inline">\(\{(1, 1), (2, 3), (3, 2)\}\)</span>，使得每个人都能参与面试，其中数对<span class="math inline">\((i, j)\)</span>表示安排第<span class="math inline">\(i\)</span>个人参与第<span class="math inline">\(j\)</span>场面试。</p>
-<h2 id="解答">解答</h2>
-<p>暴力搜索，时间复杂度<span class="math inline">\(O(\prod |S_i|)\)</span>。</p>
-<hr />
-<p>正解：转换为无权二分图最大匹配问题：</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1G54y157HA/">14-2: 无权二部图中的最大匹配 Maximum-Cardinality Bipartite Matching (MCBM)_哔哩哔哩_bilibili</a></p>
-</blockquote>
-<p>首先，为每人建立一个顶点，为左图。</p>
-<p>记容纳<span class="math inline">\(a_j\)</span>个人的面试场次为<span class="math inline">\(a_j\)</span>个顶点，为所有面试场次建立<span class="math inline">\(\sum a_j\)</span>个顶点，为右图。</p>
-<p>若<span class="math inline">\(S_i\)</span>包含<span class="math inline">\(j\)</span>，则从左图顶点<span class="math inline">\(i\)</span>引<span class="math inline">\(a_j\)</span>条边，至第<span class="math inline">\(j\)</span>场面试建立的顶点。</p>
-<p>那么，问题转换为求该无权二分图的最大匹配。</p>
-<p>本题不能使用匈牙利算法求解，因为左图和右图顶点数不同。</p>
-<p>可归约到最大流问题后，用最大流算法求解。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/01/%E9%9D%A2%E8%AF%95%E6%8E%92%E7%8F%AD%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -460,10 +337,16 @@ a_m = \{ 1, 1, 1, 2 \}
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-09-10 09:44:59 / Modified: 09:45:38" itemprop="dateCreated datePublished" datetime="2023-09-10T09:44:59+08:00">2023-09-10</time>
+              <time title="Created: 2023-09-10 09:44:59" itemprop="dateCreated datePublished" datetime="2023-09-10T09:44:59+08:00">2023-09-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-20 13:51:29" itemprop="dateModified" datetime="2023-10-20T13:51:29+08:00">2023-10-20</time>
+              </span>
 
           
 
@@ -482,55 +365,14 @@ a_m = \{ 1, 1, 1, 2 \}
 <li>求每个盒子装有的球的期望数目。</li>
 <li>若每个盒子都会在它已经装有<span class="math inline">\(1\)</span>个球时，拒绝装下其他的球，然后被拒绝的球消失。求消失的球的期望数目。</li>
 </ol>
-<p><strong>注：每个问题的条件相互独立。默认情况下，每个盒子可装任意多个球。</strong></p>
-<h2 id="解答">解答</h2>
-<ol type="1">
-<li>记<span class="math inline">\(X_i\in\{0,1\}\)</span>表示“第<span class="math inline">\(i\)</span>个盒子为空盒”，则</li>
-</ol>
-<p><span class="math display">\[
-P(X_i = 1) = \left(\frac{n - 1}{n} \right)^n
-\]</span></p>
-<p>故<span class="math inline">\(E(X_i)=\left(\frac{n - 1}{n} \right)^n\)</span>，空盒的期望数目<span class="math inline">\(E(\sum X_i) = \sum E(X_i) = n\left(\frac{n - 1}{n} \right)^n\)</span>。当<span class="math inline">\(n\)</span>充分大时，<span class="math inline">\(E(\sum X_i) = \frac{n}{\mathrm e}\)</span>。</p>
-<ol start="2" type="1">
-<li>记<span class="math inline">\(Y_i \in \{0,1\}\)</span>表示“第<span class="math inline">\(j\)</span>个盒子装有第<span class="math inline">\(i\)</span>个球”（由对称性，<span class="math inline">\(Y_i\)</span>与<span class="math inline">\(j\)</span>无关），则<span class="math inline">\(P(Y_i= 1) = \frac{1}{n}\)</span>。故每个盒子装有的球的期望数目为</li>
-</ol>
-<p><span class="math display">\[
-E(\sum Y_i) = \sum E(Y_i) = n \cdot \frac{1}{n} = 1.
-\]</span></p>
-<p>注意：若考虑用期望的定义计算：记<span class="math inline">\(T\)</span>表示“第<span class="math inline">\(j\)</span>个盒子里的球的数目”，则</p>
-<p><span class="math display">\[
-E(T) = 0 \cdot P(T=0) + 1 \cdot P(T=1) + \dots + n \cdot P(T=n) = \sum_{i=1}^n i P(T=i).
-\]</span></p>
-<p>而且我们已经知道<span class="math inline">\(E(T) = 1\)</span>。这个式子在下一题是有用的。</p>
-<ol start="3" type="1">
-<li>等价地，将题目的条件转化为：先假设每个盒子可装任意多个球，装完后，再统一地让超出容积的盒子里面的球消失。具体而言，在装完<span class="math inline">\(n\)</span>个球后，对第<span class="math inline">\(j\)</span>个盒子，若该盒子中装有<span class="math inline">\(k(k &gt; 1)\)</span>个球，则抛弃<span class="math inline">\(k - 1\)</span>个球，否则不抛弃。</li>
-</ol>
-<p>记<span class="math inline">\(S\)</span>表示“如此做后，第<span class="math inline">\(j\)</span>个盒子抛弃的球的个数”，由期望的线性性质，我们只需求<span class="math inline">\(nE(S)\)</span>。首先显然有</p>
-<p><span class="math display">\[
-E(S) = 1 \cdot P(S=1) + 2 \cdot P(S=2) + \dots + (n-1) \cdot P(S=n-1).
-\]</span></p>
-<p>注意到当<span class="math inline">\(S \geq 1\)</span>时，<span class="math inline">\(S\)</span>和<span class="math inline">\(T\)</span>的关系满足<span class="math inline">\(S = T - 1\)</span>。于是</p>
-<p><span class="math display">\[
-\begin{aligned}
-E(S) &amp;= 1 \cdot P(T = 2) + 2 \cdot P(T=3) + \dots + (n-1) \cdot P(T=n) \\
-&amp;= \sum_{i=1}^n (i-1)P(T=i)\\
-&amp;= \sum_{i=1}^n i P(T=i) - \sum_{i=1}^n P(T=i). \\
-&amp;= 1- (1- P(T=0)) \\
-&amp;= P(T=0) \\
-&amp;= \frac{n}{\mathrm e}.
-\end{aligned}
-\]</span></p>
-<p><strong>另解</strong></p>
-<p>由于在这种情况下，所有有球的盒子里都有且只有<span class="math inline">\(1\)</span>个球，所以在所有球都分配完毕后，有</p>
-<p><span class="math display">\[
-非空盒的数目 = 未消失的球的数目
-\]</span></p>
-<p>于是</p>
-<p><span class="math display">\[
-空盒的数目 = 消失的球的数目。
-\]</span></p>
-<p>所以答案是空盒的期望数目。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -572,10 +414,16 @@ E(S) &amp;= 1 \cdot P(T = 2) + 2 \cdot P(T=3) + \dots + (n-1) \cdot P(T=n) \\
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-07-28 21:06:10 / Modified: 21:10:25" itemprop="dateCreated datePublished" datetime="2023-07-28T21:06:10+08:00">2023-07-28</time>
+              <time title="Created: 2023-07-28 21:06:10" itemprop="dateCreated datePublished" datetime="2023-07-28T21:06:10+08:00">2023-07-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-20 13:51:37" itemprop="dateModified" datetime="2023-10-20T13:51:37+08:00">2023-10-20</time>
+              </span>
 
           
 
@@ -600,48 +448,14 @@ E(S) &amp;= 1 \cdot P(T = 2) + 2 \cdot P(T=3) + \dots + (n-1) \cdot P(T=n) \\
 <p>然后你可以接受<span class="math inline">\(a_2\)</span>，获取等量的收益，或者再次花费<span class="math inline">\(k\)</span>的代价重新采样。重新采样次数无限制。</p>
 <p>请给出一个最优策略，最大化获得的收益，并计算该策略下收益的数学期望。</p>
 <p>特例：<span class="math inline">\(D\)</span>为整数集<span class="math inline">\(\{1, \dots, 100\}\)</span>上的均匀分布，<span class="math inline">\(D=U(1,100)\)</span>等。</p>
-<h2 id="解答">解答</h2>
-<p>设投掷者在使用最优策略，且已经重采样了<span class="math inline">\(m\)</span>次，最近一次采样结果为<span class="math inline">\(n\)</span>时，应当进行的决策：</p>
-<ul>
-<li>若此时接受采样，则收益为<span class="math inline">\(n - km\)</span>。</li>
-<li>若此时仍选择重新采样，记在<span class="math inline">\(m=0\)</span>时的期望收益为<span class="math inline">\(E\)</span>，由马尔可夫性知，此时的期望收益为<span class="math inline">\(E - k(m + 1)\)</span>。</li>
-</ul>
-<p>要使收益最大化，我们可以有：当且仅当<span class="math inline">\(E - k(m + 1) &gt; n - km\)</span>，即<span class="math inline">\(n &lt; E - k\)</span>时，选择重新采样。可见该决策与<span class="math inline">\(m\)</span>无关。该不等式可以取等号。</p>
-<p>考虑<span class="math inline">\(m=0\)</span>时的决策：</p>
-<ul>
-<li>当<span class="math inline">\(n &gt; E - k\)</span>时，接受采样，获得<span class="math inline">\(n\)</span>的收益。<span class="math inline">\(E(n)\)</span>取决于<span class="math inline">\(D\)</span>在<span class="math inline">\([E-k, +\infty)\)</span>的条件分布；</li>
-<li>当<span class="math inline">\(n \leq E - k\)</span>时，重新采样，获得<span class="math inline">\(E - k\)</span>的收益。</li>
-</ul>
-<p>我们对<span class="math inline">\(D\)</span>为整数集<span class="math inline">\(\{1, \dots, N\}\)</span>上的均匀分布的特例进行计算：</p>
-<p><span class="math display">\[
-E = \frac{N - E + k}{N} \cdot \frac{N + E - k}{2} + \frac{E - k}{N}(E-k)
-\]</span></p>
-<p>其中<span class="math inline">\(\frac{N - E + k}{N}\)</span>为事件<span class="math inline">\(n &gt; E - k\)</span>发生的概率，<span class="math inline">\(\frac{N + E - k}{2}\)</span>为该事件下的条件期望<span class="math inline">\(E(n)\)</span>的大小。</p>
-<p>整理得到</p>
-<p><span class="math display">\[
-E^2 - (2k + 2N)E + N^2 + k^2 = 0.
-\]</span></p>
-<p>由求根公式得<span class="math inline">\(E = k + N \pm \sqrt{2kN}\)</span>。其中大根<span class="math inline">\(k + N + \sqrt{2kN} &gt; N\)</span>，故舍去。于是</p>
-<p><span class="math display">\[
-E = k + N - \sqrt{2kN}.
-\]</span></p>
-<p>但这一结果有一点小问题。原因在于，概率<span class="math inline">\(\frac{N - E + 1}{N}\)</span>是连续的，而非离散的。上式实际上是<span class="math inline">\(D = U(1, N)\)</span>时的结果。</p>
-<p>为方便计算，我们接下来只讨论<span class="math inline">\(k=1\)</span>的特例。若要离散化概率，我们需要修改方程为</p>
-<p><span class="math display">\[
-E^* = \frac{N - e + 1}{N} \cdot \frac{N + e}{2} + \frac{e - 1}{N}(E^* - 1)
-\]</span></p>
-<p>化简为</p>
-<p><span class="math display">\[
-E^* = \frac{N^2+N+2-e-e^2}{2(N-e+2)}
-\]</span></p>
-<p>其中<span class="math inline">\(e \in \mathbb Z\)</span>，表示我们能接受的最差的采样结果。直觉上，<span class="math inline">\(e = \lceil E \rceil\)</span>或<span class="math inline">\(e = \lfloor E \rfloor\)</span>，然后需要代入上式求解<span class="math inline">\(E^*\)</span>。</p>
-<p>对于<span class="math inline">\(N = 100\)</span>的特例，我们计算一个具体的<span class="math inline">\(E^*\)</span>。首先</p>
-<p><span class="math display">\[
-E = 101 - 10\sqrt{2} \approx 86.8,
-\]</span></p>
-<p>于是<span class="math inline">\(e = 86\)</span>或<span class="math inline">\(e = 87\)</span>。带入分别求得<span class="math inline">\(E^* = 87\frac{1}{3}, E^* = 87\frac{5}{14}\)</span>。</p>
-<p>由于<span class="math inline">\(\frac{5}{14} &gt; \frac{1}{3}\)</span>，故最优策略对应的<span class="math inline">\(e = 87\)</span>，<span class="math inline">\(E^* = 87\frac{5}{14}\)</span>。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/28/%E6%97%A0%E9%99%90%E9%87%8D%E6%8E%B7%E9%AA%B0%E5%AD%90%E7%9A%84%E6%94%B6%E7%9B%8A%E6%9C%9F%E6%9C%9B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -683,10 +497,16 @@ E = 101 - 10\sqrt{2} \approx 86.8,
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-07-18 13:43:08 / Modified: 13:49:31" itemprop="dateCreated datePublished" datetime="2023-07-18T13:43:08+08:00">2023-07-18</time>
+              <time title="Created: 2023-07-18 13:43:08" itemprop="dateCreated datePublished" datetime="2023-07-18T13:43:08+08:00">2023-07-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-20 13:51:52" itemprop="dateModified" datetime="2023-10-20T13:51:52+08:00">2023-10-20</time>
+              </span>
 
           
 
@@ -707,21 +527,14 @@ E = 101 - 10\sqrt{2} \approx 86.8,
 <p><span class="math display">\[
 \iiint _{V}\left(\mathbf {\nabla } \cdot \mathbf {F} \right) \, \mathrm d V= \iint_{\partial V}\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\;\subset\!\supset {\displaystyle (\mathbf {F} \cdot \mathbf {\hat {n}} )\, \mathrm dS.}
 \]</span></p>
-<h2 id="格林公式">格林公式</h2>
-<p><span class="math display">\[
-\iint _{S}\left(\mathbf {\nabla } \cdot \mathbf {F} \right) \, \mathrm d S= \oint_{\partial S} {\displaystyle (\mathbf {F} \cdot \mathbf {\hat {n}} )\, \mathrm d l.}
-\]</span></p>
-<h2 id="退化到一维">退化到一维</h2>
-<p><span class="math display">\[
-\int_a^b f&#39;(x) \, \mathrm d x = f(b) - f(a).
-\]</span></p>
-<h2 id="拉普拉斯算子形式">拉普拉斯算子形式</h2>
-<p>由于<span class="math inline">\(\mathbf \Delta u = \mathbf \nabla^2 u = \mathbf \nabla \cdot \mathbf \nabla u\)</span>，故以上均可写成拉普拉斯算子形式。以格林公式为例：</p>
-<p><span class="math display">\[
-\iint _{S}\left(\mathbf \Delta \mathbf {F} \right) \, \mathrm d S= \oint_{\partial S} {\displaystyle (\mathbf \nabla \mathbf {F} \cdot \mathbf {\hat {n}} )\, \mathrm d l.}
-\]</span></p>
-<p>这里的<span class="math inline">\(\mathbf F\)</span>实际上是原式取了梯度算子的<span class="math inline">\(\mathbf \nabla \mathbf F\)</span>。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -763,10 +576,16 @@ E = 101 - 10\sqrt{2} \approx 86.8,
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-07-18 13:35:21 / Modified: 13:38:10" itemprop="dateCreated datePublished" datetime="2023-07-18T13:35:21+08:00">2023-07-18</time>
+              <time title="Created: 2023-07-18 13:35:21" itemprop="dateCreated datePublished" datetime="2023-07-18T13:35:21+08:00">2023-07-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-10-20 13:51:58" itemprop="dateModified" datetime="2023-10-20T13:51:58+08:00">2023-10-20</time>
+              </span>
 
           
 
@@ -786,89 +605,14 @@ E = 101 - 10\sqrt{2} \approx 86.8,
 <p>抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列<span class="math inline">\(s\)</span>首次出现，所需抛掷次数的数学期望。</p>
 <p>具体的<span class="math inline">\(s\)</span>可以是001、1111或1101001等。</p>
 <p>推广：给定一个字符生成器，每次以概率<span class="math inline">\(p_i\)</span>生成字符<span class="math inline">\(i\)</span>，且<span class="math inline">\(\sum_i p_i = 1\)</span>。求直到生成序列<span class="math inline">\(s\)</span>首次出现，所需抛掷次数的数学期望。</p>
-<h2 id="解答">解答</h2>
-<h3 id="方法1朴素马尔可夫链">方法1：朴素马尔可夫链</h3>
-<p>这种方法适用于短序列的求解，通用性不强，因为需要求解一个维度为<span class="math inline">\(\Theta(2^{|s|-1})\)</span>的线性方程组，当<span class="math inline">\(s\)</span>的长度较大时难以计算。</p>
-<h3 id="方法2考虑两个相同序列之间的期望距离">方法2：考虑两个相同序列之间的期望距离</h3>
-<p>这一方法的通用性也不强，但提供了一种有趣的思路。它依赖如下定理：</p>
-<hr />
-<p><strong>定理</strong> 给定一个充分长的字符串，它由每次以概率<span class="math inline">\(p_i\)</span>生成字符<span class="math inline">\(i\)</span>，且<span class="math inline">\(\sum_i p_i = 1\)</span>的字符生成器生成。现有一长度为<span class="math inline">\(|s|\)</span>的滑动窗口框选出某一序列<span class="math inline">\(s\)</span>，然后不断向右滑动，直到框选到某一内容与<span class="math inline">\(s\)</span>相同的序列<span class="math inline">\(t\)</span>（<span class="math inline">\(s\)</span>与<span class="math inline">\(t\)</span>位置不同，但可重叠）。记<span class="math inline">\(s = \{c_{i}\}_{i = 1, \dots, |s|}\)</span>，此过程中滑动窗口滑动的距离为<span class="math inline">\(X\)</span>，则<span class="math inline">\(E(X) = \left( \prod_{i=1}^{|s|} p_{c_i} \right)^{-1}\)</span>。</p>
-<p>特别地，对于均匀硬币字符生成器，有<span class="math inline">\(p_1 = p_2 = \frac{1}{2}\)</span>，于是<span class="math inline">\(E(X) = 2^{|s|}\)</span>，与<span class="math inline">\(s\)</span>的具体内容无关。</p>
-<p>定理的证明比较复杂，笔者也不会。</p>
-<hr />
-<p>由此可对已生成了序列后的情况列状态转移方程。</p>
-<p>例如，对于硬币序列<span class="math inline">\(s = 100\)</span>，我们注意到，无论之后掷出0还是1，结果为000或001，这与从零开始掷骰子没有任何区别，即等价于000等价于0，001等价于1。于是从零开始掷出<span class="math inline">\(100\)</span>所需次数的数学期望恰好等于两个<span class="math inline">\(100\)</span>之间的距离的数学期望，为<span class="math inline">\(2^3 = 8\)</span>。</p>
-<p>而对于硬币序列<span class="math inline">\(s = 101\)</span>，情况有所不同。如果之后掷出1，则011等价于1；但若之后掷出0，则会出现1010等价于10，并非从零开始。画出状态转移图如下：</p>
-<figure>
-<img src="states.png" alt="states" /><figcaption>states</figcaption>
-</figure>
-<p>记从状态<span class="math inline">\(i\)</span>出发，首次回到状态<span class="math inline">\(101\)</span>所需转移次数的数学期望为<span class="math inline">\(E_i\)</span>，列出状态转移方程</p>
-<p><span class="math display">\[
-\begin{cases}
-E_{101} = \frac{1}{2}(E_{10} + 1) + \frac{1}{2}(E_{1} + 1) = 8, \\
-E_{10} = \frac{1}{2} \times 1 + \frac{1}{2}(E_{0} + 1), \\
-E_{1} = \frac{1}{2}(E_{1} + 1) + \frac{1}{2}(E_{10} + 1), \\
-E_{0} = \frac{1}{2}(E_{0} + 1) + \frac{1}{2}(E_{1} + 1).
-\end{cases}
-\]</span></p>
-<p>解得<span class="math inline">\(E_0 = 10, E_1 = 8\)</span>。那么，从零开始直到生成<span class="math inline">\(s\)</span>所需次数的数学期望就是<span class="math inline">\(E = \frac{1}{2}(E_0 + 1) + \frac{1}{2} (E_1 + 1) = 10 = E_0\)</span>。</p>
-<h3 id="方法3鞅">方法3：鞅</h3>
-<p>这是一个非常巧妙，也非常通用的方法。</p>
-<p>设我们想要得到的序列为<span class="math inline">\(s = \{c_i\}_{i = 1, \dots, n}\)</span>。</p>
-<p>构造公平赌局。设想有一列赌徒在一个公平的赌场参赌，这个赌场使用的唯一一台赌博机就是题目中的字符生成器，且每天都只生成一个字符，因此所有的赌徒在相同天数看到的字符都是相同的。每个赌徒起初都有<span class="math inline">\(1\)</span>元。第<span class="math inline">\(i\)</span>名赌徒会在第<span class="math inline">\(i\)</span>天的开始赌起，首先以他的<span class="math inline">\(1\)</span>元打赌那天产生的字符将是<span class="math inline">\(c_1\)</span>。若</p>
-<ul>
-<li>打赌赢了，则获得<span class="math inline">\(d_1 = p_{c_1}^{-1}\)</span>元。该赌徒现在有<span class="math inline">\(p_{c_1}^{-1}\)</span>元，并继续以这些钱赌下一天的结果是<span class="math inline">\(c_{2}\)</span>。</li>
-<li>打赌输了，则永久退出赌局。</li>
-</ul>
-<p>以此类推，若第二天的赌局也胜利了，则赌徒将拥有<span class="math inline">\(d_2 = p_{c_1}^{-1} \cdot p_{c_2}^{-1}\)</span>元，并继续以<span class="math inline">\(d_2\)</span>的钱赌下一天的结果是<span class="math inline">\(c_{3}\)</span>，直到赌完<span class="math inline">\(n\)</span>次，得到序列<span class="math inline">\(s\)</span>为止。</p>
-<p>可见，所有赌徒的赌法都是全押，即便输了，也只会给赌场贡献<span class="math inline">\(1\)</span>元钱。但若有一名赌徒全胜，他将得到来自赌场的<span class="math inline">\(d_n - 1 = \prod_{i=1}^n p_{c_i}^{-1} - 1\)</span>元的收益。</p>
-<p>每天一开始，就会有一名新的赌徒开始赌。记<span class="math inline">\(Y_m\)</span>为第<span class="math inline">\(m\)</span>天结束时赌场的总收入，由于所有的打赌都是公平的，故 <span class="math inline">\(\{Y_m, m \geq 1\}\)</span>是鞅，均值为<span class="math inline">\(0\)</span>。</p>
-<p>现在考虑直到一名赌徒全胜，赌场赢得的情况。记<span class="math inline">\(X\)</span>为直到一名赌徒全胜，经过的天数。</p>
-<p>对于长度为<span class="math inline">\(n\)</span>的序列<span class="math inline">\(s\)</span>，这名赌徒第一次赌的是第<span class="math inline">\(X- n+1\)</span>天的结果。由于该序列在这名幸运赌徒赌的过程中首次出现，因此这名幸运赌徒的前辈都唯一例外输了<span class="math inline">\(1\)</span>元，共计为赌场贡献了<span class="math inline">\(X-n\)</span>元。</p>
-<p>而幸运赌徒得到了<span class="math inline">\(d_n - 1\)</span>元。</p>
-<p>那么，幸运赌徒的后辈呢？他们可能有得有失。具体而言，在第<span class="math inline">\(X-k + 1\)</span>（<span class="math inline">\(1 \leq k \leq n\)</span>）天开始赌的赌徒赢钱，当且仅当<span class="math inline">\(s\)</span>的长度为<span class="math inline">\(k\)</span>的后缀与<span class="math inline">\(s\)</span>的同等长度的前缀完全相同，且这名赌徒恰好赢得<span class="math inline">\(d_k - 1\)</span>元。</p>
-<p>故赌场在这一过程中的总收入为</p>
-<p><span class="math display">\[
-Y_X = X - n + \sum_{i=1}^n f_i
-\]</span></p>
-<p>其中</p>
-<p><span class="math display">\[
-f_i = \begin{cases}
-1, &amp; s_{1:i} = s_{n-i+1:n}, \\
-1 - d_i, &amp; \text{otherwise}.
-\end{cases}
-\]</span></p>
-<p>化简得</p>
-<p><span class="math display">\[
-Y_X = X - \sum_{i=1}^n \delta_{i} d_i
-\]</span></p>
-<p>其中</p>
-<p><span class="math display">\[
-\delta_i = \begin{cases}
-0, &amp; s_{1:i} = s_{n-i+1:n}, \\
-1, &amp; \text{otherwise}.
-\end{cases}
-\]</span></p>
-<p>由于<span class="math inline">\(E(Y_X) = 0\)</span>，故</p>
-<p><span class="math display">\[
-E(X) = \sum_{i=1}^n \delta_{i} d_i = \sum_{i=1}^n \delta_i \frac{1}{p_{c_1}p_{c_2}\dots p_{c_i}}.
-\]</span></p>
-<h3 id="例子">例子</h3>
-<ol type="1">
-<li><span class="math inline">\(s = 0 ... 0\)</span>（<span class="math inline">\(n\)</span>个<span class="math inline">\(0\)</span>），</li>
-</ol>
-<p><span class="math display">\[
-E(X) = \sum_{i=1}^n 2^{i} = \frac{2(1-2^n)}{1-2} = 2^{n+1}-2.
-\]</span></p>
-<ol start="2" type="1">
-<li><span class="math inline">\(s=100\)</span>，<span class="math inline">\(E(X) = \sum_{i=1}^3 \delta_i d_i = d_3 = 2^3 = 8\)</span>。</li>
-<li><span class="math inline">\(s=101\)</span>，<span class="math inline">\(E(X) = d_1 + d_3 = 2 + 2^3 = 10\)</span>。</li>
-<li><span class="math inline">\(s = \text{tencent}\)</span>，<span class="math inline">\(p_{i} = \frac{1}{26}\)</span>，<span class="math inline">\(i \in \{ \text{&#39;a&#39;}, \dots, \text{&#39;z&#39;}\}\)</span>，</li>
-</ol>
-<p><span class="math display">\[
-E(X) = 26 + 26^7.
-\]</span></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -918,7 +662,7 @@ E(X) = 26 + 26^7.
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-07-21 12:11:43" itemprop="dateModified" datetime="2023-07-21T12:11:43+08:00">2023-07-21</time>
+                <time title="Modified: 2023-10-20 13:51:16" itemprop="dateModified" datetime="2023-10-20T13:51:16+08:00">2023-10-20</time>
               </span>
 
           
@@ -936,135 +680,19 @@ E(X) = 26 + 26^7.
 <p>http://www.matrix67.com/blog/archives/3507</p>
 <p>https://www.zhihu.com/question/64089362</p>
 </blockquote>
-<h2 id="题干">题干</h2>
 <p>记<span class="math inline">\(U_1,U_2,\dots\)</span>为一列独立随机变量，均服从<span class="math inline">\((0,1]\)</span>上的均匀分布。记</p>
 <p><span class="math display">\[
 \xi = \min\{n \geq 1: U_1+U_2+\dots+U_n &gt; 1\},
 \]</span></p>
 <p>求<span class="math inline">\(E(\xi)\)</span>。</p>
-<h2 id="解答">解答</h2>
-<h3 id="方法零动态规划法">方法零：动态规划法</h3>
-<blockquote>
-<p>本方法出处未知，且似乎并不严谨，但能算出正确的结果，仅供参考</p>
-</blockquote>
-<p>记<span class="math inline">\(f_x\)</span>是部分和<span class="math inline">\(U_1 + \dots + U_n\)</span>首次超过<span class="math inline">\(x\)</span>（<span class="math inline">\(x \in [0, 1]\)</span>）的期望项数，则答案在<span class="math inline">\(f_1\)</span>。初值条件为<span class="math inline">\(f_0 = 0\)</span>。按照<span class="math inline">\(U_1\)</span>的取值分类：</p>
-<ol type="1">
-<li>若<span class="math inline">\(U_1 &gt; x\)</span>，则<span class="math inline">\(f_x = 1\)</span>；</li>
-<li><p>否则，状态可能从<span class="math inline">\(f_y, y \in [0, x)\)</span>转移得到，故</p>
-<p><span class="math display">\[
-f_x = 1 + \int_{0}^x f_{x - u} \, \mathrm d u.
-\]</span></p>
-<p>上式可改写成</p>
-<p><span class="math display">\[
-f_x = 1 + \int_0^x f_{u} \, \mathrm du.
-\]</span></p>
-<p>解积分方程得到<span class="math inline">\(f_x = \mathrm e^x\)</span>。故答案为<span class="math inline">\(\mathrm e\)</span>。</p></li>
-</ol>
-<h3 id="方法一墙角积分法">方法一：墙角积分法</h3>
-<p>从<span class="math inline">\((0,1]\)</span>中均匀地抽取一个数若干次，直至这些数的和恰好大于<span class="math inline">\(1\)</span>为止，题目所求的就是抽取次数的数学期望。抽取次数一定为<span class="math inline">\(2,3,\dots\)</span>，我们用原始的想法一个一个检验：</p>
-<p>考虑抽取<span class="math inline">\(2\)</span>次，但这些数的和仍小于或等于<span class="math inline">\(1\)</span>的概率，记为<span class="math inline">\(p_2\)</span>，这要求</p>
-<p><span class="math display">\[
-U_1 + U_2 \leq 1,
-\]</span></p>
-<p>由于<span class="math inline">\(U_i \in (0,1])\)</span>，故在坐标系中，上述面积占<span class="math inline">\((0,1] \times (0,1]\)</span>的一半。于是<span class="math inline">\(p_2=\frac{1}{2}\)</span>。</p>
-<p>考虑抽取<span class="math inline">\(3\)</span>次，但这些数的和仍小于或等于<span class="math inline">\(1\)</span>的概率，记为<span class="math inline">\(p_3\)</span>，类似地</p>
-<p><span class="math display">\[
-U_1 + U_2 + U_3 \leq 1,
-\]</span></p>
-<p>由于</p>
-<p><span class="math display">\[
-\iiint\limits_{U_1 + U_2 + U_3 \leq 1} \mathrm dU_1 \mathrm dU_2 \mathrm dU_3 = \frac{1}{6},
-\]</span></p>
-<p>故<span class="math inline">\(p_3 = \frac{1}{6}\)</span>。</p>
-<p>考虑抽取<span class="math inline">\(n\)</span>次，但这些数的和仍小于或等于<span class="math inline">\(1\)</span>的概率，记为<span class="math inline">\(p_n\)</span>，由归纳法得</p>
-<p><span class="math display">\[
-\begin{matrix}\underbrace{\int \dots \int}\\\small{n重, \sum_{i=1}^n U_i \leq 1}\end{matrix} \mathrm dU_1\dots \mathrm dU_n = \frac{1}{n!}.
-\]</span></p>
-<p>我们求抽取<span class="math inline">\(n\)</span>次，这些数的和恰好大于<span class="math inline">\(1\)</span>的概率，这意味着抽取<span class="math inline">\(n-1\)</span>次时，这些数的和仍小于或等于<span class="math inline">\(1\)</span>。即</p>
-<p><span class="math display">\[
-P = \left(1-\frac{1}{n!} \right) - \left(1-\frac{1}{(n-1)!}\right).
-\]</span></p>
-<p>上式可以从“状态转移”的角度理解，即<span class="math inline">\(P(抽取n次和大于1)\)</span>可以由<span class="math inline">\(P(抽取n-1次和大于1)\)</span>和<span class="math inline">\(P(抽取n-1次和仍然小于或等于1)\)</span>转移而来，前者是以概率<span class="math inline">\(1\)</span>转移，后者的转移概率不必关心。于是，用<span class="math inline">\(P(抽取n次和大于1)\)</span>减去<span class="math inline">\(P(抽取n-1次和大于1)\)</span>就能得出我们“从期望的路径转移而来”的结果。</p>
-<p>可求得数学期望</p>
-<p><span class="math display">\[
-E(\xi) = \sum_{n=2}^{\infty} nP = \sum_{n=2}^{\infty} n \frac{n-1}{n!} = \sum_{n=2}^{\infty} \frac{1}{(n-2)!} = \mathrm e.
-\]</span></p>
-<p>PS: 本题的结论可以推广到</p>
-<p><span class="math display">\[
-\xi(x) = \min\{n \geq 1: U_1+U_2+\dots+U_n &gt; x\}, x \in [0, 1],
-\]</span></p>
-<p>只需求</p>
-<p><span class="math display">\[
-\begin{matrix}\underbrace{\int \dots \int}\\\small{n重, \sum_{i=1}^n U_i \leq x}\end{matrix} \mathrm dU_1\dots \mathrm dU_n = \frac{x^n}{n!}.
-\]</span></p>
-<p>故</p>
-<p><span class="math display">\[
-P(\xi(x) &gt; n) = \frac{x^n}{n!}. \tag{*}
-\]</span></p>
-<p>特别地，<span class="math inline">\(x=1\)</span>时，<span class="math inline">\(P(\xi &gt; n) = \frac{1}{n!}\)</span>。我们研究<span class="math inline">\((*)\)</span>式对应的期望，有</p>
-<p><span class="math display">\[
-\begin{aligned}
-EX(x) &amp;= \sum_{n=1}^{\infty}n\left (\left( 1- \frac{x^n}{n!}\right) - \left( 1- \frac{x^{n-1}}{(n-1)!}\right)\right ) \\
-&amp;= \sum_{n = 1}^{\infty} \frac{x^{n-1}}{(n-1)!}(n-x) \\
-&amp;= \sum_{n=1}^{\infty}\frac{n x^{n-1}}{(n-1)!} - x \sum_{n = 1}^{\infty} \frac{x^{n-1}}{(n-1)!} \\
-&amp;= (x+1)\mathrm e^x - x \mathrm e^x \\
-&amp;= \mathrm e^x.
-\end{aligned}
-\]</span></p>
-<p>结果令人意外地简洁。但请注意该结论仅限于<span class="math inline">\(x \in [0, 1]\)</span>的情况，<span class="math inline">\(x &gt; 1\)</span>的情况更加复杂，详见 https://mathworld.wolfram.com/UniformSumDistribution.html.</p>
-<h4 id="变体">变体</h4>
-<p>将题干所求的随机变量<span class="math inline">\(\xi\)</span>改为<span class="math inline">\(\gamma\)</span>，定义如下：</p>
-<p><span class="math display">\[
-\gamma = \min\{n \geq 1: U_n &gt; U_{n-1}\},
-\]</span></p>
-<p>则<span class="math inline">\(E(\gamma) = \mathrm e\)</span>。解答可见<a target="_blank" rel="noopener" href="https://blog.csdn.net/CY19980216/article/details/121804278">【趣题分享】如何数学推导三国杀王荣吉占摸牌的期望值？（Web Premiere）_一只热爱奔跑的程序猿-CSDN博客</a>，与本问题完全类似。</p>
-<h3 id="方法二离散动态规划法">方法二：离散动态规划法</h3>
-<p>考虑这样一个问题：从<span class="math inline">\(\{1,2,\dots,n-1\}\)</span>这<span class="math inline">\(n-1\)</span>个数中等概率地抽取一个数若干次，直至抽取的这些数的和第一次大于<span class="math inline">\(n\)</span>为止，抽取次数的数学期望。当<span class="math inline">\(n \to \infty\)</span>时，就是我们想要的等价问题（两个问题的等价性显然，然而不会证明）。我们先讨论<span class="math inline">\(n \neq \infty\)</span>的情形。</p>
-<p>仍然考虑一般化的情形。从<span class="math inline">\(\{1,2,\dots,n-1\}\)</span>这<span class="math inline">\(n-1\)</span>个数中等概率地抽取一个数<span class="math inline">\(X\)</span>次，直至抽取的这些数的和第一次大于<span class="math inline">\(m\)</span>为止，记抽取次数的数学期望为</p>
-<p><span class="math display">\[
-EX(m).
-\]</span></p>
-<p>它是一个关于<span class="math inline">\(m\)</span>的函数。定义<span class="math inline">\(\forall m &lt; 0, EX(m) = 0\)</span>，且<span class="math inline">\(EX(0)=1\)</span>。</p>
-<p>对于任意一次抽取，要想使本次抽取结束后终于满足条件——这些数的和第一次大于<span class="math inline">\(m\)</span>，则可由<span class="math inline">\(n-1\)</span>条路径得到状态转移：</p>
-<p><span class="math display">\[
-\begin{aligned}
-EX(m) &amp;= \frac{1+EX(m-1)}{n-1} + \frac{1+EX(m-2)}{n-1} + \dots + \frac{1+EX(m-(n-1))}{n-1}.\\
-&amp;= 1 + \frac{1}{n-1}\sum_{i=1}^{n-1} EX(m-i) \\
-&amp;= 1 + \frac{1}{n-1}\sum_{i=m-n+1}^{m-1} EX(i).
-\end{aligned}
-\]</span></p>
-<p>注意到</p>
-<p><span class="math display">\[
-EX(m) - EX(m-1) = \frac{1}{n-1}(EX(m-1) - EX(m-n)),
-\]</span></p>
-<p>若记<span class="math inline">\(m &lt; n\)</span>，就有<span class="math inline">\(EX(m-n)=0\)</span>，于是</p>
-<p><span class="math display">\[
-EX(m) = \frac{n}{n-1}EX(m-1).
-\]</span></p>
-<p>于是</p>
-<p><span class="math display">\[
-EX(m) = \left( \frac{n}{n-1} \right)^m EX(0) = \left( \frac{n}{n-1} \right)^m.
-\]</span></p>
-<p>故（所以为什么能令<span class="math inline">\(m=n\)</span>，前面明明写了<span class="math inline">\(m &lt;n\)</span>？）</p>
-<p><span class="math display">\[
-EX(n) = \left( \frac{n}{n-1} \right)^n,
-\]</span></p>
-<p>当<span class="math inline">\(n \to \infty\)</span>时，上式<span class="math inline">\(\to \mathrm e\)</span>。</p>
-<h2 id="section"></h2>
-<h2 id="附首中时的计算">附：首中时的计算</h2>
-<p>记<span class="math inline">\(U_1,U_2,\dots\)</span>为一列独立随机变量，均服从<span class="math inline">\((0,1]\)</span>上的均匀分布。记</p>
-<p><span class="math display">\[
-\xi = \min\{n \geq 1: U_1+U_2+\dots+U_n &gt; x\}, x \in [0, 1],
-\]</span></p>
-<p>对给定的<span class="math inline">\(\xi\)</span>，求<span class="math inline">\(P(\xi = n)\)</span>的表达式。</p>
-<p>注：<span class="math inline">\(E(\xi) = \sum_{n=1}^{\infty} n P(\xi = n)\)</span>。</p>
-<hr />
-<p>这题很难。答案是</p>
-<p><span class="math display">\[
-P(\xi = n) = \frac{(n-x)x^{n-1}}{n!},
-\]</span></p>
-<p>计算过程详见 https://www.xiaohongshu.com/explore/640e59ad000000001300cd68.</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/07/10/n%E7%BB%B4%E5%A2%99%E8%A7%92%E4%B8%8Ee%E7%9A%84%E4%BC%B0%E8%AE%A1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1114,7 +742,7 @@ P(\xi = n) = \frac{(n-x)x^{n-1}}{n!},
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-10-01 18:39:53" itemprop="dateModified" datetime="2023-10-01T18:39:53+08:00">2023-10-01</time>
+                <time title="Modified: 2023-10-20 13:52:33" itemprop="dateModified" datetime="2023-10-20T13:52:33+08:00">2023-10-20</time>
               </span>
 
           
@@ -1129,16 +757,14 @@ P(\xi = n) = \frac{(n-x)x^{n-1}}{n!},
 
       
           <p>Hello, I'm Mercury! This blog uses <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info.</p>
-<p>The following operations are used to do CRUD and maintenance.</p>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/29/hello-world/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
