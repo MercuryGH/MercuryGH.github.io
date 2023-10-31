@@ -182,7 +182,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-10-31 11:11:57 / Modified: 11:12:29" itemprop="dateCreated datePublished" datetime="2023-10-31T11:11:57+08:00">2023-10-31</time>
+              <time title="Created: 2023-10-31 11:11:57 / Modified: 12:58:57" itemprop="dateCreated datePublished" datetime="2023-10-31T11:11:57+08:00">2023-10-31</time>
             </span>
 
           
@@ -206,80 +206,14 @@
 <li>将两个球放回盒子。</li>
 </ul>
 <p>求直到所有的球具有相同的颜色为止，经过轮数的数学期望。</p>
-<h2 id="解答">解答</h2>
-<p>注意到所有的颜色是对称的，那么我们只需指定其中一种颜色分析，记这种颜色为<span class="math inline">\(c\)</span>，其他颜色统称<span class="math inline">\(\bar c\)</span>。记当这种颜色的球的数目为<span class="math inline">\(i\)</span>时为状态<span class="math inline">\(i\)</span>。</p>
-<p>记<span class="math inline">\(s = \sum_{i=1}^n a_i\)</span>为所有球数。</p>
-<p>记<span class="math inline">\(f_i\)</span>为从状态<span class="math inline">\(i\)</span>到状态<span class="math inline">\(s\)</span>，需经过轮数的数学期望，则<span class="math inline">\(f_s = 0\)</span>。记<span class="math inline">\(q_i\)</span>为从状态<span class="math inline">\(i\)</span>能够转移到状态<span class="math inline">\(s\)</span>的概率，由于题目不需要指定颜色，故最终结果为</p>
-<p><span class="math display">\[
-\sum_{i=1}^n q_{a_i} f_{a_i}.
-\]</span></p>
-<p>在状态<span class="math inline">\(i\)</span>下：</p>
-<ul>
-<li>选出两个球颜色情况恰为：先取出一个<span class="math inline">\(c\)</span>，后取出一个<span class="math inline">\(\bar c\)</span>的概率为</li>
-</ul>
-<p><span class="math display">\[
-p_{i+1} = \frac{i(s-i)}{\binom s 2},
-\]</span></p>
-<p>此时，重刷后，两球颜色均为<span class="math inline">\(c\)</span>，状态<span class="math inline">\(i\)</span>将变成<span class="math inline">\(i+1\)</span>。同理，<span class="math inline">\(p_{i-1} = p_{i+1}\)</span>。</p>
-<ul>
-<li>选出两个球颜色均为<span class="math inline">\(\bar c\)</span>或均为<span class="math inline">\(c\)</span>的概率为</li>
-</ul>
-<p><span class="math display">\[
-1 - p_{i+1} - p_{i-1},
-\]</span></p>
-<p>故状态转移方程为</p>
-<p><span class="math display">\[
-f_i = p_{i-1} f_{i-1} + p_{i+1}f_{i+1} + (1 - p_{i-1} - p_{i+1})f_i + 1. \tag{?}
-\]</span></p>
-<p>这个方程有点不对劲儿，这是因为没有考虑转移失败的情况。</p>
-<p>考虑状态<span class="math inline">\(i=1\)</span>到<span class="math inline">\(i=0\)</span>，注意到，一旦进入状态<span class="math inline">\(0\)</span>，所有的球就不再可能具有这种颜色，故不再可能转移到状态<span class="math inline">\(s\)</span>。注意到<span class="math inline">\(p_{i+1} = p_{i-1}\)</span>，这是一个两端吸收壁的对称随机游走模型，故状态<span class="math inline">\(i\)</span>在到达<span class="math inline">\(0\)</span>之前到达<span class="math inline">\(s\)</span>的概率为</p>
-<p><span class="math display">\[
-q_i = \frac{i}{s}.
-\]</span></p>
-<p>于是，基础概率从<span class="math inline">\(1\)</span>变成<span class="math inline">\(q_i\)</span>。正确的转移方程为</p>
-<p><span class="math display">\[
-q_if_i = q_{i-1} p_{i-1} (f_{i-1}+1) + q_{i+1} p_{i+1} (f_{i+1}+1) + q_i(1 - p_{i-1} - p_{i+1})(f_i + 1),
-\]</span></p>
-<p>注意到<span class="math inline">\(2q_i = q_{i-1} + q_{i+1}\)</span>，<span class="math inline">\(p_{i-1} = p_{i+1}\)</span>，我们有</p>
-<p><span class="math display">\[
-q_i f_i = q_{i-1} p_{i-1} f_{i-1} + q_{i+1} p_{i+1}f_{i+1} + q_i(1 - p_{i-1} - p_{i+1})f_i + q_i.
-\]</span></p>
-<p>代入化简得</p>
-<p><span class="math display">\[
-2if_i = (i-1)f_{i-1} + (i+1)f_{i+1} + \frac{s(s-1)}{s-i}. \tag{*}
-\]</span></p>
-<p>注意到上式的高度对称性。令</p>
-<p><span class="math display">\[
-g_i = if_i - (i-1)f_{i-1}, \tag{1}
-\]</span></p>
-<p>可知<span class="math inline">\(g_1 = f_1\)</span>。两边求和有</p>
-<p><span class="math display">\[
-\sum_{i=1}^n g_i = \sum_{i=1}^n i f_i - \sum_{i=1}^n (i-1)f_{i-1} = nf_n. \tag{2}
-\]</span></p>
-<p>(*)式结合(1)式有</p>
-<p><span class="math display">\[
-g_{i+1} - g_i = -\frac{s(s-1)}{s-i},
-\]</span></p>
-<p>累加得</p>
-<p><span class="math display">\[
-g_n = g_1- \sum_{i=1}^{n-1} \frac{s(s-1)}{s-i}, \tag{3}
-\]</span></p>
-<p>两边求和，联立(2)式得</p>
-<p><span class="math display">\[
-nf_n = \sum_{i=1}^n g_i = ng_1 - \sum_{i=1}^n \sum_{j=1}^{i-1} \frac{s(s-1)}{s-i} = ng_1 - \sum_{i=1}^{n-1} (n-i)\frac{s(s-1)}{s-i}
-\]</span></p>
-<p>令<span class="math inline">\(n=s\)</span>，得</p>
-<p><span class="math display">\[
-sf_s = 0 = sg_1 -  \sum_{i=1}^{s-1}(s-i) \frac{s(s-1)}{s-i} = sg_1 -  \sum_{i=1}^{s-1} s(s-1),
-\]</span></p>
-<p>化简得</p>
-<p><span class="math display">\[
-g_1 = f_1 =  (s-1)^2.
-\]</span></p>
-<p>求得<span class="math inline">\(f_1\)</span>后，即可用(*)式进行线性递推，得到最终结果<span class="math inline">\(\sum_{i=1}^n q_{a_i} f_{a_i}\)</span>。时间复杂度<span class="math inline">\(O(s)\)</span>。</p>
-<h3 id="特例">特例</h3>
-<p>当<span class="math inline">\(\forall i, a_i = 1\)</span>时，最终结果为<span class="math inline">\(\sum_{i=1}^n \frac{1}{n}(n-1)^2 = (n-1)^2\)</span>。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/31/%E7%9B%92%E5%AD%90%E9%87%8C%E7%9A%84%E5%BD%A9%E8%89%B2%E7%90%83/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
