@@ -157,6 +157,147 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/31/%E7%9B%92%E5%AD%90%E9%87%8C%E7%9A%84%E5%BD%A9%E8%89%B2%E7%90%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="from Mercury">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/10/31/%E7%9B%92%E5%AD%90%E9%87%8C%E7%9A%84%E5%BD%A9%E8%89%B2%E7%90%83/" class="post-title-link" itemprop="url">盒子里的彩色球</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-10-31 11:11:57 / Modified: 11:12:29" itemprop="dateCreated datePublished" datetime="2023-10-31T11:11:57+08:00">2023-10-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/CF850F">Rainbow Balls - 洛谷 | 计算机科学教育新生态 (luogu.com.cn)</a></p>
+</blockquote>
+<p>盒子里有<span class="math inline">\(n\)</span>种颜色的球，第<span class="math inline">\(i\)</span>种颜色的球初始时有<span class="math inline">\(a_i\)</span>个。玩家每轮进行如下操作：</p>
+<ul>
+<li>从盒子中依次取出两个球，记为<span class="math inline">\(\text f, \text s\)</span>。</li>
+<li>若<span class="math inline">\(\text f\)</span>和<span class="math inline">\(\text s\)</span>颜色不同，则将<span class="math inline">\(\text f\)</span>的颜色重刷成<span class="math inline">\(\text s\)</span>的颜色。</li>
+<li>将两个球放回盒子。</li>
+</ul>
+<p>求直到所有的球具有相同的颜色为止，经过轮数的数学期望。</p>
+<h2 id="解答">解答</h2>
+<p>注意到所有的颜色是对称的，那么我们只需指定其中一种颜色分析，记这种颜色为<span class="math inline">\(c\)</span>，其他颜色统称<span class="math inline">\(\bar c\)</span>。记当这种颜色的球的数目为<span class="math inline">\(i\)</span>时为状态<span class="math inline">\(i\)</span>。</p>
+<p>记<span class="math inline">\(s = \sum_{i=1}^n a_i\)</span>为所有球数。</p>
+<p>记<span class="math inline">\(f_i\)</span>为从状态<span class="math inline">\(i\)</span>到状态<span class="math inline">\(s\)</span>，需经过轮数的数学期望，则<span class="math inline">\(f_s = 0\)</span>。记<span class="math inline">\(q_i\)</span>为从状态<span class="math inline">\(i\)</span>能够转移到状态<span class="math inline">\(s\)</span>的概率，由于题目不需要指定颜色，故最终结果为</p>
+<p><span class="math display">\[
+\sum_{i=1}^n q_{a_i} f_{a_i}.
+\]</span></p>
+<p>在状态<span class="math inline">\(i\)</span>下：</p>
+<ul>
+<li>选出两个球颜色情况恰为：先取出一个<span class="math inline">\(c\)</span>，后取出一个<span class="math inline">\(\bar c\)</span>的概率为</li>
+</ul>
+<p><span class="math display">\[
+p_{i+1} = \frac{i(s-i)}{\binom s 2},
+\]</span></p>
+<p>此时，重刷后，两球颜色均为<span class="math inline">\(c\)</span>，状态<span class="math inline">\(i\)</span>将变成<span class="math inline">\(i+1\)</span>。同理，<span class="math inline">\(p_{i-1} = p_{i+1}\)</span>。</p>
+<ul>
+<li>选出两个球颜色均为<span class="math inline">\(\bar c\)</span>或均为<span class="math inline">\(c\)</span>的概率为</li>
+</ul>
+<p><span class="math display">\[
+1 - p_{i+1} - p_{i-1},
+\]</span></p>
+<p>故状态转移方程为</p>
+<p><span class="math display">\[
+f_i = p_{i-1} f_{i-1} + p_{i+1}f_{i+1} + (1 - p_{i-1} - p_{i+1})f_i + 1. \tag{?}
+\]</span></p>
+<p>这个方程有点不对劲儿，这是因为没有考虑转移失败的情况。</p>
+<p>考虑状态<span class="math inline">\(i=1\)</span>到<span class="math inline">\(i=0\)</span>，注意到，一旦进入状态<span class="math inline">\(0\)</span>，所有的球就不再可能具有这种颜色，故不再可能转移到状态<span class="math inline">\(s\)</span>。注意到<span class="math inline">\(p_{i+1} = p_{i-1}\)</span>，这是一个两端吸收壁的对称随机游走模型，故状态<span class="math inline">\(i\)</span>在到达<span class="math inline">\(0\)</span>之前到达<span class="math inline">\(s\)</span>的概率为</p>
+<p><span class="math display">\[
+q_i = \frac{i}{s}.
+\]</span></p>
+<p>于是，基础概率从<span class="math inline">\(1\)</span>变成<span class="math inline">\(q_i\)</span>。正确的转移方程为</p>
+<p><span class="math display">\[
+q_if_i = q_{i-1} p_{i-1} (f_{i-1}+1) + q_{i+1} p_{i+1} (f_{i+1}+1) + q_i(1 - p_{i-1} - p_{i+1})(f_i + 1),
+\]</span></p>
+<p>注意到<span class="math inline">\(2q_i = q_{i-1} + q_{i+1}\)</span>，<span class="math inline">\(p_{i-1} = p_{i+1}\)</span>，我们有</p>
+<p><span class="math display">\[
+q_i f_i = q_{i-1} p_{i-1} f_{i-1} + q_{i+1} p_{i+1}f_{i+1} + q_i(1 - p_{i-1} - p_{i+1})f_i + q_i.
+\]</span></p>
+<p>代入化简得</p>
+<p><span class="math display">\[
+2if_i = (i-1)f_{i-1} + (i+1)f_{i+1} + \frac{s(s-1)}{s-i}. \tag{*}
+\]</span></p>
+<p>注意到上式的高度对称性。令</p>
+<p><span class="math display">\[
+g_i = if_i - (i-1)f_{i-1}, \tag{1}
+\]</span></p>
+<p>可知<span class="math inline">\(g_1 = f_1\)</span>。两边求和有</p>
+<p><span class="math display">\[
+\sum_{i=1}^n g_i = \sum_{i=1}^n i f_i - \sum_{i=1}^n (i-1)f_{i-1} = nf_n. \tag{2}
+\]</span></p>
+<p>(*)式结合(1)式有</p>
+<p><span class="math display">\[
+g_{i+1} - g_i = -\frac{s(s-1)}{s-i},
+\]</span></p>
+<p>累加得</p>
+<p><span class="math display">\[
+g_n = g_1- \sum_{i=1}^{n-1} \frac{s(s-1)}{s-i}, \tag{3}
+\]</span></p>
+<p>两边求和，联立(2)式得</p>
+<p><span class="math display">\[
+nf_n = \sum_{i=1}^n g_i = ng_1 - \sum_{i=1}^n \sum_{j=1}^{i-1} \frac{s(s-1)}{s-i} = ng_1 - \sum_{i=1}^{n-1} (n-i)\frac{s(s-1)}{s-i}
+\]</span></p>
+<p>令<span class="math inline">\(n=s\)</span>，得</p>
+<p><span class="math display">\[
+sf_s = 0 = sg_1 -  \sum_{i=1}^{s-1}(s-i) \frac{s(s-1)}{s-i} = sg_1 -  \sum_{i=1}^{s-1} s(s-1),
+\]</span></p>
+<p>化简得</p>
+<p><span class="math display">\[
+g_1 = f_1 =  (s-1)^2.
+\]</span></p>
+<p>求得<span class="math inline">\(f_1\)</span>后，即可用(*)式进行线性递推，得到最终结果<span class="math inline">\(\sum_{i=1}^n q_{a_i} f_{a_i}\)</span>。时间复杂度<span class="math inline">\(O(s)\)</span>。</p>
+<h3 id="特例">特例</h3>
+<p>当<span class="math inline">\(\forall i, a_i = 1\)</span>时，最终结果为<span class="math inline">\(\sum_{i=1}^n \frac{1}{n}(n-1)^2 = (n-1)^2\)</span>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -584,7 +725,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-10-20 13:51:58" itemprop="dateModified" datetime="2023-10-20T13:51:58+08:00">2023-10-20</time>
+                <time title="Modified: 2023-10-24 15:30:44" itemprop="dateModified" datetime="2023-10-24T15:30:44+08:00">2023-10-24</time>
               </span>
 
           
@@ -604,7 +745,7 @@
 <h2 id="题干">题干</h2>
 <p>抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列<span class="math inline">\(s\)</span>首次出现，所需抛掷次数的数学期望。</p>
 <p>具体的<span class="math inline">\(s\)</span>可以是001、1111或1101001等。</p>
-<p>推广：给定一个字符生成器，每次以概率<span class="math inline">\(p_i\)</span>生成字符<span class="math inline">\(i\)</span>，且<span class="math inline">\(\sum_i p_i = 1\)</span>。求直到生成序列<span class="math inline">\(s\)</span>首次出现，所需抛掷次数的数学期望。</p>
+<p>推广（猴子打字问题）：给定一个字符生成器，每次以概率<span class="math inline">\(p_i\)</span>生成字符<span class="math inline">\(i\)</span>，且<span class="math inline">\(\sum_i p_i = 1\)</span>。求直到生成序列<span class="math inline">\(s\)</span>首次出现，所需抛掷次数的数学期望。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/#more" rel="contents">
@@ -662,7 +803,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-10-20 13:51:16" itemprop="dateModified" datetime="2023-10-20T13:51:16+08:00">2023-10-20</time>
+                <time title="Modified: 2023-10-31 11:11:07" itemprop="dateModified" datetime="2023-10-31T11:11:07+08:00">2023-10-31</time>
               </span>
 
           
@@ -845,14 +986,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
