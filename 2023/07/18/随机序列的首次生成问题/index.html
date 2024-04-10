@@ -17,31 +17,31 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="一道抛硬币问题的不同解法和比较 | 统计之都 (cosx.org)  题干 抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列\(s\)首次出现，所需抛掷次数的数学期望。 具体的\(s\)可以是001、1111或1101001等。 推广（猴子打字问题）：给定一个字符生成器，每次以概率\(p_i\)生成字符\(i\)，且\(\sum_i p_i &#x3D; 1\)。求直到生成序列\(s\)首">
 <meta property="og:type" content="article">
 <meta property="og:title" content="随机序列的首次生成问题">
-<meta property="og:url" content="http://example.com/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:url" content="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Mercury&#39;s Blog">
 <meta property="og:description" content="一道抛硬币问题的不同解法和比较 | 统计之都 (cosx.org)  题干 抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列\(s\)首次出现，所需抛掷次数的数学期望。 具体的\(s\)可以是001、1111或1101001等。 推广（猴子打字问题）：给定一个字符生成器，每次以概率\(p_i\)生成字符\(i\)，且\(\sum_i p_i &#x3D; 1\)。求直到生成序列\(s\)首">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/states.png">
+<meta property="og:image" content="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/states.png">
 <meta property="article:published_time" content="2023-07-18T05:35:21.000Z">
 <meta property="article:modified_time" content="2023-11-19T01:33:30.663Z">
-<meta property="article:author" content="from Mercury">
+<meta property="article:author" content="Mercury">
 <meta property="article:tag" content="数学">
 <meta property="article:tag" content="概率论">
 <meta property="article:tag" content="随机过程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/states.png">
+<meta name="twitter:image" content="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/states.png">
 
 
-<link rel="canonical" href="http://example.com/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/","path":"2023/07/18/随机序列的首次生成问题/","title":"随机序列的首次生成问题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/","path":"2023/07/18/随机序列的首次生成问题/","title":"随机序列的首次生成问题"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>随机序列的首次生成问题 | Mercury's Blog</title>
@@ -123,7 +123,7 @@
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">from Mercury</p>
+  <p class="site-author-name" itemprop="name">Mercury</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap animated">
@@ -163,11 +163,11 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="from Mercury">
+      <meta itemprop="name" content="Mercury">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -323,6 +323,23 @@ E(X) = 26 + 26^7.
     
 
     <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/" title="随机序列的首次生成问题">https://zrephel.fun/2023/07/18/随机序列的首次生成问题/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
           <div class="post-tags">
               <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
               <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
