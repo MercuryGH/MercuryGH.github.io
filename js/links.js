@@ -13,7 +13,21 @@ function renderlink(data) {
         name = data[i].name;
         avatar = data[i].avatar;
         site = data[i].site;
-        li += '<div class="card">' + '<a href="' + site + '" target="_blank">' + '<div class="thumb" style="background: url( ' + avatar + ');">' + '</div>' + '</a>' + '<div class="card-header">' + '<div><a href="' + site + '" target="_blank">' + name + '</a></div>' + '</div>' + '</div>';
+        tip = data[i].tip ? data[i].tip : "";
+        // const li_str = `
+        //     <div class="card hover-tip">
+        //         <a href="${site}" target="_blank>"
+        //             <div class="thumb" style="background: url('${avatar}');"></div>
+        //         </a>
+        //         <div class="card-header">
+        //             <div>
+        //                 <a href="${site}" target="_blank">${name}</a>
+        //             </div>
+        //         </div>
+        //         <span class="tip-text">${tip}</span>
+        //     </div>
+        // `;
+        li += '<div class="card hover-tip">' + '<a href="' + site + '" target="_blank">' + '<div class="thumb" style="background: url( ' + avatar + ');">' + '</div>' + '</a>' + '<div class="card-header">' + '<div><a href="' + site + '" target="_blank">' + name + '</a></div>' + '</div>' + '<span class="tip-text">' + tip + '</span></div>';
     }
     document.querySelector(".link-navigation").innerHTML = li;
 }
