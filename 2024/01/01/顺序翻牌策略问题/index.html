@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="团建拓展活动项目超音速|超音速玩法规则技巧-有山团建 (youshantuanjian.com)  现有\(n\)名玩家参与一个翻牌游戏，每人编号为\(0, 1, \dots, n -1\)。游戏中共有\(m\)张牌，这些牌的正面分别印有数字\(1, \dots, m\)。初始时，它们的顺序被随机打乱，背面朝上在桌上排成一个序列。从\(i&#x3D;1\)开始，第\(i\)轮，编号为\(i \ \text">
+<meta property="og:type" content="article">
+<meta property="og:title" content="顺序翻牌策略问题">
+<meta property="og:url" content="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="团建拓展活动项目超音速|超音速玩法规则技巧-有山团建 (youshantuanjian.com)  现有\(n\)名玩家参与一个翻牌游戏，每人编号为\(0, 1, \dots, n -1\)。游戏中共有\(m\)张牌，这些牌的正面分别印有数字\(1, \dots, m\)。初始时，它们的顺序被随机打乱，背面朝上在桌上排成一个序列。从\(i&#x3D;1\)开始，第\(i\)轮，编号为\(i \ \text">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/ill.png">
+<meta property="og:image" content="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/qsort.png">
+<meta property="og:image" content="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/qsort2.png">
+<meta property="article:published_time" content="2023-12-31T17:08:46.000Z">
+<meta property="article:modified_time" content="2024-11-09T09:18:50.416Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="随机过程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/ill.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/","path":"2024/01/01/顺序翻牌策略问题/","title":"顺序翻牌策略问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>顺序翻牌策略问题 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E8%B4%9F%E8%B4%A3%E7%AD%96%E7%95%A5"><span class="nav-number">1.1.</span> <span class="nav-text">区间负责策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%8E%E6%9C%80%E5%89%8D%E5%BE%80%E6%9C%80%E5%90%8E%E6%94%BE%E7%AD%96%E7%95%A5"><span class="nav-number">1.2.</span> <span class="nav-text">从最前往最后放策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%87%E5%8C%80%E5%88%86%E5%89%B2%E7%AD%96%E7%95%A5"><span class="nav-number">1.3.</span> <span class="nav-text">均匀分割策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%B2%BB%E7%AD%96%E7%95%A5"><span class="nav-number">1.4.</span> <span class="nav-text">分治策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.4.1.</span> <span class="nav-text">代码示例</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="顺序翻牌策略问题 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          顺序翻牌策略问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-01-01 01:08:46" itemprop="dateCreated datePublished" datetime="2024-01-01T01:08:46+08:00">2024-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-11-09 17:18:50" itemprop="dateModified" datetime="2024-11-09T17:18:50+08:00">2024-11-09</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.youshantuanjian.com/youxi/37.html">团建拓展活动项目超音速|超音速玩法规则技巧-有山团建
+(youshantuanjian.com)</a></p>
+</blockquote>
+<p>现有<span
+class="math inline">\(n\)</span>名玩家参与一个翻牌游戏，每人编号为<span
+class="math inline">\(0, 1, \dots, n -1\)</span>。游戏中共有<span
+class="math inline">\(m\)</span>张牌，这些牌的正面分别印有数字<span
+class="math inline">\(1, \dots,
+m\)</span>。初始时，它们的顺序被随机打乱，背面朝上在桌上排成一个序列。从<span
+class="math inline">\(i=1\)</span>开始，第<span
+class="math inline">\(i\)</span>轮，编号为<span class="math inline">\(i
+\ \text{mod} \ n\)</span>的玩家依次执行如下操作：</p>
+<ol type="1">
+<li>查看桌面上的牌的状态<span
+class="math inline">\(S_i\)</span>。记已被翻开的牌的最大数字为<span
+class="math inline">\(k_i\)</span>，若无牌被翻开，则记<span
+class="math inline">\(k_i = 0\)</span>。</li>
+<li>选择一张未被翻开的牌，将其翻开，若</li>
+</ol>
+<ul>
+<li>此时翻开的牌的数字为<span class="math inline">\(k_i +
+1\)</span>，则可以将其正面朝上或背面朝上插入序列的任意位置。进一步地，若<span
+class="math inline">\(k_i + 1 = m\)</span>，则游戏结束。</li>
+<li>否则，可以将其背面朝上插入序列的任意位置。</li>
+</ul>
+<ol start="3" type="1">
+<li>离开桌面。</li>
+</ol>
+<p>在游戏中，每名玩家只能在轮到自己时才可以查看桌面上的牌的状态，无法获知其他玩家在各自的轮次的操作，也无法直接告知其他玩家任何信息。只有在开始游戏之前，这<span
+class="math inline">\(n\)</span>名玩家才能进行讨论。</p>
+<p>记<span
+class="math inline">\(X_{n,m}\)</span>为直到游戏结束，总的翻牌次数。游戏的目标是让<span
+class="math inline">\(X_{n,m}\)</span>尽可能小。</p>
+<span id="more"></span>
+<hr />
+<p>问：</p>
+<ol type="1">
+<li>求<span class="math inline">\(E(X_{1, m})\)</span>。</li>
+<li>若所有玩家“各自为战”，且<span
+class="math inline">\(n\)</span>远大于<span
+class="math inline">\(m\)</span>，求<span
+class="math inline">\(E(X_{\infty,m})\)</span>。</li>
+<li>在<span class="math inline">\(n\)</span>较小时，以及<span
+class="math inline">\(n\)</span>很大时，分别制定一个策略，尽可能最小化<span
+class="math inline">\(E(X_{n, m})\)</span>。</li>
+</ol>
+<p>变体：</p>
+<ul>
+<li>游戏中可以随意交流（所有情况变成<span
+class="math inline">\(X_{1,m}\)</span>）</li>
+<li>不需要维持牌是一个序列，可以将牌摆成任意形状，摆到桌面上的任意位置（所有情况变成<span
+class="math inline">\(X_{1,m}\)</span>）</li>
+<li>翻出牌后，不能改变其在序列中的位置（当<span
+class="math inline">\(n\)</span>很大时，所有玩家只能“各自为战”，无法制定策略）</li>
+<li>翻出牌后，可以随意改变整个序列中任意牌的位置，但不能再翻牌（情况更加复杂，应该可以制定相同时间复杂度但常数更小的策略）</li>
+</ul>
+<h2 id="解答">解答</h2>
+<p>记每次正面翻出的数字为<span
+class="math inline">\(k_i+1\)</span>的牌为<strong>接续牌</strong>。</p>
+<p><strong>线性翻牌</strong>，即让<span
+class="math inline">\(m\)</span>个人翻<span
+class="math inline">\(m\)</span>张不同的牌的策略可以如下进行：每人都只翻最左侧（最前）的牌，无论翻到什么牌，都将其置入序列的最右侧（末尾）。</p>
+<ol type="1">
+<li></li>
+</ol>
+<p>当只有一个玩家时，他的策略是简单的：</p>
+<ol type="1">
+<li>第一趟，线性翻出每张牌，记下每张牌的数字。注意，最后一张牌不需要被翻出，因为前<span
+class="math inline">\(m-1\)</span>张牌的数字分布唯一决定了最后一张牌的数字。</li>
+<li>第二趟，根据记下的数字顺序翻出每张接续牌。</li>
+</ol>
+<p>该策略的最优性是显然的。</p>
+<p>如果第一趟翻出的牌恰好能够正面翻出，那么就可以减少第二趟翻牌的次数。一般地，记<span
+class="math inline">\(Y_i\)</span>为在此情况下，第<span
+class="math inline">\(i\)</span>张牌被翻出的次数，则<span
+class="math inline">\(X = \sum_{i=1}^m Y_i\)</span>，<span
+class="math inline">\(Y_i\)</span>的取值范围为<span
+class="math inline">\(\{1,2\}\)</span>。<span
+class="math inline">\(\forall i \in [1, m-1]\)</span>，</p>
+<p><span class="math display">\[
+E(Y_i) = 1 \cdot \frac{1}{m - i + 1} + 2 \left(1 - \frac{1}{m-i+1}
+\right) = 2 - \frac{1}{m-i+1}.
+\]</span></p>
+<p>而<span class="math inline">\(E(Y_m) = 1\)</span>。故</p>
+<p><span class="math display">\[
+E(X) = \sum_{i=1}^{m-1} E(Y_i) + E(Y_m) = 2(m-1) - (H_m - 1) + 1 = 2m -
+H_m.
+\]</span></p>
+<p>这是个很漂亮的结论。</p>
+<ol start="2" type="1">
+<li></li>
+</ol>
+<p>在所有玩家“各自为战”，且且<span
+class="math inline">\(n\)</span>远大于<span
+class="math inline">\(m\)</span>的假设下，每个玩家只能被轮到一次，且其轮次只能获取场上已被翻出的牌的信息。由对称性，此时有<span
+class="math inline">\(E(Y_i) = i\)</span>。故<span
+class="math inline">\(E(X) = \frac{m(m+1)}{2}\)</span>。</p>
+<ol start="3" type="1">
+<li></li>
+</ol>
+<p>该问题的开放程度很高，直接给出最优策略及其证明相当困难，在此先给出几个策略，并逐一分析它们的特点：</p>
+<h3 id="区间负责策略">区间负责策略</h3>
+<p>当<span class="math inline">\(n\)</span>较小时，有一个比较显然的<span
+class="math inline">\(O(nm)\)</span>的策略，描述如下：</p>
+<p>不失一般性，设<span class="math inline">\(m\)</span>能被<span
+class="math inline">\(n\)</span>整除。考虑让每个人负责长度为<span
+class="math inline">\(\frac{m}{n}\)</span>的区间的牌：</p>
+<ol type="1">
+<li>第一趟，线性翻出每张牌，其中每个玩家只负责翻自己的<span
+class="math inline">\(m/n\)</span>张牌。总翻牌次数为<span
+class="math inline">\(m\)</span>。这一趟至少可以翻出一张牌，其数字为<span
+class="math inline">\(1\)</span>。</li>
+<li>第<span class="math inline">\(j \ (j \in [2,
+m])\)</span>趟，对每个玩家，若自己负责的区间有接续牌，则翻出之，否则可以随意翻出<strong>后续</strong>玩家负责的区间中的一张牌。我们近似认为这个随意翻牌的操作不影响翻牌推进。每翻出一次接续牌，令<span
+class="math inline">\(j = j+1\)</span>。如此翻牌直到游戏结束。</li>
+</ol>
+<p>对每个第<span
+class="math inline">\(j\)</span>趟，我们近似认为，每个玩家的区间有接续牌的概率均等为<span
+class="math inline">\(\frac{1}{n}\)</span>。记在第<span
+class="math inline">\(j\)</span>趟还有<span
+class="math inline">\(n\)</span>名玩家没翻过牌时，直到翻出接续牌，所需的翻牌次数的数学期望为<span
+class="math inline">\(s_n\)</span>，则<span class="math inline">\(s_n =
+\frac{1}{n} + \frac{n-1}{n}(s_{n-1} + 1)\)</span>，初值条件为<span
+class="math inline">\(s_1=1\)</span>，解得<span
+class="math inline">\(s_n = \frac{n+1}{2}\)</span>。故此方案的<span
+class="math inline">\(E(X)\)</span>满足不等式</p>
+<p><span class="math display">\[
+E(X) \leq m + \frac{n+1}{2} \cdot (m-1).
+\]</span></p>
+<p>可以证明，上式取等号当且仅当<span
+class="math inline">\(n=m=1\)</span>。由于该方案未在翻出牌后改变其在序列中的位置，故仍然有很大的改良空间。</p>
+<h3 id="从最前往最后放策略">从最前往最后放策略</h3>
+<p>当<span
+class="math inline">\(n\)</span>很大时，有一个比随机选择更好（常数更小）的<span
+class="math inline">\(O(m^2)\)</span>策略，只要每次都翻出最左侧未翻开的牌，并将其放至最右侧，就可以保证每张牌不会被过多地重复翻出。在实际团建游戏中，综合考虑轮数和简洁，以及<span
+class="math inline">\(m \leq 13\)</span>，这个策略是最实用的。</p>
+<p>策略描述非常简单：每名玩家总是翻开最左侧的未翻开的牌，若其是接续牌，则将其正面朝上放至最右侧，否则将其背面朝上放至最右侧。</p>
+<p><span
+class="math inline">\(E(X)\)</span>的计算也是简单的：记从背面朝上的牌恰有<span
+class="math inline">\(i\)</span>张开始，至恰有<span
+class="math inline">\(i -
+1\)</span>张为止，所需的翻牌次数的数学期望为<span
+class="math inline">\(s_i\)</span>，则<span class="math inline">\(s_n =
+\frac{1}{n} + \frac{n-1}{n}(s_{n-1} + 1)\)</span>，初值条件为<span
+class="math inline">\(s_1=1\)</span>，解得<span
+class="math inline">\(s_n = \frac{n+1}{2}\)</span>。故</p>
+<p><span class="math display">\[
+E(X) = \sum_{i=1}^m s_i = \frac{m(m+3)}{4}.
+\]</span></p>
+<p>最坏情况下，仍需要<span
+class="math inline">\(\frac{m(m+1)}{2}\)</span>次翻牌。</p>
+<h3 id="均匀分割策略">均匀分割策略</h3>
+<p>当<span class="math inline">\(n\)</span>很大时，有一个<span
+class="math inline">\(O(m \sqrt m)\)</span>的“均匀分割策略”。</p>
+<p>当<span
+class="math inline">\(n\)</span>很大时，每个玩家只能被轮到一次，我们考虑如何让前人为后人留下信息。由于场面上最显然的就是已被翻出的牌，一个简单的想法是，让这些正面朝上的牌充当区间的划分点，各区间等量地分布着一些连续的牌。我们只需要在第一趟把区间端点的牌找出并摆至相应的端点位置，后人只需将他们翻到的牌置入相应的区间即可。</p>
+<p>对<span
+class="math inline">\(m=11\)</span>的场合，当我们已经将数字<span
+class="math inline">\(1,2\)</span>翻出，并让它们作为区间端点后，此时的示意图如下：</p>
+<p><img src="./ill.png" /></p>
+<p>即，后续我们只需将<span class="math inline">\([3,5], [6,8],
+[9,11]\)</span>这些区间的牌按照顺序翻出即可。</p>
+<p>形式化地，首先，我们指定区间长度参数<span
+class="math inline">\(l\)</span>的值。不失一般性，设正整数<span
+class="math inline">\(l\)</span>满足<span class="math inline">\((l - 1)
++ l^2 = m\)</span>（在上例<span
+class="math inline">\(m=11\)</span>时，<span
+class="math inline">\(l=3\)</span>）。考虑<span
+class="math inline">\(1,2,\dots,
+l-1\)</span>作为区间端点，我们需要为<span class="math inline">\(l, l +
+1, \dots, m\)</span>的每一个数字分配一个区间。记在长度参数为<span
+class="math inline">\(l\)</span>时，第<span
+class="math inline">\(j\)</span>个区间为</p>
+<p><span class="math display">\[
+I_{l,j} = [jl, (j+1)l - 1],
+\]</span></p>
+<p>即，第<span class="math inline">\(1\)</span>个区间为<span
+class="math inline">\([l, 2l - 1]\)</span>，最后一个区间为<span
+class="math inline">\([l^2, (l+1)l - 1] = [l^2,
+m]\)</span>，可见区间数目与区间长度相等。当<span
+class="math inline">\(m=11\)</span>时，共有<span
+class="math inline">\(l=3\)</span>个区间，第<span
+class="math inline">\(1\)</span>个区间为<span
+class="math inline">\([3,5]\)</span>，最后一个区间为<span
+class="math inline">\([9,11]\)</span>；这些区间由正面朝上的的牌作为端点划分，如上图所示。</p>
+<p>我们的策略如下描述：</p>
+<ol type="1">
+<li>端点扫描阶段。线性翻牌，翻出端点牌<span class="math inline">\(1,
+\dots, l-1\)</span>，然后依照顺序置于序列末尾。可以证明<span
+class="math inline">\(l - 1 &lt; \sqrt m\)</span>，故这一趟所需翻牌次数
+<span class="math inline">\(\leq (l-1)m &lt; m \sqrt m\)</span>。</li>
+<li>区间置位阶段。线性翻出所有未翻出的牌，将它们置于相应的区间内。为了避免后人多次翻出重复的牌，我们规定，在置入区间时，置入区间端点所在处的左s侧或右侧。这一趟所需翻牌次数为<span
+class="math inline">\(m-l+1\)</span>。</li>
+<li>区间扫描阶段。对<span
+class="math inline">\(l\)</span>个区间，依次进行相当于<span
+class="math inline">\(m=l\)</span>的翻牌游戏，这一翻牌游戏共进行<span
+class="math inline">\(l\)</span>次。即便我们只使用最简单的随机翻开的方法，翻牌次数期望也只有<span
+class="math inline">\(\frac{l(l+1)}{2} =
+\frac{m+1}{2}\)</span>，故总翻牌次数期望为<span
+class="math inline">\(\frac{l(m+1)}{2} &lt; \frac{(\sqrt m + 1)(m+1)}{2}
+= O(m\sqrt {m})\)</span>。</li>
+</ol>
+<p>因此这是一个<span class="math inline">\(O(m \sqrt
+m)\)</span>的策略。</p>
+<h3 id="分治策略">分治策略</h3>
+<p>当<span
+class="math inline">\(m\)</span>很大时，有一个与快速排序思想极其相似的<span
+class="math inline">\(O(m \log m)\)</span>的分治策略。</p>
+<p>“均匀分割策略”还有很多可改进的空间。如果我们能够让正面朝上的牌平均分割两个区间，然后对这两个区间递归地解决子问题，就能达到更优的复杂度。具体描述如下：</p>
+<ol type="1">
+<li>线性翻牌，在此过程中，正面朝上翻出端点牌<span
+class="math inline">\(1\)</span>，并置于序列末尾。这一趟所需翻牌次数不大于<span
+class="math inline">\(m\)</span>。</li>
+<li>再次线性翻牌，将数字为<span class="math inline">\(2, \dots, \lceil
+\frac{m}{2} \rceil\)</span>的牌背面朝上置于端点牌<span
+class="math inline">\(1\)</span>左侧，将<span
+class="math inline">\(\lceil \frac{m}{2} \rceil + 1, \dots,
+m\)</span>置于右侧（在此过程中，即便已经可以将<span
+class="math inline">\(2\)</span>翻出并置于<span
+class="math inline">\(1\)</span>的末尾，为下次递归省出一步，但不必这么做，我们统一背面朝上放牌）。这一趟所需翻牌次数不大于<span
+class="math inline">\(m\)</span>。</li>
+<li>递归地，先处理左侧序列<span class="math inline">\(2, \dots, \lceil
+\frac{m}{2} \rceil\)</span>（规模为<span class="math inline">\(\lceil
+\frac{m}{2} \rceil - 1\)</span>的子问题），再处理右侧序列<span
+class="math inline">\(\lceil \frac{m}{2} \rceil + 1, \dots,
+m\)</span>（规模为<span class="math inline">\(m - \lceil \frac{m}{2}
+\rceil\)</span>的子问题）。当子问题规模为<span
+class="math inline">\(1\)</span>时，此时该牌必为接续牌，直接翻开即可。</li>
+</ol>
+<p>当<span
+class="math inline">\(m=11\)</span>时，完成第一次区间划分后的情况如下图所示：</p>
+<p><img src="./qsort.png" /></p>
+<p>随后，完成对左侧子问题的第一次区间划分后的情况如下图所示：</p>
+<p><img src="./qsort2.png" /></p>
+<p>整体时间复杂度计算方法为<span class="math inline">\(T(m) = 2m + 2
+T(\frac{m}{2})\)</span>，其中<span class="math inline">\(T(1) =
+1\)</span>。解得<span class="math inline">\(T(m) = 2m \log_2 m +
+m\)</span>。因此<span class="math inline">\(E(X) \leq m(2\log_2m +
+1)\)</span>，取等当且仅当<span
+class="math inline">\(m=1\)</span>。因此这是一个<span
+class="math inline">\(O(m \log
+m)\)</span>的策略。该策略的最坏情况时间复杂度为<span
+class="math inline">\(O(m \log m)\)</span>，平均时间复杂度为<span
+class="math inline">\(O(m \log m)\)</span>，最好情况时间复杂度为<span
+class="math inline">\(m\)</span>。</p>
+<hr />
+<p>所有<span class="math inline">\(n\)</span>很大的策略都适用于任意<span
+class="math inline">\(n\)</span>的策略。因此，即便在<span
+class="math inline">\(n\)</span>不大时，也可以考虑使用这个分治策略，因为它实在是太漂亮了。经过实验，对<span
+class="math inline">\(m &gt;
+13\)</span>的情况，该策略的平均表现优于“从最前往最后放策略”。</p>
+<p>感觉<span class="math inline">\(O(m \log
+m)\)</span>已经是最优的情况了。是否可以证明这一结论呢？待填坑。</p>
+<hr />
+<h4 id="代码示例">代码示例</h4>
+<p>项目地址： https://github.com/MercuryGH/sequence-card-flip-game</p>
+<p>API说明：</p>
+<ul>
+<li><code>table.query_flipped(index)</code>: 得到当前桌上第
+<code>index</code> 张牌是否正面朝上。</li>
+<li><code>table.query_val(index)</code>: 得到当前桌上第
+<code>index</code>
+张牌的数字。对正面朝上的牌，可反复调用；对背面朝上的牌，每轮只能调用1次。</li>
+<li><code>table.flip_queried_card()</code>:
+在某轮中，对背面朝上的接续牌调用过 <code>table.query_val()</code>
+后，将那张牌翻成正面朝上。不能在调用完
+<code>table.replace_queried_card()</code> 后调用。</li>
+<li><code>table.replace_queried_card(index)</code>:
+在某轮中，对背面朝上的牌调用过 <code>table.query_val()</code>
+后，将那张牌抽出后，重新置于序列的第 <code>index</code> 个位置。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    // calling example:</span></span><br><span class="line"><span class="comment">    bool finish_action = false;</span></span><br><span class="line"><span class="comment">    recurse_entry(table, cards, 0, 0, finish_action);</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">recurse_entry</span><span class="params">(Table&amp; table, <span class="type">const</span> std::vector&lt;Card&gt;&amp; cards, <span class="type">int</span> index_offset, <span class="type">int</span> val_offset, <span class="type">bool</span>&amp; finish_action)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (finish_action) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> n_cards = cards.<span class="built_in">size</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// early return, no operation needed</span></span><br><span class="line">    <span class="keyword">if</span> (n_cards == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">bool</span> all_cards_flipped = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n_cards; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cards.<span class="built_in">at</span>(i).flipped == <span class="literal">false</span>) &#123;</span><br><span class="line">            all_cards_flipped = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (all_cards_flipped == <span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (n_cards == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// flip and leave</span></span><br><span class="line">        <span class="type">int</span> val = table.<span class="built_in">query_val</span>(index_offset);</span><br><span class="line">        <span class="built_in">assert</span>(val == val_offset + <span class="number">1</span>);</span><br><span class="line">        table.<span class="built_in">flip_queried_card</span>();</span><br><span class="line">        finish_action = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="keyword">auto</span> [ max_flipped_val, max_flipped_index ] = <span class="built_in">get_maximum_flipped_card_val_index</span>(cards);</span><br><span class="line">    <span class="keyword">if</span> (max_flipped_val == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// if no card is flipped, linear search.</span></span><br><span class="line">        <span class="built_in">linear_search_val</span>(table, val_offset + <span class="number">1</span>, index_offset, n_cards);</span><br><span class="line">        finish_action = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the problem division is complete. handle the left and right subproblem</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> min_flipped_index = <span class="built_in">get_minimum_flipped_card_index</span>(cards, val_offset);</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> target_r_interval_n_cards = n_cards / <span class="number">2</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> cur_r_interval_n_cards = n_cards - <span class="number">1</span> - min_flipped_index;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// put the left wrong number to right</span></span><br><span class="line">    <span class="keyword">if</span> (cur_r_interval_n_cards &lt; target_r_interval_n_cards) &#123;</span><br><span class="line">        <span class="comment">// flip the leftest card and place it</span></span><br><span class="line">        <span class="type">int</span> val = table.<span class="built_in">query_val</span>(index_offset);</span><br><span class="line">        <span class="keyword">if</span> (val - val_offset &gt; n_cards - target_r_interval_n_cards) &#123;</span><br><span class="line">            <span class="comment">// insert to right side</span></span><br><span class="line">            table.<span class="built_in">replace_queried_card</span>(index_offset + min_flipped_index);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// insert to left side</span></span><br><span class="line">            table.<span class="built_in">replace_queried_card</span>(index_offset + min_flipped_index - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        finish_action = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::vector&lt;Card&gt; <span class="title">l_interval_cards</span><span class="params">(min_flipped_index)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; min_flipped_index; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (table.<span class="built_in">query_flipped</span>(i + index_offset) == <span class="literal">false</span>) &#123;</span><br><span class="line">            l_interval_cards.<span class="built_in">at</span>(i) = &#123; <span class="number">-1</span>, <span class="literal">false</span> &#125;;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            l_interval_cards.<span class="built_in">at</span>(i) = &#123; table.<span class="built_in">query_val</span>(i + index_offset), <span class="literal">true</span> &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::vector&lt;Card&gt; <span class="title">r_interval_cards</span><span class="params">(target_r_interval_n_cards)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = min_flipped_index + <span class="number">1</span>, j = <span class="number">0</span>; i &lt; n_cards; i++, j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (table.<span class="built_in">query_flipped</span>(i + index_offset) == <span class="literal">false</span>) &#123;</span><br><span class="line">            r_interval_cards.<span class="built_in">at</span>(j) = &#123; <span class="number">-1</span>, <span class="literal">false</span> &#125;;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            r_interval_cards.<span class="built_in">at</span>(j) = &#123; table.<span class="built_in">query_val</span>(i + index_offset), <span class="literal">true</span> &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">recurse_entry</span>(table, l_interval_cards,</span><br><span class="line">        index_offset,</span><br><span class="line">        val_offset + <span class="number">1</span>,</span><br><span class="line">        finish_action</span><br><span class="line">    );</span><br><span class="line">    <span class="built_in">recurse_entry</span>(table, r_interval_cards,</span><br><span class="line">        index_offset + min_flipped_index + <span class="number">1</span>,</span><br><span class="line">        val_offset + min_flipped_index + <span class="number">1</span>,</span><br><span class="line">        finish_action</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">linear_search_val</span><span class="params">(Table&amp; table, <span class="type">int</span> next_val, <span class="type">int</span> index_offset, <span class="type">int</span> n_cards)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> val = table.<span class="built_in">query_val</span>(index_offset);</span><br><span class="line">    <span class="keyword">if</span> (val == next_val) &#123;</span><br><span class="line">        table.<span class="built_in">flip_queried_card</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// insert to last</span></span><br><span class="line">    table.<span class="built_in">replace_queried_card</span>(index_offset + n_cards - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/" title="顺序翻牌策略问题">https://zrephel.fun/2024/01/01/顺序翻牌策略问题/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E9%9A%8F%E6%9C%BA%E8%BF%87%E7%A8%8B/" rel="tag"># 随机过程</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/13/%E5%88%86%E9%83%A8%E5%92%8C%E5%88%86%E2%80%94%E2%80%94%E9%98%BF%E8%B4%9D%E5%B0%94%E5%8F%98%E6%8D%A2/" rel="prev" title="分部和分——阿贝尔变换">
+                  <i class="fa fa-angle-left"></i> 分部和分——阿贝尔变换
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/17/%E4%B8%80%E4%BA%9B%E6%88%91%E5%8F%91%E6%98%8E%E7%9A%84%E6%96%87%E5%AD%97%E5%B0%8F%E6%B8%B8%E6%88%8F/" rel="next" title="一些我发明的文字小游戏">
+                  一些我发明的文字小游戏 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2024/01/01/%E9%A1%BA%E5%BA%8F%E7%BF%BB%E7%89%8C%E7%AD%96%E7%95%A5%E9%97%AE%E9%A2%98/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>

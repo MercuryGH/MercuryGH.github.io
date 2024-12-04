@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="一道抛硬币问题的不同解法和比较 | 统计之都 (cosx.org)  题干 抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列\(s\)首次出现，所需抛掷次数的数学期望。 具体的\(s\)可以是001、1111或1101001等。 推广（猴子打字问题）：给定一个字符生成器，每次以概率\(p_i\)生成字符\(i\)，且\(\sum_i p_i &#x3D; 1\)。求直到生成序列\(s\)首">
+<meta property="og:type" content="article">
+<meta property="og:title" content="随机序列的首次生成问题">
+<meta property="og:url" content="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="一道抛硬币问题的不同解法和比较 | 统计之都 (cosx.org)  题干 抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列\(s\)首次出现，所需抛掷次数的数学期望。 具体的\(s\)可以是001、1111或1101001等。 推广（猴子打字问题）：给定一个字符生成器，每次以概率\(p_i\)生成字符\(i\)，且\(\sum_i p_i &#x3D; 1\)。求直到生成序列\(s\)首">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/states.png">
+<meta property="article:published_time" content="2023-07-18T05:35:21.000Z">
+<meta property="article:modified_time" content="2024-11-09T09:18:50.416Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="概率论">
+<meta property="article:tag" content="随机过程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/states.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/","path":"2023/07/18/随机序列的首次生成问题/","title":"随机序列的首次生成问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>随机序列的首次生成问题 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E5%B9%B2"><span class="nav-number">1.</span> <span class="nav-text">题干</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%951%E6%9C%B4%E7%B4%A0%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE"><span class="nav-number">2.1.</span> <span class="nav-text">方法1：朴素马尔可夫链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%952%E8%80%83%E8%99%91%E4%B8%A4%E4%B8%AA%E7%9B%B8%E5%90%8C%E5%BA%8F%E5%88%97%E4%B9%8B%E9%97%B4%E7%9A%84%E6%9C%9F%E6%9C%9B%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.2.</span> <span class="nav-text">方法2：考虑两个相同序列之间的期望距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%953%E9%9E%85"><span class="nav-number">2.3.</span> <span class="nav-text">方法3：鞅</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">2.4.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="随机序列的首次生成问题 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          随机序列的首次生成问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-07-18 13:35:21" itemprop="dateCreated datePublished" datetime="2023-07-18T13:35:21+08:00">2023-07-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-11-09 17:18:50" itemprop="dateModified" datetime="2024-11-09T17:18:50+08:00">2024-11-09</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://cosx.org/2011/01/different-ways-to-solve-a-tossing-problem">一道抛硬币问题的不同解法和比较
+| 统计之都 (cosx.org)</a></p>
+</blockquote>
+<h2 id="题干">题干</h2>
+<p>抛掷一枚均匀硬币若干次，记0为反面，1为正面，求直到抛掷结果序列<span
+class="math inline">\(s\)</span>首次出现，所需抛掷次数的数学期望。</p>
+<p>具体的<span
+class="math inline">\(s\)</span>可以是001、1111或1101001等。</p>
+<p>推广（猴子打字问题）：给定一个字符生成器，每次以概率<span
+class="math inline">\(p_i\)</span>生成字符<span
+class="math inline">\(i\)</span>，且<span class="math inline">\(\sum_i
+p_i = 1\)</span>。求直到生成序列<span
+class="math inline">\(s\)</span>首次出现，所需生成次数的数学期望。</p>
+<span id="more"></span>
+<h2 id="解答">解答</h2>
+<h3 id="方法1朴素马尔可夫链">方法1：朴素马尔可夫链</h3>
+<p>这种方法适用于短序列的求解，通用性不强，因为需要求解一个维度为<span
+class="math inline">\(\Theta(2^{|s|-1})\)</span>的线性方程组，当<span
+class="math inline">\(s\)</span>的长度较大时难以计算。</p>
+<h3
+id="方法2考虑两个相同序列之间的期望距离">方法2：考虑两个相同序列之间的期望距离</h3>
+<p>这一方法的通用性也不强，但提供了一种有趣的思路。它依赖如下定理：</p>
+<hr />
+<p><strong>定理</strong> 给定一个充分长的字符串，它由每次以概率<span
+class="math inline">\(p_i\)</span>生成字符<span
+class="math inline">\(i\)</span>，且<span class="math inline">\(\sum_i
+p_i = 1\)</span>的字符生成器生成。现有一长度为<span
+class="math inline">\(|s|\)</span>的滑动窗口框选出某一序列<span
+class="math inline">\(s\)</span>，然后不断向右滑动，直到框选到某一内容与<span
+class="math inline">\(s\)</span>相同的序列<span
+class="math inline">\(t\)</span>（<span
+class="math inline">\(s\)</span>与<span
+class="math inline">\(t\)</span>位置不同，但可重叠）。记<span
+class="math inline">\(s = \{c_{i}\}_{i = 1, \dots,
+|s|}\)</span>，此过程中滑动窗口滑动的距离为<span
+class="math inline">\(X\)</span>，则<span class="math inline">\(E(X) =
+\left( \prod_{i=1}^{|s|} p_{c_i} \right)^{-1}\)</span>。</p>
+<p>特别地，对于均匀硬币字符生成器，有<span class="math inline">\(p_1 =
+p_2 = \frac{1}{2}\)</span>，于是<span class="math inline">\(E(X) =
+2^{|s|}\)</span>，与<span
+class="math inline">\(s\)</span>的具体内容无关。</p>
+<p>定理的证明比较复杂，笔者也不会。</p>
+<hr />
+<p>由此可对已生成了序列后的情况列状态转移方程。</p>
+<p>例如，对于硬币序列<span class="math inline">\(s =
+100\)</span>，我们注意到，无论之后掷出0还是1，结果为000或001，这与从零开始掷骰子没有任何区别，即等价于000等价于0，001等价于1。于是从零开始掷出<span
+class="math inline">\(100\)</span>所需次数的数学期望恰好等于两个<span
+class="math inline">\(100\)</span>之间的距离的数学期望，为<span
+class="math inline">\(2^3 = 8\)</span>。</p>
+<p>而对于硬币序列<span class="math inline">\(s =
+101\)</span>，情况有所不同。如果之后掷出1，则011等价于1；但若之后掷出0，则会出现1010等价于10，并非从零开始。画出状态转移图如下：</p>
+<figure>
+<img src="states.png" alt="states" />
+<figcaption aria-hidden="true">states</figcaption>
+</figure>
+<p>记从状态<span class="math inline">\(i\)</span>出发，首次回到状态<span
+class="math inline">\(101\)</span>所需转移次数的数学期望为<span
+class="math inline">\(E_i\)</span>，列出状态转移方程</p>
+<p><span class="math display">\[
+\begin{cases}
+E_{101} = \frac{1}{2}(E_{10} + 1) + \frac{1}{2}(E_{1} + 1) = 8, \\
+E_{10} = \frac{1}{2} \times 1 + \frac{1}{2}(E_{0} + 1), \\
+E_{1} = \frac{1}{2}(E_{1} + 1) + \frac{1}{2}(E_{10} + 1), \\
+E_{0} = \frac{1}{2}(E_{0} + 1) + \frac{1}{2}(E_{1} + 1).
+\end{cases}
+\]</span></p>
+<p>解得<span class="math inline">\(E_0 = 10, E_1 =
+8\)</span>。那么，从零开始直到生成<span
+class="math inline">\(s\)</span>所需次数的数学期望就是<span
+class="math inline">\(E = \frac{1}{2}(E_0 + 1) + \frac{1}{2} (E_1 + 1) =
+10 = E_0\)</span>。</p>
+<h3 id="方法3鞅">方法3：鞅</h3>
+<p>这是一个非常巧妙，也非常通用的方法。</p>
+<p>设我们想要得到的序列为<span class="math inline">\(s = \{c_i\}_{i = 1,
+\dots, n}\)</span>。</p>
+<p>构造公平赌局。设想有一列赌徒在一个公平的赌场参赌，这个赌场使用的唯一一台赌博机就是题目中的字符生成器，且每天都只生成一个字符，因此所有的赌徒在相同天数看到的字符都是相同的。每个赌徒起初都有<span
+class="math inline">\(1\)</span>元。第<span
+class="math inline">\(i\)</span>名赌徒会在第<span
+class="math inline">\(i\)</span>天的开始赌起，首先以他的<span
+class="math inline">\(1\)</span>元打赌那天产生的字符将是<span
+class="math inline">\(c_1\)</span>。若</p>
+<ul>
+<li>打赌赢了，则获得<span class="math inline">\(d_1 =
+p_{c_1}^{-1}\)</span>元。该赌徒现在有<span
+class="math inline">\(p_{c_1}^{-1}\)</span>元，并继续以这些钱赌下一天的结果是<span
+class="math inline">\(c_{2}\)</span>。</li>
+<li>打赌输了，则永久退出赌局。</li>
+</ul>
+<p>以此类推，若第二天的赌局也胜利了，则赌徒将拥有<span
+class="math inline">\(d_2 = p_{c_1}^{-1} \cdot
+p_{c_2}^{-1}\)</span>元，并继续以<span
+class="math inline">\(d_2\)</span>的钱赌下一天的结果是<span
+class="math inline">\(c_{3}\)</span>，直到赌完<span
+class="math inline">\(n\)</span>次，得到序列<span
+class="math inline">\(s\)</span>为止。</p>
+<p>可见，所有赌徒的赌法都是全押，即便输了，也只会给赌场贡献<span
+class="math inline">\(1\)</span>元钱。但若有一名赌徒全胜，他将得到来自赌场的<span
+class="math inline">\(d_n - 1 = \prod_{i=1}^n p_{c_i}^{-1} -
+1\)</span>元的收益。</p>
+<p>每天一开始，就会有一名新的赌徒开始赌。记<span
+class="math inline">\(Y_m\)</span>为第<span
+class="math inline">\(m\)</span>天结束时赌场的总收入，由于所有的打赌都是公平的，故
+<span class="math inline">\(\{Y_m, m \geq 1\}\)</span>是鞅，均值为<span
+class="math inline">\(0\)</span>。</p>
+<p>现在考虑直到一名赌徒全胜，赌场赢得的情况。记<span
+class="math inline">\(X\)</span>为直到一名赌徒全胜，经过的天数。</p>
+<p>对于长度为<span class="math inline">\(n\)</span>的序列<span
+class="math inline">\(s\)</span>，这名赌徒第一次赌的是第<span
+class="math inline">\(X-
+n+1\)</span>天的结果。由于该序列在这名幸运赌徒赌的过程中首次出现，因此这名幸运赌徒的前辈都唯一例外输了<span
+class="math inline">\(1\)</span>元，共计为赌场贡献了<span
+class="math inline">\(X-n\)</span>元。</p>
+<p>而幸运赌徒得到了<span class="math inline">\(d_n - 1\)</span>元。</p>
+<p>那么，幸运赌徒的后辈呢？他们可能有得有失。具体而言，在第<span
+class="math inline">\(X-k + 1\)</span>（<span class="math inline">\(1
+\leq k \leq n\)</span>）天开始赌的赌徒赢钱，当且仅当<span
+class="math inline">\(s\)</span>的长度为<span
+class="math inline">\(k\)</span>的后缀与<span
+class="math inline">\(s\)</span>的同等长度的前缀完全相同，且这名赌徒恰好赢得<span
+class="math inline">\(d_k - 1\)</span>元。</p>
+<p>故赌场在这一过程中的总收入为</p>
+<p><span class="math display">\[
+Y_X = X - n + \sum_{i=1}^n f_i
+\]</span></p>
+<p>其中</p>
+<p><span class="math display">\[
+f_i = \begin{cases}
+1, &amp; s_{1:i} = s_{n-i+1:n}, \\
+1 - d_i, &amp; \text{otherwise}.
+\end{cases}
+\]</span></p>
+<p>化简得</p>
+<p><span class="math display">\[
+Y_X = X - \sum_{i=1}^n \delta_{i} d_i
+\]</span></p>
+<p>其中</p>
+<p><span class="math display">\[
+\delta_i = \begin{cases}
+1, &amp; s_{1:i} = s_{n-i+1:n}, \\
+0, &amp; \text{otherwise}.
+\end{cases}
+\]</span></p>
+<p>由于<span class="math inline">\(E(Y_X) = 0\)</span>，故</p>
+<p><span class="math display">\[
+E(X) = \sum_{i=1}^n \delta_{i} d_i = \sum_{i=1}^n \delta_i
+\frac{1}{p_{c_1}p_{c_2}\dots p_{c_i}}.
+\]</span></p>
+<h3 id="例子">例子</h3>
+<ol type="1">
+<li><span class="math inline">\(s = 0 ... 0\)</span>（<span
+class="math inline">\(n\)</span>个<span
+class="math inline">\(0\)</span>），</li>
+</ol>
+<p><span class="math display">\[
+E(X) = \sum_{i=1}^n 2^{i} = \frac{2(1-2^n)}{1-2} = 2^{n+1}-2.
+\]</span></p>
+<ol start="2" type="1">
+<li><span class="math inline">\(s=100\)</span>，<span
+class="math inline">\(E(X) = \sum_{i=1}^3 \delta_i d_i = d_3 = 2^3 =
+8\)</span>。</li>
+<li><span class="math inline">\(s=101\)</span>，<span
+class="math inline">\(E(X) = d_1 + d_3 = 2 + 2^3 = 10\)</span>。</li>
+<li><span class="math inline">\(s = \text{tencent}\)</span>，<span
+class="math inline">\(p_{i} = \frac{1}{26}\)</span>，<span
+class="math inline">\(i \in \{ \text{&#39;a&#39;}, \dots,
+\text{&#39;z&#39;}\}\)</span>，</li>
+</ol>
+<p><span class="math display">\[
+E(X) = 26 + 26^7.
+\]</span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/" title="随机序列的首次生成问题">https://zrephel.fun/2023/07/18/随机序列的首次生成问题/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+              <a href="/tags/%E9%9A%8F%E6%9C%BA%E8%BF%87%E7%A8%8B/" rel="tag"># 随机过程</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/10/n%E7%BB%B4%E5%A2%99%E8%A7%92%E4%B8%8Ee%E7%9A%84%E4%BC%B0%E8%AE%A1/" rel="prev" title="n维墙角与e的估计">
+                  <i class="fa fa-angle-left"></i> n维墙角与e的估计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/" rel="next" title="格林公式与高斯公式">
+                  格林公式与高斯公式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>

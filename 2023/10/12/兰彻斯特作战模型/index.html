@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="MAP5932(MOW).dvi (fsu.edu)   策划冷知识--兰切斯特规律是个什么鬼？ - 知乎 (zhihu.com)  考虑两军交战：  \(x(t)\)，\(y(t)\)分别表示\(t\)时刻，甲方和乙方的兵力； \(a\)，\(b\)分别表示乙、甲两方的单兵（作战单位）平均毁伤率。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="兰彻斯特作战模型">
+<meta property="og:url" content="https://zrephel.fun/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="MAP5932(MOW).dvi (fsu.edu)   策划冷知识--兰切斯特规律是个什么鬼？ - 知乎 (zhihu.com)  考虑两军交战：  \(x(t)\)，\(y(t)\)分别表示\(t\)时刻，甲方和乙方的兵力； \(a\)，\(b\)分别表示乙、甲两方的单兵（作战单位）平均毁伤率。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-12T08:42:26.000Z">
+<meta property="article:modified_time" content="2024-11-09T09:18:50.289Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="微分方程">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/","path":"2023/10/12/兰彻斯特作战模型/","title":"兰彻斯特作战模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>兰彻斯特作战模型 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%BA%BF%E6%80%A7%E5%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">第一线性律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%BA%BF%E6%80%A7%E5%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">第二线性律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E6%96%B9%E5%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">平方律</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E6%96%B9%E5%BE%8B%E4%B8%8B%E7%9A%84%E6%88%98%E4%BA%89%E4%BB%A3%E4%BB%B7"><span class="nav-number">3.1.</span> <span class="nav-text">平方律下的战争代价</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%84%88%E6%88%98%E6%84%88%E5%8B%87"><span class="nav-number">4.</span> <span class="nav-text">愈战愈勇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">例题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="兰彻斯特作战模型 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          兰彻斯特作战模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-10-12 16:42:26" itemprop="dateCreated datePublished" datetime="2023-10-12T16:42:26+08:00">2023-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-11-09 17:18:50" itemprop="dateModified" datetime="2024-11-09T17:18:50+08:00">2024-11-09</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.math.fsu.edu/~mesterto/NewCourses/MAP5932/2016/Notes/lecture02.pdf">MAP5932(MOW).dvi
+(fsu.edu)</a></p>
+</blockquote>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27768067">策划冷知识--兰切斯特规律是个什么鬼？
+- 知乎 (zhihu.com)</a></p>
+</blockquote>
+<p>考虑两军交战：</p>
+<ul>
+<li><span class="math inline">\(x(t)\)</span>，<span
+class="math inline">\(y(t)\)</span>分别表示<span
+class="math inline">\(t\)</span>时刻，甲方和乙方的兵力；</li>
+<li><span class="math inline">\(a\)</span>，<span
+class="math inline">\(b\)</span>分别表示乙、甲两方的单兵（作战单位）平均毁伤率。</li>
+</ul>
+<span id="more"></span>
+<h2 id="第一线性律">第一线性律</h2>
+<p>第一线性律认为，战斗是一对一的，即在双方战线上战斗的士兵数目基本相同，且基本不变。进一步可认为始终双方仅派出一个作战单位对战。在此假设下，毁伤率仅与单兵毁伤率有关，对甲军兵力分析，有</p>
+<p><span class="math display">\[
+x(t) - x(t + \Delta t) = a \Delta t,
+\]</span></p>
+<p>令<span class="math inline">\(\Delta t \to
+0\)</span>对称分析，可推导出系统微分方程组：</p>
+<p><span class="math display">\[
+\begin{cases}
+\frac{\mathrm d x(t)}{\mathrm dt} = -a, \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b, \\
+\end{cases}
+\]</span></p>
+<p>初值条件<span class="math inline">\(x(0) = x_0, y(0) =
+y_0\)</span>为双方已知的起始兵力。</p>
+<p>该微分方程组是平凡的，<span
+class="math inline">\(x(t)\)</span>和<span
+class="math inline">\(y(t)\)</span>均为直线。</p>
+<h2 id="第二线性律">第二线性律</h2>
+<p>第二线性律用于仅进行炮火覆盖，而无直接短兵相接的情况。假设平均毁伤率</p>
+<ul>
+<li>与敌军当前剩余兵力成正比，因为剩余敌军越少，炮火覆盖的杀伤效果越差，</li>
+<li>与我军当前兵力成正比，因为我军兵力越多，炮火越密集。</li>
+</ul>
+<p>那么，对甲军兵力分析，有</p>
+<p><span class="math display">\[
+x(t) - x(t + \Delta t) = a x(t) y(t) \Delta t,
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+\begin{cases}
+\frac{\mathrm d x(t)}{\mathrm dt} = -a x(t) y(t), \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b x(t) y(t).
+\end{cases}
+\]</span></p>
+<p>进一步地，有</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm d y(t)} = \frac{a}{b},
+\]</span></p>
+<p>即<span class="math inline">\(x(t), y(t)\)</span>间成线性关系。</p>
+<p>下面推导解析表达。由线性关系可知</p>
+<p><span class="math display">\[
+x(t) = \frac{a}{b}y(t) + C,
+\]</span></p>
+<p>令<span class="math inline">\(t = 0\)</span>，代入初值条件得<span
+class="math inline">\(C = x_0 - \frac{a}{b}y_0\)</span>。故</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\mathrm d y(t)}{\mathrm dt} &amp;= -b x(t) y(t) \\
+&amp;= -b \left (\frac{a}{b} y(t) + x_0 - \frac{a}{b}y_0\right) y(t) \\
+&amp;= -a y^2(t) - (bx_0 -ay_0 ) y(t).
+\end{aligned}
+\]</span></p>
+<p>解这个微分方程，可以令<span class="math inline">\(z =
+\frac{1}{y}\)</span>，化为一阶线性微分方程求解。解得</p>
+<p><span class="math display">\[
+\begin{cases}
+y(t) = \frac{y_0 (k-1)}{k \mathrm e^{ay_0 (k-1)t} - 1}, \\
+x(t) = \frac{x_0 (1-k)}{ \mathrm e^{ay_0 (1-k)t} - k}.
+\end{cases}
+\]</span></p>
+<p>其中<span class="math inline">\(k =
+\frac{bx_0}{ay_0}\)</span>。当<span class="math inline">\(k =
+1\)</span>时，上式为<span
+class="math inline">\(\frac{0}{0}\)</span>形式，可用洛必达法则得出</p>
+<p><span class="math display">\[
+\begin{cases}
+y(t) = \frac{y_0}{ay_0 t + 1}, \\
+x(t) = \frac{x_0}{ay_0 t + 1}.
+\end{cases}
+\]</span></p>
+<p>求解出的函数<span class="math inline">\(x(t),
+y(t)\)</span>均呈衰减曲线，不存在零点，与炮火覆盖的假设相符。</p>
+<h2 id="平方律">平方律</h2>
+<p>平方律用于一般的直瞄射击情况。设双方的每件武器对敌方进行直瞄射击，一旦毁伤目标，则立即转移火力，向下一目标射击。双方的射击流都是泊松流。故平均毁伤率</p>
+<ul>
+<li>与我军当前兵力成正比，而与敌军当前兵力无关</li>
+</ul>
+<p>那么</p>
+<p><span class="math display">\[
+x(t) - x(t + \Delta t) = ay(t) \Delta t,
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+\begin{cases}
+\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t), \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b x(t).
+\end{cases}
+\]</span></p>
+<p>有</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm d y(t)} = \frac{ay(t)}{bx(t)},
+\]</span></p>
+<p>分离变量，两边积分得到</p>
+<p><span class="math display">\[
+bx^2(t) - ay^2(t) = C,
+\]</span></p>
+<p>令<span class="math inline">\(t=0\)</span>得<span
+class="math inline">\(C = bx_0^2 - ay_0^2\)</span>。故</p>
+<p><span class="math display">\[
+bx^2(t) - ay^2(t) = bx_0^2 - ay_0^2.
+\]</span></p>
+<p>一般地，这是一个对称中心为原点的双曲线的第一象限的部分。</p>
+<p>下面推导解析表达。由</p>
+<p><span class="math display">\[
+\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t),
+\]</span></p>
+<p>两边对<span class="math inline">\(t\)</span>求导得</p>
+<p><span class="math display">\[
+\frac{\mathrm d^2 x(t)}{\mathrm dt^2} = -a\frac{\mathrm d y(t)}{\mathrm
+dt} = abx(t).
+\]</span></p>
+<p>上述微分方程的特征方程为<span class="math inline">\(x^2 -ab =
+0\)</span>，两根<span class="math inline">\(x = \pm
+\sqrt{ab}\)</span>，通解为<span class="math inline">\(x(t) = C_1\mathrm
+e^{\sqrt{ab}t} + C_2\mathrm e^{-\sqrt{ab}t}\)</span>。</p>
+<ul>
+<li>令<span class="math inline">\(t = 0\)</span>得<span
+class="math inline">\(C_1 + C_2 = x_0\)</span>，</li>
+<li>对<span class="math inline">\(t\)</span>求导后，有<span
+class="math inline">\(\frac{\mathrm d x(t)}{\mathrm dt} = \sqrt{ab}(C_1
+\mathrm e^{\sqrt{ab}t} - C_2 \mathrm e^{-\sqrt{ab}t}) =
+-ay(t)\)</span>，令<span class="math inline">\(t=0\)</span>得<span
+class="math inline">\(\sqrt{ab}(C_1-C_2) = -ay_0\)</span>，</li>
+</ul>
+<p>解得<span class="math inline">\(C_1,C_2\)</span>，代回<span
+class="math inline">\(x(t)\)</span>得</p>
+<p><span class="math display">\[
+x(t) = \frac{1}{2}\left( \left(x_0 - \sqrt{\frac{a}{b}}y_0\right)
+\mathrm e^{\sqrt{ab}t} + \left(x_0 + \sqrt{\frac{a}{b}}y_0\right)
+\mathrm e^{-\sqrt{ab}t} \right).
+\]</span></p>
+<p>利用双曲函数表达，有</p>
+<p><span class="math display">\[
+x(t) = x_0\cosh(\sqrt{ab} t) - \sqrt{\frac{a}{b}} y_0\sinh(\sqrt{ab} t),
+\]</span></p>
+<p>由对称性得</p>
+<p><span class="math display">\[
+y(t) = y_0\cosh(\sqrt{ab} t) - \sqrt{\frac{b}{a}} x_0\sinh(\sqrt{ab} t).
+\]</span></p>
+<p>当<span class="math inline">\(x(t)\)</span>存在零点<span
+class="math inline">\(T\)</span>时，<span
+class="math inline">\(y&#39;(t)\)</span>满足<span
+class="math inline">\(y&#39;(T) =
+0\)</span>，此零点即为战斗结束，甲方全军覆没，乙方获胜之时。令<span
+class="math inline">\(x(t) = 0, k = \mathrm e^{\sqrt{ab}
+t}\)</span>，得</p>
+<p><span class="math display">\[
+\begin{cases}
+k = \sqrt\frac{\sqrt {ab} x_0y_0}{\sqrt{a} y_0 - \sqrt b x_0}, \\
+T = \frac{1}{2\sqrt{ab}} \ln\left( \frac{\sqrt {ab} x_0y_0}{\sqrt{a} y_0
+- \sqrt b x_0}\right).
+\end{cases}
+\]</span></p>
+<p>最后，乙方剩余兵力可代入式<span class="math inline">\(bx^2(t) -
+ay^2(t) = bx_0^2 - ay_0^2\)</span>计算，为</p>
+<p><span class="math display">\[
+y(T) = \sqrt{ y_0^2 - \frac{b}{a}x_0^2 }.
+\]</span></p>
+<p>定量分析可得出如下结论：</p>
+<ul>
+<li>若<span class="math inline">\(ay_0^2 &gt;
+bx_0^2\)</span>，则对任意<span class="math inline">\(t\)</span>，有<span
+class="math inline">\(ay^2(t) &gt; bx^2(t)\)</span>，最终<span
+class="math inline">\(x(t)\)</span>在经过时间<span
+class="math inline">\(T\)</span>后变成<span
+class="math inline">\(0\)</span>，甲方被歼灭，乙方获胜。</li>
+<li>反之，若<span class="math inline">\(ay_0^2 &lt;
+bx_0^2\)</span>，则甲方获胜。</li>
+<li>若<span class="math inline">\(bx_0^2 =
+ay_0^2\)</span>，则双方同归于尽。</li>
+</ul>
+<h3 id="平方律下的战争代价">平方律下的战争代价</h3>
+<p>在乙方获胜的前提下，设乙方每投入一个战斗单位的代价为<span
+class="math inline">\(c_1\)</span>，每阵亡一个战斗单位的代价为<span
+class="math inline">\(c_2\)</span>，则乙方在战斗结束后，付出的总代价为</p>
+<p><span class="math display">\[
+f(y_0) = c_1 y_0 + c_2\sqrt{ y_0^2 - \frac{b}{a}x_0^2 }
+\]</span></p>
+<p>求<span class="math inline">\(\min
+f\)</span>，可以得到使得代价最小化的战争投入</p>
+<p><span class="math display">\[
+y_0^* = \frac{\sqrt{b} (1 + \frac{c_2}{c_1})x_0}{\sqrt a \sqrt{1 +
+2\frac{c_2}{c_1}}}.
+\]</span></p>
+<h2 id="愈战愈勇">愈战愈勇</h2>
+<p>在某些游戏中，甲方可能携带“愈战愈勇”加成，使得该方的输出能力随着生命值的减少而上升，即在濒死时可具有最强的输出能力，量化表现为</p>
+<p><span class="math display">\[
+y(t) - y(t + \Delta t) = b(k - x(t)) \Delta t,
+\]</span></p>
+<p>其中<span
+class="math inline">\(k\)</span>为濒死状态下的输出能力系数。例如，当<span
+class="math inline">\(k=2x_0\)</span>时，濒死时的输出能力恰好为满血时的输出能力的两倍。</p>
+<p>如果其面对的对手的输出能力与“平方律”相同，即满足</p>
+<p><span class="math display">\[
+\begin{cases}
+\frac{\mathrm d x(t)}{\mathrm dt} = -a y(t), \\
+\frac{\mathrm d y(t)}{\mathrm dt} = -b(k - x(t)),
+\end{cases}
+\]</span></p>
+<p>那么，同理可推导得到，对任意<span
+class="math inline">\(t\)</span>，有</p>
+<p><span class="math display">\[
+bx^2(t) + ay^2(t) - 2bkx(t) = bx_0^2 + ay_0^2 - 2bkx_0.
+\]</span></p>
+<p>一般地，这是一个对称中心在<span
+class="math inline">\(x\)</span>轴的正半轴上的椭圆的第一象限的一部分。若需要求解战斗结束的点，令<span
+class="math inline">\(y(T) = 0\)</span>或<span
+class="math inline">\(x(T) = 0\)</span>，查看解的情况是否合理即可。</p>
+<h3 id="例题">例题</h3>
+<p>勇者初始生命值为<span
+class="math inline">\(200\)</span>，每秒可造成伤害<span
+class="math inline">\(2\)</span>点；BOSS初始生命值为<span
+class="math inline">\(400\)</span>，每秒可造成伤害<span
+class="math inline">\(2\)</span>点。且勇者具有“愈战愈勇”加成：生命每减少1%，输出能力就增加1%；而BOSS生命每减少1%，输出能力就下降1%。现两者对战，求勇者获胜时的生命值。</p>
+<hr />
+<p>代入数据<span class="math inline">\(a=1/20\)</span>，<span
+class="math inline">\(y_0 = 400\)</span>，<span
+class="math inline">\(b=1/100\)</span>，<span class="math inline">\(x_0
+= 200\)</span>，<span class="math inline">\(k = 2x_0\)</span>，令<span
+class="math inline">\(y(T) = 0\)</span>，得到</p>
+<p><span class="math display">\[
+x(T) = 100 (4 \pm  2 \sqrt 3),
+\]</span></p>
+<p>舍去不合理的解，得到<span class="math inline">\(x(T) = 100(4 - 2
+\sqrt 3) \approx 53.59\)</span>，即勇者获胜时的生命值。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/" title="兰彻斯特作战模型">https://zrephel.fun/2023/10/12/兰彻斯特作战模型/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B/" rel="tag"># 微分方程</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/01/%E9%9D%A2%E8%AF%95%E6%8E%92%E7%8F%AD%E9%97%AE%E9%A2%98/" rel="prev" title="面试排班问题">
+                  <i class="fa fa-angle-left"></i> 面试排班问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/10/31/%E7%9B%92%E5%AD%90%E9%87%8C%E7%9A%84%E5%BD%A9%E8%89%B2%E7%90%83/" rel="next" title="盒子里的彩色球">
+                  盒子里的彩色球 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2023/10/12/%E5%85%B0%E5%BD%BB%E6%96%AF%E7%89%B9%E4%BD%9C%E6%88%98%E6%A8%A1%E5%9E%8B/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>

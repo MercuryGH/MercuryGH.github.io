@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是博主撰写的学校课程论文（有删改），主题是几何处理领域的常用数据结构 Voronoi 图。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Voronoi图及其应用简介">
+<meta property="og:url" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="本文是博主撰写的学校课程论文（有删改），主题是几何处理领域的常用数据结构 Voronoi 图。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/voronoi.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/voronoi-delaunay.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/degenerate.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/degenerate-2.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/growing.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/liftingmap.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/projection.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/sphere-airport.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/addweighted.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/powerdistance.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/mulweighted.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/L1voronoi.jpg">
+<meta property="og:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/Linfvoronoi.jpg">
+<meta property="article:published_time" content="2024-12-04T15:49:37.000Z">
+<meta property="article:modified_time" content="2024-12-04T16:31:38.256Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="几何处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/voronoi.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/","path":"2024/12/04/Voronoi图及其应用简介/","title":"Voronoi图及其应用简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Voronoi图及其应用简介 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#voronoi%E5%9B%BE"><span class="nav-number">1.1.</span> <span class="nav-text">Voronoi图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#delaunay%E5%9B%BE"><span class="nav-number">1.2.</span> <span class="nav-text">Delaunay图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAvoronoi%E5%9B%BE%E7%9A%84%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">构建Voronoi图的算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%86%E6%89%A9%E5%BC%A0%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.1.</span> <span class="nav-text">圆扩张算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%9B%E7%89%A9%E9%9D%A2%E6%8F%90%E5%8D%87%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">抛物面提升算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">其他算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BB%E6%89%A9%E5%B1%95%E7%9A%84voronoi%E5%9B%BE"><span class="nav-number">1.4.</span> <span class="nav-text">距离扩展的Voronoi图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%90%83%E9%9D%A2%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.4.1.</span> <span class="nav-text">球面距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E6%B3%95%E5%8A%A0%E6%9D%83%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.4.2.</span> <span class="nav-text">加法加权距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#power-distance"><span class="nav-number">1.4.3.</span> <span class="nav-text">Power distance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%98%E6%B3%95%E5%8A%A0%E6%9D%83%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.4.4.</span> <span class="nav-text">乘法加权距离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#l_p%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.4.5.</span> <span class="nav-text">\(L_p\)距离</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">在算法与数据结构中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E9%82%BB%E8%BF%91%E6%90%9C%E7%B4%A2%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">最邻近搜索问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%9C%86%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text">最小圆覆盖问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E9%97%AE%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text">其他计算几何问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">在计算机图形学中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%87%A0%E4%BD%95%E5%A4%84%E7%90%86%E9%A2%86%E5%9F%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">在几何处理领域中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%B8%B2%E6%9F%93%E9%A2%86%E5%9F%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">在渲染领域中的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">5.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%BC%95%E7%90%86%E7%9A%84%E8%AF%81%E6%98%8E"><span class="nav-number">5.1.</span> <span class="nav-text">对引理的证明</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Voronoi图及其应用简介 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Voronoi图及其应用简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-12-04 23:49:37" itemprop="dateCreated datePublished" datetime="2024-12-04T23:49:37+08:00">2024-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-12-05 00:31:38" itemprop="dateModified" datetime="2024-12-05T00:31:38+08:00">2024-12-05</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是博主撰写的学校课程论文（有删改），主题是几何处理领域的常用数据结构
+Voronoi 图。</p>
+<span id="more"></span>
+<p>在计算几何领域，Voronoi
+图是最有代表性的区域划分数据结构之一，在诸多领域如计算机图形学、物理化学、分子生物学乃至社会科学中均有广泛应用。在不同科学领域，Voronoi
+图被发现和重视已有百年历史，以至于随发现者的不同而被赋予了不同的名称，如
+Thiessen 多边形、Dirichrit 网络、plesiohedra 等。</p>
+<p>作为基础的数据结构，Voronoi 图与 Delaunay
+三角化之间的密切联系以及构建 Voronoi
+图的基本算法已经得到充分研究。随着时代的发展，这一数据结构的重要性并未丧失，各领域对
+Voronoi 图的应用仍可见于近年来的若干前沿研究。本文将给出 Voronoi 图与
+Delaunay
+图的基本概念和构建算法，并介绍在算法和数据结构和计算机图形学领域中的应用，重点强调计算机图形学领域最前沿（state-of-the-art）的应用成果，以期启发这一领域的后续研究。</p>
+<h2 id="预备知识">预备知识</h2>
+<h3 id="voronoi图">Voronoi图</h3>
+<p>在 <span class="math inline">\(d\)</span> 维实空间 <span
+class="math inline">\(\mathbb R^d\)</span> 中，给定点集 <span
+class="math inline">\(S = \{\mathbf p_1, \dots, \mathbf
+p_n\}\)</span>，称 <span class="math inline">\(S\)</span>
+中的点为Voronoi图的<strong>生成点</strong>。对每一生成点 <span
+class="math inline">\(\mathbf p_i\)</span>，定义</p>
+<p><span class="math display">\[
+R(\mathbf p_i) = \{ \mathbf p \in \mathbb R^d : || \mathbf p - \mathbf
+p_i || &lt; || \mathbf p - \mathbf p_j ||, \forall j \neq i \}
+\]</span></p>
+<p>为 <span class="math inline">\(\mathbf p_i\)</span>
+的<strong>Voronoi区域</strong>，其中 <span
+class="math inline">\(||\mathbf p - \mathbf q||\)</span> 衡量了两点
+<span class="math inline">\(\mathbf p, \mathbf q\)</span>
+之间的距离，我们在此采用常见的欧氏距离。Voronoi区域的几何意义相当明显：该区域恰好包含了所有到
+<span class="math inline">\(\mathbf p_i\)</span> 的距离近于到其他 <span
+class="math inline">\(\mathbf p_j \ (j \neq i)\)</span> 的距离的点。</p>
+<p>注意到，当上式的距离表达式取等时，点 <span
+class="math inline">\(\mathbf p\)</span> 恰好处于到 <span
+class="math inline">\(\mathbf p_i, \mathbf p_j\)</span> 距离相等的一个
+<span class="math inline">\(d-1\)</span> 维的超平面上。定义</p>
+<p><span class="math display">\[
+R^=(\mathbf p_i) = \{ \mathbf p \in \mathbb R^d : || \mathbf p - \mathbf
+p_i || \leq || \mathbf p - \mathbf p_j ||, \forall j \neq i \}
+\]</span></p>
+<p>为 <span class="math inline">\(\mathbf p_i\)</span> 的含边界的
+Voronoi 区域，以方便我们未来的讨论。</p>
+<figure>
+<img src="voronoi.png" alt="二维的 Voronoi 图示例，生成点数 n=8" />
+<figcaption aria-hidden="true">二维的 Voronoi 图示例，生成点数 <span
+class="math inline">\(n=8\)</span></figcaption>
+</figure>
+<p>注意到 <span class="math inline">\(\mathbb R^d = \bigcup_{i=1}^n
+R^=(\mathbf p_i)\)</span>，即整个空间可以被分解为各点的 Voronoi
+区域和它们的边界。一个二维的欧氏距离 Voronoi
+图的例子如上图所示，我们称图中各Voronoi区域边界为
+<strong>Voronoi边</strong>，图中Voronoi边的相交点为
+<strong>Voronoi点</strong>。一般地，考虑这一空间划分得到的各 Voronoi
+区域为面，Voronoi 边为边，Voronoi 点为顶点，由此我们得到了 <span
+class="math inline">\(S\)</span> 的 <strong>Voronoi图</strong>，记作
+<span class="math inline">\(\text{VD}(S)\)</span>。</p>
+<h3 id="delaunay图">Delaunay图</h3>
+<figure>
+<img src="voronoi-delaunay.png" alt="上图及其对应的 Delaunay 图" />
+<figcaption aria-hidden="true">上图及其对应的 Delaunay 图</figcaption>
+</figure>
+<p>给定一个二维 Voronoi 图 <span
+class="math inline">\(\text{VD}(S)\)</span>，对每对生成点 <span
+class="math inline">\((\mathbf p_i, \mathbf
+p_j)\)</span>，我们用线段连接之当且仅当 <span
+class="math inline">\(R(\mathbf p_i)\)</span> 与 <span
+class="math inline">\(R(\mathbf p_j)\)</span> 相邻，即恰好有一条Voronoi
+边将它们相隔。对二维情形，可以证明，该 Voronoi
+边在两点连线的中垂线上。如此产生的图如上图所示，视新添加的线段为边（称之为Delaunay边），所有生成点为顶点，那么我们称新的图为<strong>Delaunay图</strong>。Delaunay
+图亦可拓展到高维情况，此处不再赘述。</p>
+<p>值得注意的是，如果对给定的一个二维 Delaunay 图和一个点集 <span
+class="math inline">\(S\)</span>，我们容易通过完全类似的手段还原 Voronoi
+图：只需对 <span class="math inline">\(S\)</span> 中的每对
+Voronoi点，用线段连接之当且仅当恰好有一条 Delaunay
+边将它们相隔。可以证明，在二维情况下，Voronoi点和生成点的数目规模都是
+<span class="math inline">\(O(n)\)</span> 的，因此，Delaunay 图及其对应
+Voronoi 图之间可以用 <span class="math inline">\(O(n)\)</span>
+的时间互相还原。在数学上，Voronoi 图及相应的 Delaunay
+图是互为对偶图的关系，指的就是这一性质。</p>
+<figure>
+<img src="degenerate.jpg"
+alt="二维的退化的Voronoi图及其Delaunay图示例。正下方的Voronoi点与4条边相连，成为4个生成点的外接圆的圆心" />
+<figcaption
+aria-hidden="true">二维的退化的Voronoi图及其Delaunay图示例。正下方的Voronoi点与4条边相连，成为4个生成点的外接圆的圆心</figcaption>
+</figure>
+<p>Delaunay图与Delaunay三角化密不可分------一般情况下，Voronoi图的生成点集
+<span class="math inline">\(S\)</span>
+的Delaunay三角化结果正是该图对应的Delaunay图，但对于退化情况则需要特殊讨论。如上图所示，一般地，一个
+<span class="math inline">\(d\)</span> 维Voronoi图中的Voronoi点与 <span
+class="math inline">\(d+1\)</span> 条Voronoi边相连。而如果该数目超过
+<span
+class="math inline">\(d+1\)</span>，则称这一点为退化点，该Voronoi图出现了<strong>退化</strong>情况。</p>
+<figure>
+<img src="degenerate-2.png" alt="上图的完全三角化" />
+<figcaption aria-hidden="true">上图的完全三角化</figcaption>
+</figure>
+<p>可见，退化的二维Voronoi图对应Delaunay图产生了边数大于 <span
+class="math inline">\(3\)</span>
+的多边形，但处理方法也很简单------我们只需依次连接该多边形的对角线（无所谓连接哪两个顶点），将其分割成若干三角形即可，如上图所示。因此，可以认为Voronoi图的退化情况无伤大雅，Voronoi图与Delaunay三角化有相当密切的一对一关系。</p>
+<p>Delaunay三角化是计算机图形学的基础算法之一，能够产生高质量的三角化结果，具有许多优秀的性质，如最大空外接圆，最大化最小角等，被频繁地应用于大量的图形学算法之中。可见，对偶Delaunay图的应用亦十分广泛，鉴于本文的重点是Voronoi图，故此处不再赘述。</p>
+<h3 id="构建voronoi图的算法">构建Voronoi图的算法</h3>
+<p>本小节将介绍从点集 <span class="math inline">\(S = {\mathbf p_1,
+\dots, \mathbf p_n}\)</span>
+构建Voronoi图的算法。由于Voronoi图和Delaunay图的对偶关系，两者的构建是等价的，因此所有构建Delaunay图（Delaunay三角化）的算法均可用于构建Voronoi图。据我们所知，大部分的算法构建的是Delaunay图，本小节介绍的也均是构建Delaunay图的算法。为使算法易于描述，我们省略高维情形的拓展，只讨论二维情形的算法。</p>
+<h4 id="圆扩张算法">圆扩张算法</h4>
+<figure>
+<img src="growing.jpg" alt="二维情形下的圆扩张算法流程" />
+<figcaption aria-hidden="true">二维情形下的圆扩张算法流程</figcaption>
+</figure>
+<p>圆扩张算法的思想来源于Delaunay三角化满足的最大空外接圆性质：（非退化情况下）任意Delaunay三角形的外接圆不会包含其他生成点。注意到任意三角形的外接圆唯一，而线段的外接圆不唯一，于是，圆扩张算法可以如下描述：</p>
+<ol type="1">
+<li>从任意未进行过圆扩张的生成点 <span class="math inline">\(\mathbf p_i
+\in S\)</span> 出发，寻找其最近邻点 <span class="math inline">\(\mathbf
+p_j\)</span>，如上图(a)(b)。</li>
+<li>确定 <span class="math inline">\(\mathbf p_i\)</span> 与 <span
+class="math inline">\(\mathbf p_j\)</span>
+为一条Delaunay边，如上图(c)。</li>
+<li>若该Delaunay边不是 <span class="math inline">\(S\)</span>
+的凸包的一条边，则向两侧扩张该边的外接圆，分别直到找到一个三角形 <span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf p_k\)</span>
+的外接圆；若该Delaunay边是 <span class="math inline">\(S\)</span>
+的凸包的一条边，则只向 <span class="math inline">\(S\)</span>
+的凸包内侧扩张该边的外接圆，直到找到一个三角形 <span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf p_k\)</span>
+的外接圆，如上图(d)(e)。</li>
+<li>确定三角形 <span class="math inline">\(\mathbf p_i, \mathbf p_j,
+\mathbf p_k\)</span> 为一个Delaunay三角形，如上图<a
+href="f">3</a>。回到步骤(1)。</li>
+</ol>
+<p>存在平均时间复杂度为 <span class="math inline">\(O(n \log n)\)</span>
+的计算二维凸包的算法；对每个生成点 <span class="math inline">\(\mathbf
+p_i\)</span>，该算法均执行一次圆扩张，而查询最近点、扩张边外接圆的时间复杂度均为
+<span
+class="math inline">\(O(n)\)</span>，故圆扩张算法的整体时间复杂度为
+<span
+class="math inline">\(O(n^2)\)</span>。该算法属于朴素算法，思路与求最小生成树的Prim算法（加点法）相当类似，有很大的优化空间，实际工程中不会采用该算法。</p>
+<h4 id="抛物面提升算法">抛物面提升算法</h4>
+<p>抛物面提升算法为将<span
+class="math inline">\(d\)</span>维的Delaunay图问题归约到了<span
+class="math inline">\(d+1\)</span>维的凸包问题，思想相当巧妙。算法基于接下来给出的一个重要引理。</p>
+<figure>
+<img src="liftingmap.jpg" alt="抛物面提升映射" />
+<figcaption aria-hidden="true">抛物面提升映射</figcaption>
+</figure>
+<p><strong>引理</strong>  考虑二维平面上的点<span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf p_k, \mathbf
+p\)</span>，记<strong>抛物面提升映射</strong><span
+class="math inline">\(f: \mathbf p \in \mathbb R^2 \to \mathbf p&#39;
+\in \mathbb R^3\)</span>，满足<span class="math inline">\(f(x,y) =
+(x,y,x^2+y^2)\)</span>，如上图所示。记<span
+class="math inline">\(\mathbf p_i&#39;, \mathbf p_j&#39;, \mathbf
+p_k&#39;, \mathbf p&#39;\)</span>分别为这四点经过映射的点。那么，<span
+class="math inline">\(\mathbf p\)</span>在<span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf
+p_k\)</span>确定的圆内/外，当且仅当<span class="math inline">\(\mathbf
+p&#39;\)</span>在<span class="math inline">\(\mathbf p_i&#39;, \mathbf
+p_j&#39;, \mathbf p_k&#39;\)</span>确定的平面的下半/上半空间。</p>
+<figure>
+<img src="projection.jpg"
+alt="二维Delaunay图问题与三维凸包问题的关系" />
+<figcaption
+aria-hidden="true">二维Delaunay图问题与三维凸包问题的关系</figcaption>
+</figure>
+<p>引理的证明可参见附录。根据这一引理，我们容易推导出二维Delaunay图问题与三维凸包问题之间的关系。记<span
+class="math inline">\(S&#39;\)</span>为点集<span
+class="math inline">\(S\)</span>经过抛物面提升映射得到的三维点集。为了满足最大空外接圆性质，<span
+class="math inline">\(S\)</span>中的<span class="math inline">\(\mathbf
+p_i, \mathbf p_j, \mathbf
+p_k\)</span>是Delaunay三角形，当且仅当其提升后得到的<span
+class="math inline">\(S&#39;\)</span>三角面<span
+class="math inline">\(\mathbf p_i&#39;, \mathbf p_j&#39;, \mathbf
+p_k&#39;\)</span>恰好是<span
+class="math inline">\(S&#39;\)</span>的凸包的一个低面，如此才能保证三角面<span
+class="math inline">\(\mathbf p_i&#39;, \mathbf p_j&#39;, \mathbf
+p_k&#39;\)</span>的下半空间不包含其他<span
+class="math inline">\(S&#39;\)</span>中的点。如上图所示，<span
+class="math inline">\(S&#39;\)</span>的凸包的任意低面（lower
+face）的下方不再包含<span
+class="math inline">\(S&#39;\)</span>的其他点，将所有低面投影至<span
+class="math inline">\(z = 0\)</span>的<span
+class="math inline">\(\mathbb R^2\)</span>平面，即可得到原<span
+class="math inline">\(S\)</span>点集的Delaunay图。于是，抛物面提升算法的流程可以如下描述：</p>
+<ol type="1">
+<li>将<span
+class="math inline">\(S\)</span>中的所有点进行抛物面提升映射，得到三维点集<span
+class="math inline">\(S&#39;\)</span>。</li>
+<li>求解<span class="math inline">\(S&#39;\)</span>的凸包。</li>
+<li>将<span class="math inline">\(S&#39;\)</span>的凸包投影至<span
+class="math inline">\(S\)</span>所在平面（步骤(1)的逆映射），得到Delaunay图。</li>
+</ol>
+<p>一般地，<span
+class="math inline">\(d\)</span>维的Delaunay图问题均可如此归约到<span
+class="math inline">\(d+1\)</span>维的凸包问题。<span
+class="math inline">\(d=2\)</span>时，由于存在平均时间复杂度为<span
+class="math inline">\(O(n \log
+n)\)</span>的计算三维凸包的算法，而映射每个点仅需<span
+class="math inline">\(O(n)\)</span>时间，故抛物面提升算法的整体时间复杂度为<span
+class="math inline">\(O(n \log
+n)\)</span>，这也是已知的求解二维Delaunay图的算法的时间复杂度的下确界。</p>
+<h4 id="其他算法">其他算法</h4>
+<p>求解Delaunay图的算法相当丰富，除了时间复杂度之外，数值稳定性也是重要考量之一。由于抛物面提升算法需要计算<span
+class="math inline">\(x^2 +
+y^2\)</span>这一较大的浮点数值，导致一定的精度误差，实际工程中一般不会采用该算法。其他常用的算法包括Divide
+and Conquer、Fortune's Algorithm等，此处不再赘述。</p>
+<h3 id="距离扩展的voronoi图">距离扩展的Voronoi图</h3>
+<p>通常的Voronoi图的定义采用欧氏距离，可以用其他形式的距离替换之，以满足应用场景的需要。一般地，记<span
+class="math inline">\(h(\mathbf p, \mathbf p_i)\)</span>为两点<span
+class="math inline">\(\mathbf p, \mathbf
+p_i\)</span>的广义距离函数，那么在此定义下的Voronoi区域为</p>
+<p><span class="math display">\[
+R_h(\mathbf p_i) = \bigcap_{\mathbf p_j \in S, j \neq i} \{ \mathbf p
+\in \mathbb R^d: h(\mathbf p, \mathbf p_i) &lt; h(\mathbf p, \mathbf
+p_j) \}.
+\]</span></p>
+<p>一般地，构建距离扩展的Voronoi图的算法与欧氏距离定义下的Voronoi图存在显著不同。对某些特定的距离函数，构建Voronoi图的算法远不及欧氏距离下的经典情形成熟，仍存在较大的研究空间。限于篇幅，本小节仅讨论应用较广的距离函数：球面距离、加法加权距离、power
+distance、乘法加权距离，以及一般的<span
+class="math inline">\(L_p\)</span>距离。</p>
+<h4 id="球面距离">球面距离</h4>
+<figure>
+<img src="sphere-airport.png"
+alt="以地球上的大型机场为生成点建立的Voronoi图" />
+<figcaption
+aria-hidden="true">以地球上的大型机场为生成点建立的Voronoi图</figcaption>
+</figure>
+<p>若点集<span
+class="math inline">\(S\)</span>分布在一个球面上，则Voronoi图的距离函数应当是球面距离函数，如Haversine公式。如此生成的Voronoi图也位于球面上，可用于地理信息系统的建设。例如，在地球上建立Voronoi图时自然应当应用球面距离函数，如上图所示。</p>
+<h4 id="加法加权距离">加法加权距离</h4>
+<figure>
+<img src="addweighted.jpg"
+alt="加法加权距离定义的二维Voronoi图示例。图中生成点\mathbf p_i周围是半径为w_i的圆，其他弧线为Voronoi边" />
+<figcaption
+aria-hidden="true">加法加权距离定义的二维Voronoi图示例。图中生成点<span
+class="math inline">\(\mathbf p_i\)</span>周围是半径为<span
+class="math inline">\(w_i\)</span>的圆，其他弧线为Voronoi边</figcaption>
+</figure>
+<p><span class="math display">\[
+h(\mathbf p, \mathbf p_i) = || \mathbf p - \mathbf p_i ||_2 - w_i,
+\]</span></p>
+<p>其中<span
+class="math inline">\(||\cdot||_2\)</span>表示欧氏距离范数。这就是加法加权距离（additively
+weighted distance）。使用这种距离函数定义的Voronoi图如上图所示。</p>
+<p>使用加法加权距离函数，可以量化各生成点对其Voronoi区域的控制程度。举例说明，当<span
+class="math inline">\(\mathbf p\)</span>与<span
+class="math inline">\(\mathbf p_i\)</span>的距离小于<span
+class="math inline">\(w_i\)</span>时，<span
+class="math inline">\(h(\mathbf p, \mathbf p_i) &lt;
+0\)</span>，若我们对距离函数取绝对值处理，即记<span
+class="math inline">\(h(\mathbf p, \mathbf p_i) = \text{abs}(|| \mathbf
+p - \mathbf p_i ||_2 - w_i)\)</span>，这时可以保证<span
+class="math inline">\(\mathbf p\)</span>被<span
+class="math inline">\(\mathbf p_i\)</span>"绝对控制"，即<span
+class="math inline">\(\mathbf p\)</span>一定在<span
+class="math inline">\(R^=(\mathbf
+p_i)\)</span>中。加法加权距离下的Voronoi图具有较广泛的应用，如量化不同规模的购物中心对附近居民的吸引程度等。</p>
+<h4 id="power-distance">Power distance</h4>
+<figure>
+<img src="powerdistance.jpg" alt="二维的power diagram示例" />
+<figcaption aria-hidden="true">二维的power diagram示例</figcaption>
+</figure>
+<p>Power distance（又称Laguerre distance）定义如下：</p>
+<p><span class="math display">\[
+h(\mathbf p, \mathbf p_i) = || \mathbf p - \mathbf p_i ||^2_2 - w_i,
+\]</span></p>
+<p>称使用这一距离函数的Voronoi图为power diagram。可见，power
+distance与加法加权距离的区别仅在于power
+distance将距离取了平方，但这一变动使得power
+diagram具有许多巧妙的性质。power
+distance在二维情形下的定义可以由勾股定理解释：考虑在点<span
+class="math inline">\(\mathbf p_i\)</span>处作半径为<span
+class="math inline">\(\sqrt w_i\)</span>的圆，那么在圆外的任意点<span
+class="math inline">\(\mathbf p\)</span>到<span
+class="math inline">\(\mathbf p_i\)</span>的power
+distance的平方恰好是从<span class="math inline">\(\mathbf
+p\)</span>向该圆引的切线段的长度。由圆幂定理，容易推导两个生成点对应圆之间的交点所在直线恰好包含Voronoi边，如上图所示。power
+distance下的Voronoi图可用于高效计算空间中三维球的并集的体积，检测点是否在圆盘的并集内等，应用广泛。</p>
+<h4 id="乘法加权距离">乘法加权距离</h4>
+<figure>
+<img src="mulweighted.jpg"
+alt="乘法加权距离定义的二维Voronoi图示例。图中生成点\mathbf p_i周围的标签为其权值(w_i)" />
+<figcaption
+aria-hidden="true">乘法加权距离定义的二维Voronoi图示例。图中生成点<span
+class="math inline">\(\mathbf p_i\)</span>周围的标签为其权值<span
+class="math inline">\((w_i)\)</span></figcaption>
+</figure>
+<p>与加法加权距离类似，乘法加权距离的定义式为</p>
+<p><span class="math display">\[
+h(\mathbf p, \mathbf p_i) = \frac{1}{w_i}|| \mathbf p - \mathbf p_i
+||_2.
+\]</span></p>
+<p>使用这种距离函数定义的Voronoi图如上图所示。</p>
+<p>乘法加权距离则量化了各生成点对其Voronoi区域的扩张程度，<span
+class="math inline">\(w_i\)</span>越大，扩张程度越高。我们取极限说明：当<span
+class="math inline">\(w_i \to 0\)</span>时，距离函数<span
+class="math inline">\(h(\mathbf p, \mathbf p_i) \to
++\infty\)</span>，该生成点的Voronoi区域的面积趋向于<span
+class="math inline">\(0\)</span>；当<span
+class="math inline">\(w_i\)</span>充分大时，距离函数<span
+class="math inline">\(h(\mathbf p, \mathbf p_i) \to
+0\)</span>，有利于该生成点扩张其Voronoi区域的大小。乘法加权距离下的Voronoi图也具有较广泛的应用，如量化生态系统下各竞争物种扩张能力等。</p>
+<h4 id="l_p距离"><span class="math inline">\(L_p\)</span>距离</h4>
+<figure>
+<img src="L1voronoi.jpg" alt="L_1距离定义的二维Voronoi图示例" />
+<figcaption aria-hidden="true"><span
+class="math inline">\(L_1\)</span>距离定义的二维Voronoi图示例</figcaption>
+</figure>
+<p>记<span class="math inline">\(\mathbf p = (a_1, \dots,
+a_d)\)</span>，<span class="math inline">\(\mathbf q = (b_1, \dots,
+b_d)\)</span>为<span class="math inline">\(\mathbb
+R^d\)</span>中任意两点，定义<span
+class="math inline">\(L_p\)</span>距离为</p>
+<p><span class="math display">\[
+h_p(\mathbf p, \mathbf q) = \left(\sum_{i=1}^d |a_i - b_i|^p
+\right)^{1/p},
+\]</span></p>
+<p>可见<span class="math inline">\(L_2\)</span>距离即为欧氏距离。<span
+class="math inline">\(L_1\)</span>距离又称曼哈顿距离，可衡量规整的城市道路联通的两点之间的距离，上图展示了<span
+class="math inline">\(L_1\)</span>距离下的二维Voronoi图的一个例子。定义<span
+class="math inline">\(L_\infty\)</span>距离为</p>
+<p><span class="math display">\[
+h_{\infty}(\mathbf p, \mathbf q) = \lim_{p \to \infty} h_p(\mathbf p,
+\mathbf q) = \max_{i=1,\dots, d} \{|a_i - b_i|\},
+\]</span></p>
+<figure>
+<img src="Linfvoronoi.jpg" alt="L_\infty距离定义的二维Voronoi图示例" />
+<figcaption aria-hidden="true"><span
+class="math inline">\(L_\infty\)</span>距离定义的二维Voronoi图示例</figcaption>
+</figure>
+<p>可见<span
+class="math inline">\(L_\infty\)</span>距离衡量了两点之间在某个坐标轴的投影距离上的最大差值。在二维情形，<span
+class="math inline">\(L_\infty\)</span>距离的应用包括衡量在水平轴和竖直轴上做等速率匀速运动的数控机床从点<span
+class="math inline">\(\mathbf p\)</span>运动点<span
+class="math inline">\(\mathbf q\)</span>所需的时间。上图展示了<span
+class="math inline">\(L_\infty\)</span>距离下的二维Voronoi图的一个例子。</p>
+<p>除了<span
+class="math inline">\(p=1,2,\infty\)</span>的情况，其他<span
+class="math inline">\(L_p\)</span>距离也有相应的应用场景，此处不再赘述。</p>
+<h2 id="在算法与数据结构中的应用">在算法与数据结构中的应用</h2>
+<p>Voronoi图在算法和数据结构上的应用相当广泛，降低了求解许多非图形学的计算几何问题的时间复杂度。</p>
+<h3 id="最邻近搜索问题">最邻近搜索问题</h3>
+<p>一个最简单也是最典型的例子，就是最邻近搜索（Nearest Neighbor
+Search）问题：给定<span class="math inline">\(\mathbb
+R^d\)</span>空间中的<span
+class="math inline">\(n\)</span>个定点构成的点集<span
+class="math inline">\(S = \{\mathbf p_1, \dots, \mathbf
+p_n\}\)</span>；接下来<span
+class="math inline">\(m\)</span>次查询，第<span
+class="math inline">\(j\)</span>次查询将询问点<span
+class="math inline">\(\mathbf q_j \in \mathbb
+R^d\)</span>的最近邻点<span class="math inline">\(\mathbf p_i \in
+S\)</span>。</p>
+<p>显然，该问题有一个朴素的<span
+class="math inline">\(O(mn)\)</span>算法：对每次查询，对所有<span
+class="math inline">\(n\)</span>个点线性计算<span
+class="math inline">\(\mathbf q_j\)</span>与<span
+class="math inline">\(\mathbf
+p_i\)</span>的距离，取最小距离即可。但若考虑将Voronoi图作为数据结构，可以设计如下的算法：</p>
+<ol type="1">
+<li>为<span
+class="math inline">\(S\)</span>建立Voronoi图（以及相应的用于查询点的位置的数据结构，如Kirkpatrick）。</li>
+<li>对每次查询<span class="math inline">\(\mathbf
+q_j\)</span>，根据步骤(1)建立的数据结构，取满足<span
+class="math inline">\(\mathbf q_j \in R^=(\mathbf p_i)\)</span>的<span
+class="math inline">\(\mathbf p_i\)</span>。</li>
+</ol>
+<p>对于二维情形（<span
+class="math inline">\(d=2\)</span>），步骤(1)耗时<span
+class="math inline">\(O(n \log
+n)\)</span>，步骤(2)对每次查询可做到耗时<span
+class="math inline">\(O(\log n)\)</span>，故算法的整体时间复杂度为<span
+class="math inline">\(O(n \log n + m \log
+n)\)</span>，优于朴素方法。其他空间数据结构如k-d
+树、多叉树等亦可解决这一问题，并具有相同的时间复杂度。</p>
+<p>容易想到，最邻近搜索问题在地理信息系统中应用广泛，如查询当前坐标距离最近的公共设施的位置等。在计算机图形学中，也存在大量最邻近搜索问题，通过建立Voronoi区域划分的层次结构也是解决方案之一。</p>
+<h3 id="最小圆覆盖问题">最小圆覆盖问题</h3>
+<p>详见<a
+href="https://zrephel.fun/2023/11/19/%E6%9C%80%E5%B0%8F%E5%9C%86%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/">我的另一篇文章</a>。</p>
+<h3 id="其他计算几何问题">其他计算几何问题</h3>
+<p>Voronoi图在计算几何建模的图像分割和路径规划等问题中均得到了应用，限于篇幅，本文不再展开介绍。</p>
+<h2 id="在计算机图形学中的应用">在计算机图形学中的应用</h2>
+<p>众所周知，Delaunay三角化是图形学最重要的基础算法之一，而我们已经知道Delaunay图就是Voronoi图的对偶。除此之外，Voronoi图在计算机图形学中也得到了许多直接的应用。本节将介绍在几何处理和渲染领域中应用Voronoi图的研究成果。</p>
+<h3 id="在几何处理领域中的应用">在几何处理领域中的应用</h3>
+<p>Voronoi图在几何处理领域的经典应用包括计算形体的中轴，以及计算偏移曲线和偏移曲面等。在网格生成与重建领域，有关Voronoi图和Delaunay图的相关工作层出不穷。经典的Tetgen算法利用
+Constrained Voronoi 图及其对偶 Constrained Delaunay
+三角化，在三维曲面上实现了高效的四面体网格生成算法，后续工作TetWild
+等也基于相关概念实现了更稳健的四面体网格生成算法。</p>
+<p>在脚手架实体建模的相关研究中，球面上的Voronoi图可用于平滑混合（blending）不同方向的脚手架多面体的伸展。后续工作进一步将该方法扩展到了稳健的管状实体建模领域，这是已知的三维CAD建模前沿应用Voronoi图的研究工作。</p>
+<p>从三维Voronoi图重建网格也是一个有趣的研究课题。研究工作给出了一个从球上的Voronoi图还原网格拓扑的GPU并行算法，其效率显著高于过去的串行算法，并在任意分布的Voronoi生成点上取得了稳健的还原结果。</p>
+<p>在有向距离场（SDF）定义的距离下，构建Voronoi图可以有效提升后续网格重建操作的效率，因此如何构建这样的预处理数据结构也具有重要研究价值。提出了在SDF下构建受限制的Voronoi图（Restricted
+Voronoi Diagram）的高效方法， 在此基础上应用Centroidal Voronoi
+Tessellation算法从SDF表达的曲面生成了高质量的三角网格。</p>
+<p>作为基础的数据结构，优化现有的Voronoi图构建算法同样具有重大意义。Inria研究机构的工作提出了一种新颖的构建三维形体的power
+diagram的GPU并行算法。同样，近年来，出现了一种构建三维<span
+class="math inline">\(L_{\infty}\)</span>距离下的Voronoi图的通用算法，高效地完成了对具体积的模型（volumetirc
+model）上的空间划分任务。可以预见，这些算法对现有利用Voronoi图的许多图形学应用而言具有重大价值。将这些新颖的高效算法应用到图形学研究和工程后，可以更高效地执行Centroidal
+Voronoi
+Tessellations等曲面细分算法，推进前沿网格生成和重建领域的研究。</p>
+<h3 id="在渲染领域中的应用">在渲染领域中的应用</h3>
+<p>在渲染领域，近年来也有部分工作围绕Voronoi图展开。与传统单色光渲染任务相比，全频率渲染（all
+frequency
+rendering）任务需要考虑不同频率（或波长）的光线在模型表面上的双向反射分布函数（Bidirectional
+Reflectance Distribution Function,
+BRDF）随频率变化而产生不同的结果，进而引入了更多的挑战。在这一领域的光线可见性（或称遮挡性）判定问题上，工作利用球面上的Voronoi图，高效地判定了给定的渲染表面是否能够接收到各频率的光线，其思路来源于球面Voronoi图在各Voronoi区域上的最近距离性质。在Voronoi图对可见性判定的加速计算下，全频率渲染结果相对于传统方法取得了更高的效率，并在存在阴影和遮蔽关系的渲染中取得了更接近于ground
+truth的效果。</p>
+<p>用于VR头盔的注视点渲染（foveated
+rendering）是虚拟现实技术的研究热点之一。在执行常规体渲染（volume
+rendering）后，在图像重建（image
+reconstruction）的后处理环节执行了基于Voronoi区域的最近邻插值，以生成平滑并带有突显注视点效果的渲染结果。</p>
+<h2 id="总结">总结</h2>
+<p>本文对Voronoi图的概念、算法和应用做了综述，详细描述了Voronoi图的计算几何数学背景，讨论了相关的若干计算几何方面的算法和数据结构的问题，并介绍了前沿的图形学学术界对Voronoi图的应用成果。限于篇幅和作者能力，本文无法涵盖学术界全部的前沿Voronoi图研究工作，但所选工作均具有一定的代表性，可供研究人员参考。目前，对Voronoi图的应用研究方兴未艾，可以相信，这一经典的数据结构将持续为各方面的研究贡献更高效的解决方案。</p>
+<h2 id="附录">附录</h2>
+<h3 id="对引理的证明">对引理的证明</h3>
+<p><strong>引理</strong>  考虑二维平面上的点<span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf p_k, \mathbf
+p\)</span>，记<strong>抛物面提升映射</strong><span
+class="math inline">\(f: \mathbf p \in \mathbb R^2 \to \mathbf p&#39;
+\in \mathbb R^3\)</span>，满足<span class="math inline">\(f(x,y) =
+(x,y,x^2+y^2)\)</span>。记<span class="math inline">\(\mathbf p_i&#39;,
+\mathbf p_j&#39;, \mathbf p_k&#39;, \mathbf
+p&#39;\)</span>分别为这四点经过映射的点。那么，<span
+class="math inline">\(\mathbf p\)</span>在<span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf
+p_k\)</span>确定的圆内/外，当且仅当<span class="math inline">\(\mathbf
+p&#39;\)</span>在<span class="math inline">\(\mathbf p_i&#39;, \mathbf
+p_j&#39;, \mathbf p_k&#39;\)</span>确定的平面的下半/上半空间。</p>
+<p><strong>证明</strong>  </p>
+<p>考虑抛物面<span class="math inline">\(z = x^2 +
+y^2\)</span>上的点<span class="math inline">\((a,b,c) \in \mathbb
+R^3\)</span>，过该点的切平面方程为</p>
+<p><span class="math display">\[
+n_x(x - a) + n_y(y - b) + n_z(z - (a^2 + b^2)) = 0,
+\]</span></p>
+<p>其中<span
+class="math inline">\((n_x,n_y,n_z)\)</span>为该点处抛物面的法向量。通过计算<span
+class="math inline">\(f = z - x^2 - y^2\)</span>的梯度可得到<span
+class="math inline">\(n_x = 2a, n_y = 2b, n_z =
+-1\)</span>，于是上式的平面方程化为</p>
+<p><span class="math display">\[
+z = 2ax + 2by - (a^2 + b^2).
+\]</span></p>
+<p>我们将该平面向</p>
+<p><span class="math inline">\(z\)</span>轴正方向平移<span
+class="math inline">\(\rho^2\)</span>单位长度，得到对抛物面的割平面</p>
+<p><span class="math display">\[
+z = 2ax + 2by - (a^2 + b^2) + \rho^2.
+\]</span></p>
+<p>在割平面与抛物面的交线处有<span class="math inline">\(z = x^2 +
+y^2\)</span>，代入<span class="math inline">\(z\)</span>化简得到</p>
+<p><span class="math display">\[
+(x-a)^2 + (y-b)^2 = \rho^2,
+\]</span></p>
+<p>这意味着割平面与抛物面的交线在<span
+class="math inline">\(z=0\)</span>上的投影恰好是一个圆心为<span
+class="math inline">\((a, b)\)</span>，半径为<span
+class="math inline">\(\rho\)</span>的圆，该圆可以由三点<span
+class="math inline">\(\mathbf p_i, \mathbf p_j, \mathbf
+p_k\)</span>确定。注意到对任意二维点<span class="math inline">\(\mathbf
+p = (x,y)\)</span>，其抛物面提升映射的输出<span
+class="math inline">\(\mathbf p&#39; = (x, y, x^2 +
+y^2)\)</span>与割平面的竖直距离为</p>
+<p><span class="math display">\[
+2ax + 2by - (a^2 + b^2) + \rho^2 - (x^2 + y^2) = \rho^2 - ( (x-a)^2 +
+(y-b)^2 ),
+\]</span></p>
+<p>于是，当<span class="math inline">\((x,y)\)</span>在圆内时，<span
+class="math inline">\((x-a)^2 + (y-b)^2 &lt; \rho^2\)</span>，上式<span
+class="math inline">\(&gt;0\)</span>，意味着<span
+class="math inline">\(\mathbf
+p&#39;\)</span>在割平面的下半空间；同理，当<span
+class="math inline">\((x,y)\)</span>在圆外时，上式<span
+class="math inline">\(&lt;0\)</span>，意味着<span
+class="math inline">\(\mathbf
+p&#39;\)</span>在割平面的上半空间。证毕。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/" title="Voronoi图及其应用简介">https://zrephel.fun/2024/12/04/Voronoi图及其应用简介/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E5%87%A0%E4%BD%95%E5%A4%84%E7%90%86/" rel="tag"># 几何处理</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/11/06/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%88%9A%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/" rel="prev" title="基于物理的动画：刚体动力学">
+                  <i class="fa fa-angle-left"></i> 基于物理的动画：刚体动力学
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>

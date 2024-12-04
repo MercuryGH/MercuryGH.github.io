@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="收集一些答案与调和级数的部分和有关的概率问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="调和级数概率专题">
+<meta property="og:url" content="https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="收集一些答案与调和级数的部分和有关的概率问题。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/seat.png">
+<meta property="article:published_time" content="2023-12-12T03:39:36.000Z">
+<meta property="article:modified_time" content="2024-11-09T09:18:50.416Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="概率论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/seat.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/","path":"2023/12/12/调和级数概率专题/","title":"调和级数概率专题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>调和级数概率专题 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E8%A7%86%E6%9F%9C%E5%8F%B0%E7%9A%84%E4%BA%BA%E6%95%B0%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">目视柜台的人数问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%96%E5%88%B8%E6%90%9C%E9%9B%86%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">奖券搜集问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E6%84%BF%E8%B5%B7%E8%BA%AB%E7%9A%84%E5%8D%A0%E5%BA%A7%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">不愿起身的占座问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A5%E7%BB%99%E7%BA%BF%E5%88%87%E6%96%AD%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">补给线切断问题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="调和级数概率专题 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          调和级数概率专题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-12-12 11:39:36" itemprop="dateCreated datePublished" datetime="2023-12-12T11:39:36+08:00">2023-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-11-09 17:18:50" itemprop="dateModified" datetime="2024-11-09T17:18:50+08:00">2024-11-09</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>收集一些答案与调和级数的部分和有关的概率问题。</p>
+<span id="more"></span>
+<h2 id="目视柜台的人数问题">目视柜台的人数问题</h2>
+<p>柜台前，有<span
+class="math inline">\(n\)</span>人排成一队等候，他们的身高独立地服从某均匀概率分布。第<span
+class="math inline">\(i\)</span>人能够目视最前方的柜台，当且仅当他的身高是前<span
+class="math inline">\(i\)</span>人中最高的。求能够目视最前方的柜台的人数<span
+class="math inline">\(X\)</span>的数学期望<span
+class="math inline">\(E(X)\)</span>。</p>
+<hr />
+<p>设<span class="math inline">\(Y_i\)</span>表示第<span
+class="math inline">\(i\)</span>人能够目视最前方的柜台，则<span
+class="math inline">\(E(X) = \sum_{i=1}^n E(Y_i)\)</span>。考虑前<span
+class="math inline">\(i\)</span>人中，第<span
+class="math inline">\(i\)</span>人成为最高者的概率</p>
+<p><span class="math display">\[
+P(Y_i = 1) = \frac{1}{i},
+\]</span></p>
+<p>故<span class="math inline">\(E(X) = \sum_{i=1}^n \frac{1}{i} =
+H_n\)</span>。</p>
+<h2 id="奖券搜集问题">奖券搜集问题</h2>
+<p>设奖池里有<span
+class="math inline">\(n\)</span>种奖品，每种奖品抽中概率均等为<span
+class="math inline">\(\frac{1}{n}\)</span>，求直到集齐所有种类的奖品，所需抽奖的次数<span
+class="math inline">\(X\)</span>的数学期望<span
+class="math inline">\(E(X)\)</span>。</p>
+<hr />
+<p><span class="math display">\[
+\begin{aligned}
+E(X) &amp;= 1 + \frac{n}{n-1} + \frac{n}{n-2} + \dots + \frac{n}{2} + n
+\\
+&amp;= n \left(1+\frac{1}{2}+ \dots + \frac{1}{n-1} + \frac{1}{n}
+\right) \\
+&amp;= n \cdot \sum_{i=1}^{n} \frac{1}{i}. \\
+&amp;= nH_n.
+\end{aligned}
+\]</span></p>
+<h2 id="不愿起身的占座问题">不愿起身的占座问题</h2>
+<p>某剧场的席位是单向进入的，如下图所示：</p>
+<figure>
+<img src=".\seat.png" alt="seat" />
+<figcaption aria-hidden="true">seat</figcaption>
+</figure>
+<p>即，座位号按<span class="math inline">\(1, \dots,
+n\)</span>的顺序排列，并且<span
+class="math inline">\(n\)</span>号座位靠墙，观众只能从<span
+class="math inline">\(1\)</span>号座位侧进入。因此，座位号为<span
+class="math inline">\(k\)</span>的观众在试图就坐时，如果存在座位号小于<span
+class="math inline">\(k\)</span>的观众已经就坐，那么有人就需要因此起身让出通道，我们称这次就坐发生了“起身”行为。</p>
+<p>现在，<span
+class="math inline">\(n\)</span>位观演者会以随机的顺序串行地到达剧场，并按照他们各自的票上的座位号就坐。求此过程中，没有发生“起身”行为的就坐的数目的数学期望。</p>
+<hr />
+<p>记所求为<span class="math inline">\(E_n\)</span>，则<span
+class="math inline">\(E_1=1\)</span>。针对第一次就坐，列状态转移方程：</p>
+<p><span class="math display">\[
+E_n = \frac{1}{n} \times 1 + \frac{1}{n} (1 + E_1)  + \dots +
+\frac{1}{n} (1 + E_{n-1}) = 1 + \frac{1}{n}(E_1 + \dots E_{n-1}).
+\]</span></p>
+<p>这个递推式可以这样求解：</p>
+<p><span class="math display">\[
+E_n = 1 + \frac{1}{n}(E_1 + \dots E_{n-1}), \\
+E_{n-1} = 1 + \frac{1}{n-1}(E_1 + \dots E_{n-2}) \\
+\]</span></p>
+<p>两式相减得</p>
+<p><span class="math display">\[
+\begin{aligned}
+E_n - E_{n-1} &amp;= \frac{1}{n} E_{n-1} + \left(\frac{1}{n} -
+\frac{1}{n-1}\right) (E_1 + \dots + E_{n-2}) \\
+&amp;= \frac{1}{n} E_{n-1} - \frac{1}{n(n-1)}(E_1 + \dots + E_{n-2})  \\
+&amp;= \frac{1}{n} \left(E_{n-1} - \frac{1}{n-1}(E_1 + \dots +
+E_{n-2})  \right) \\
+&amp;= \frac{1}{n}.
+\end{aligned}
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+E_n = E_{n-1} + \frac{1}{n}.
+\]</span></p>
+<p>代入初值条件得</p>
+<p><span class="math display">\[
+E_n = H_n,
+\]</span></p>
+<h2 id="补给线切断问题">补给线切断问题</h2>
+<p>现有<span class="math inline">\(v_0,v_1, \dots,
+v_{n-1}\)</span>这<span
+class="math inline">\(n\)</span>个节点，每个节点<span
+class="math inline">\(v_i\)</span>均与其前驱节点<span
+class="math inline">\(v_{i-1}\)</span>和后继节点<span
+class="math inline">\(v_{i+1}\)</span>相连，节点<span
+class="math inline">\(v_0\)</span>没有前驱，节点<span
+class="math inline">\(v_{n-1}\)</span>没有后继。</p>
+<p>现在，破坏者每轮执行如下操作：</p>
+<ol type="1">
+<li>从当前图中随机选择一个节点<span
+class="math inline">\(v_i\)</span>；</li>
+<li>移除<span
+class="math inline">\(v_i\)</span>及其之后的所有节点，即<span
+class="math inline">\(v_i, \dots, v_{n-1}\)</span>。</li>
+<li>更新当前图为<span class="math inline">\(v_0, v_1, \dots,
+v_{i-1}\)</span>。</li>
+</ol>
+<p>求直到所有节点被移除，所需经过轮数的数学期望。</p>
+<hr />
+<p>考虑每轮破坏相当于一个观众来访，每轮破坏行为与一个没有发生“起身”行为的就坐行为等价。事实上，本题列出的状态转移方程与“不愿起身的占座问题”完全相同。本题答案为<span
+class="math inline">\(H_n\)</span>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/" title="调和级数概率专题">https://zrephel.fun/2023/12/12/调和级数概率专题/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/19/%E6%9C%80%E5%B0%8F%E5%9C%86%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98/" rel="prev" title="最小圆覆盖问题">
+                  <i class="fa fa-angle-left"></i> 最小圆覆盖问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/12/13/%E5%88%86%E9%83%A8%E5%92%8C%E5%88%86%E2%80%94%E2%80%94%E9%98%BF%E8%B4%9D%E5%B0%94%E5%8F%98%E6%8D%A2/" rel="next" title="分部和分——阿贝尔变换">
+                  分部和分——阿贝尔变换 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2023/12/12/%E8%B0%83%E5%92%8C%E7%BA%A7%E6%95%B0%E6%A6%82%E7%8E%87%E4%B8%93%E9%A2%98/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
