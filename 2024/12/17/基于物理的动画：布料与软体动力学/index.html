@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是博主在实习公司制作的课程讲义，内容是基于物理的动画：布料与软体动力学。 原课程对应的幻灯片可以点击这里下载。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于物理的动画：布料与软体动力学">
+<meta property="og:url" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="本文是博主在实习公司制作的课程讲义，内容是基于物理的动画：布料与软体动力学。 原课程对应的幻灯片可以点击这里下载。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/softs.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/soft2.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/pipeline.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/spring.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/multiplespring.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/network.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/explosion.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/algorithm.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/uniqueness.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/bendingnaive.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/qbm.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/lockingissue.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/springconstraint.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/projection.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/serialsolve.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/pd.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/cdpipeline.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/hash.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/morton.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/bvh.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/dcdsdf.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/primitiveet.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/ccdvt.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/ccdee.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/resolve.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/clothtangle.png">
+<meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/contour.png">
+<meta property="article:published_time" content="2024-12-17T13:54:41.000Z">
+<meta property="article:modified_time" content="2024-12-17T14:02:57.126Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="物理仿真">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/softs.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/","path":"2024/12/17/基于物理的动画：布料与软体动力学/","title":"基于物理的动画：布料与软体动力学"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>基于物理的动画：布料与软体动力学 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E4%BD%93%E4%BB%BF%E7%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">软体仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BD%93%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">软体的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BD%93%E7%9A%84%E8%BF%90%E5%8A%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">软体的运动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E7%BA%A6%E5%AE%9A"><span class="nav-number">1.1.3.</span> <span class="nav-text">符号约定</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%A8%E7%82%B9-%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.</span> <span class="nav-text">质点-弹簧系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B9%E7%B0%A7%E6%A8%A1%E5%9E%8B-i"><span class="nav-number">2.1.1.</span> <span class="nav-text">弹簧模型 I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.1.2.</span> <span class="nav-text">多弹簧系统</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BD%93%E8%A1%A8%E9%9D%A2%E5%9F%BA%E6%9C%AC%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">软体表面基本模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%8A%B6%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.2.1.</span> <span class="nav-text">网状弹簧系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E7%82%B9-%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F%E4%BB%BF%E7%9C%9F%E6%B5%81%E6%B0%B4%E7%BA%BF---%E5%8D%8A%E9%9A%90%E5%BC%8F%E7%A7%AF%E5%88%86"><span class="nav-number">2.2.2.</span> <span class="nav-text">质点-弹簧系统仿真流水线 -
+半隐式积分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8A%E9%9A%90%E5%BC%8F%E7%A7%AF%E5%88%86%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.3.</span> <span class="nav-text">半隐式积分的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%A7%AF%E5%88%86"><span class="nav-number">2.2.4.</span> <span class="nav-text">隐式积分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%A7%AF%E5%88%86---%E4%BC%98%E5%8C%96%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.2.4.1.</span> <span class="nav-text">隐式积分 - 优化形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%9B%E9%A1%BF%E6%B3%95"><span class="nav-number">2.2.4.2.</span> <span class="nav-text">牛顿法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%9B%E9%A1%BF%E6%B3%95%E4%BA%8C%E9%98%B6%E6%A2%AF%E5%BA%A6"><span class="nav-number">2.2.4.3.</span> <span class="nav-text">牛顿法（二阶梯度）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%AF%E6%8A%98%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">弯折模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E9%98%B2%E5%BC%AF%E6%8A%98%E5%BC%B9%E7%B0%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.1.</span> <span class="nav-text">简单的防弯折弹簧模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9B%B2%E7%8E%87%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.2.</span> <span class="nav-text">局部曲率模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E7%82%B9-%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BC%AF%E6%8A%98%E9%94%81%E9%97%AE%E9%A2%98-i"><span class="nav-number">2.3.3.</span> <span class="nav-text">质点-弹簧系统的弯折锁问题 I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%A8%E7%82%B9-%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%BC%AF%E6%8A%98%E9%94%81%E9%97%AE%E9%A2%98-iii"><span class="nav-number">2.3.4.</span> <span class="nav-text">质点-弹簧系统的弯折锁问题
+III</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">约束法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E7%9A%84%E5%BB%BA%E7%AB%8B%E4%B8%8E%E6%B1%82%E8%A7%A3"><span class="nav-number">3.1.</span> <span class="nav-text">约束的建立与求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%BC%BA%E5%BA%A6%E5%BC%B9%E7%B0%A7%E7%9A%84%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.1.1.</span> <span class="nav-text">高强度弹簧的仿真</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B9%E7%B0%A7%E7%BA%A6%E6%9D%9F"><span class="nav-number">3.1.2.</span> <span class="nav-text">弹簧约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E6%8A%95%E5%BD%B1%E4%BD%9C%E4%B8%BA%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">3.1.3.</span> <span class="nav-text">约束投影作为优化问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BA%A6%E6%9D%9F%E7%9A%84%E6%8A%95%E5%BD%B1---%E4%B8%B2%E8%A1%8C%E6%B3%95"><span class="nav-number">3.1.4.</span> <span class="nav-text">整体约束的投影 - 串行法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BA%A6%E6%9D%9F%E7%9A%84%E6%8A%95%E5%BD%B1---%E5%B9%B6%E8%A1%8C%E6%B3%95"><span class="nav-number">3.1.5.</span> <span class="nav-text">整体约束的投影 - 并行法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#position-based-dynamics"><span class="nav-number">3.2.</span> <span class="nav-text">Position Based Dynamics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pbd%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">3.2.1.</span> <span class="nav-text">PBD流水线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#projective-dynamics"><span class="nav-number">3.3.</span> <span class="nav-text">Projective Dynamics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pd%E5%AE%9A%E4%B9%89%E7%9A%84%E7%BA%A6%E6%9D%9F%E5%8A%BF%E8%83%BD"><span class="nav-number">3.3.1.</span> <span class="nav-text">PD定义的约束势能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pd%E5%9C%A8%E8%B4%A8%E7%82%B9-%E5%BC%B9%E7%B0%A7%E7%B3%BB%E7%BB%9F%E4%B8%8A%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.3.2.</span> <span class="nav-text">PD在质点-弹簧系统上的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pd%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">3.3.3.</span> <span class="nav-text">PD流水线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extended-pbd"><span class="nav-number">3.4.</span> <span class="nav-text">eXtended PBD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#xpbd"><span class="nav-number">3.4.1.</span> <span class="nav-text">XPBD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xpbd---pros-cons"><span class="nav-number">3.4.2.</span> <span class="nav-text">XPBD - Pros &amp; Cons</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">碰撞检测与处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="nav-number">4.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">4.1.1.</span> <span class="nav-text">碰撞检测流水线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E4%BA%A4%E5%89%94%E9%99%A4"><span class="nav-number">4.2.</span> <span class="nav-text">相交剔除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E7%89%A9%E4%BD%93%E7%9A%84%E5%93%88%E5%B8%8C%E5%AD%98%E5%82%A8"><span class="nav-number">4.2.1.</span> <span class="nav-text">空间物体的哈希存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#morton-code"><span class="nav-number">4.2.2.</span> <span class="nav-text">Morton Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E5%8C%85%E5%9B%B4%E4%BD%93"><span class="nav-number">4.2.3.</span> <span class="nav-text">层次包围体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E4%BA%A4%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86"><span class="nav-number">4.3.</span> <span class="nav-text">相交检测与处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B---%E6%A6%82%E8%BF%B0"><span class="nav-number">4.3.1.</span> <span class="nav-text">碰撞检测 - 概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86---%E5%9F%BA%E4%BA%8Esdf"><span class="nav-number">4.3.2.</span> <span class="nav-text">离散碰撞检测与处理 - 基于SDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B---%E9%A1%B6%E7%82%B9-%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9B%B8%E4%BA%A4%E6%A3%80%E6%B5%8B"><span class="nav-number">4.3.3.</span> <span class="nav-text">离散碰撞检测 -
+顶点-三角形相交检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B---%E8%BE%B9-%E8%BE%B9%E7%9B%B8%E4%BA%A4%E6%A3%80%E6%B5%8B"><span class="nav-number">4.3.4.</span> <span class="nav-text">离散碰撞检测 - 边-边相交检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86---%E5%9F%BA%E4%BA%8Esdf"><span class="nav-number">4.3.5.</span> <span class="nav-text">连续碰撞检测与处理 - 基于SDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B---%E9%A1%B6%E7%82%B9-%E4%B8%89%E8%A7%92%E5%BD%A2%E7%9B%B8%E4%BA%A4%E6%A3%80%E6%B5%8B"><span class="nav-number">4.3.6.</span> <span class="nav-text">连续碰撞检测 -
+顶点-三角形相交检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B---%E8%BE%B9-%E8%BE%B9%E7%9B%B8%E4%BA%A4%E6%A3%80%E6%B5%8B"><span class="nav-number">4.3.7.</span> <span class="nav-text">连续碰撞检测 - 边-边相交检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E4%BD%93-%E8%BD%AF%E4%BD%93%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">4.3.8.</span> <span class="nav-text">软体-软体的碰撞处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interior-point-methods-%E4%BD%9C%E4%B8%BA%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="nav-number">4.3.9.</span> <span class="nav-text">Interior Point Methods
+作为优化问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%B0%E9%9A%BE%E7%9A%84%E5%B8%83%E6%96%99-%E5%B8%83%E6%96%99%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B"><span class="nav-number">4.3.10.</span> <span class="nav-text">困难的布料-布料碰撞检测</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="基于物理的动画：布料与软体动力学 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于物理的动画：布料与软体动力学
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2024-12-17 21:54:41 / Modified: 22:02:57" itemprop="dateCreated datePublished" datetime="2024-12-17T21:54:41+08:00">2024-12-17</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是博主在实习公司制作的课程讲义，内容是基于物理的动画：布料与软体动力学。</p>
+<p>原课程对应的幻灯片可以<a href="softbody-2.pdf">点击这里下载</a>。</p>
+<span id="more"></span>
+<h1 id="软体仿真">软体仿真</h1>
+<h2 id="概述">概述</h2>
+<h3 id="软体的性质">软体的性质</h3>
+<p><img src="softs.png" /></p>
+<ul>
+<li>软体或可变形体，是一系列相对刚体具有可变形性和延展性，而相对流体具有一定的整体性的物体。包括布料、橡胶制品、纤维制品等。</li>
+<li>一般地，物理引擎存储的软体仿真状态<span
+class="math inline">\(\mathbf s = \{\mathbf v, \mathbf
+x\}\)</span>是一个二元组，其中 <span class="math inline">\(\mathbf v =
+\{\mathbf v_1, \dots, \mathbf v_n\} \in \mathbb R^{3n}\)</span>
+为软体各顶点的速度，<span class="math inline">\(\mathbf x = \{\mathbf
+x_1, \dots, \mathbf x_n\} \in \mathbb
+R^{3n}\)</span>为各顶点的位移。</li>
+<li>记顶点<span class="math inline">\(i\)</span>的质量为<span
+class="math inline">\(m_i\)</span>，则<span
+class="math inline">\(\mathbf M \in \mathbb R^{3n \times
+3n}\)</span>为<span class="math inline">\(3 \times
+3\)</span>对角分块质量矩阵，其第<span
+class="math inline">\(i\)</span>个对角<span class="math inline">\(3
+\times 3\)</span>块为<span class="math inline">\(m_i \mathbf
+I\)</span>。</li>
+</ul>
+<h3 id="软体的运动">软体的运动</h3>
+<p>软体的运动由各顶点的运动决定，自由度很高。</p>
+<p>因此，软体仿真算法的类型相当丰富，各类优化手段也层出不穷。</p>
+<p><img src="soft2.png" /></p>
+<h3 id="符号约定">符号约定</h3>
+<p>仿真器在每一帧执行物理演算，并将结果提交给渲染器。</p>
+<p>在仿真流水线中，用上标方括号表示第<span
+class="math inline">\(k\)</span>帧的结果。例如 <span
+class="math inline">\(t^{[k]}\)</span> 为第 <span
+class="math inline">\(k\)</span> 帧的时刻，<span
+class="math inline">\(\mathbf s^{[k]}\)</span> 为仿真对象在第 <span
+class="math inline">\(k\)</span> 帧时的状态。</p>
+<p>在每帧执行的迭代算法中，用上标圆括号表示第<span
+class="math inline">\(k\)</span>次迭代后的结果。例如<span
+class="math inline">\(\mathbf x^{(k)}\)</span>表示第<span
+class="math inline">\(k\)</span>次迭代的位移向量。</p>
+<p><img src="pipeline.png" /></p>
+<h1 id="质点-弹簧系统">质点-弹簧系统</h1>
+<h2 id="预备知识">预备知识</h2>
+<h3 id="弹簧模型-i">弹簧模型 I</h3>
+<p><img src="spring.png" /></p>
+<p>设三维空间中的弹簧<span class="math inline">\(e\)</span>连接顶点<span
+class="math inline">\(0, 1\)</span>，原长为<span
+class="math inline">\(L\)</span>，劲度系数为<span
+class="math inline">\(k\)</span>。当两端位移向量为<span
+class="math inline">\(\mathbf x_{01}\)</span>时，其具有弹性势能</p>
+<p><span class="math display">\[
+E(\mathbf x) = \frac{k}{2}(||\mathbf x_{01}|| - L)^2
+\]</span></p>
+<p>弹力为</p>
+<p><span class="math display">\[
+\begin{cases}
+        \mathbf f(\mathbf x) = - \nabla E(\mathbf x) = \left[
+\begin{matrix}
+- \nabla_0 E(\mathbf x) \\
+- \nabla_1 E(\mathbf x)
+\end{matrix}
+\right] = \left[
+\begin{matrix}
+\mathbf f_e \\
+-\mathbf f_e
+\end{matrix}
+\right]， \\
+\mathbf f_e = -k \left(||\mathbf x_{01}|| - L \right) \frac{\mathbf
+x_{01}}{||\mathbf x_{01}||}
+\end{cases}
+\]</span></p>
+<p>Hessian (tangent stiffness) 为</p>
+<p><span class="math display">\[
+\begin{cases}  
+        \mathbf H(\mathbf x) =  \left[
+\begin{matrix}
+\frac{\partial^2 E}{\partial x_0^2} &amp; \frac{\partial^2 E}{\partial
+x_0 \partial x_1} \\
+\frac{\partial^2 E}{\partial x_1 \partial x_0} &amp; \frac{\partial^2
+E}{\partial x_1^2}
+\end{matrix}
+\right] = \left[
+\begin{matrix}
+\mathbf H_e &amp; -\mathbf H_e \\
+-\mathbf H_e &amp; \mathbf H_e
+\end{matrix}
+\right]， \\
+\mathbf H_e = k \frac{\mathbf x_{01} \mathbf x_{01}^T}{||\mathbf
+x_{01}||^2} + k \left( 1 - \frac{L}{||\mathbf x_{01}||} \right) \left(
+\mathbf I - \frac{\mathbf x_{01} \mathbf x_{01}^T}{||\mathbf x_{01}||^2}
+\right)
+\end{cases}
+\]</span></p>
+<h3 id="多弹簧系统">多弹簧系统</h3>
+<p><img src="multiplespring.png" /></p>
+<p>当顶点连接多个弹簧时，其具有的弹性势能应为所有连接弹簧的弹性势能之和，弹力亦然。</p>
+<p><span class="math display">\[
+\begin{cases}
+        E = \sum_{e=0}^3 E_e, \\
+        \mathbf f_i = - \nabla_i E = \sum_{e=0}^3 \mathbf f_e.
+        \end{cases}
+\]</span></p>
+<h2 id="软体表面基本模型">软体表面基本模型</h2>
+<h3 id="网状弹簧系统">网状弹簧系统</h3>
+<p>质点-弹簧模型为我们提供了一个简易的模拟软体表面的物理模型。对于三角形网格，我们可以运用图论几何知识，建立如下图所示的网状弹簧系统：</p>
+<p><img src="network.png" /></p>
+<p>其中，蓝色弹簧用于防止软体表面过度弯折。</p>
+<h3 id="质点-弹簧系统仿真流水线---半隐式积分">质点-弹簧系统仿真流水线 -
+半隐式积分</h3>
+<ol type="1">
+<li><p>输入状态<span class="math inline">\(\mathbf s^{[0]} = \{\mathbf
+v^{[0]}, \mathbf x^{[0]}\}\)</span></p></li>
+<li><p>对每个弹簧<span
+class="math inline">\(e\)</span>，更新其对各两端顶点<span
+class="math inline">\(i, j\)</span>施加的弹力</p>
+<p><span class="math display">\[
+\begin{cases}
+\mathbf f_e^{[0]} = -k(||\mathbf x_i^{[0]} - \mathbf x_j^{[0]}|| - L_e)
+\frac{\mathbf x_i^{[0]} - \mathbf x_j^{[0]}}{||\mathbf x_i^{[0]} -
+\mathbf x_j^{[0]}||}, \\
+\mathbf f_i^{[0]} \leftarrow \mathbf f_i^{[0]} + \mathbf f_e^{[0]}, \\
+\mathbf f_j^{[0]} \leftarrow \mathbf f_j^{[0]} - \mathbf f_e^{[0]}
+\end{cases}
+\]</span></p></li>
+<li><p>对每个顶点<span
+class="math inline">\(i\)</span>，更新仿真状态</p>
+<p><span class="math display">\[
+\begin{cases}
+\mathbf v_i^{[1]} = \mathbf v_i^{[0]} + \Delta t m_i^{-1} \mathbf
+f_i^{[0]}, \\
+\mathbf x_i^{[1]} = \mathbf x_i^{[0]} + \Delta t \mathbf v_i^{[1]}
+\end{cases}
+\]</span></p></li>
+<li><p>输出状态<span class="math inline">\(\mathbf s^{[1]} = \{\mathbf
+v^{[1]}, \mathbf x^{[1]}\}\)</span></p></li>
+</ol>
+<h3 id="半隐式积分的问题">半隐式积分的问题</h3>
+<p><span class="math inline">\(k\)</span>过大、<span
+class="math inline">\(\Delta
+t\)</span>过大都可能导致显式积分/半隐式积分仿真过程中"能量爆炸"（overshooting）。</p>
+<p><img src="explosion.png" /></p>
+<p>如图所示，当弹簧伸长时，弹力方向会试图拉回顶点。若劲度系数<span
+class="math inline">\(k\)</span>过大，或时间步长<span
+class="math inline">\(\Delta
+t\)</span>过大，下一帧的顶点位置将超越弹簧的另一端点，且这一过程可以继续下去，最终导致整个软体表面"炸裂"。</p>
+<h3 id="隐式积分">隐式积分</h3>
+<p>在规模较大的质点-弹簧系统中，采用隐式积分可以提升数值稳定性。即</p>
+<p><span class="math display">\[
+\begin{cases}
+        \mathbf v_i^{[1]} = \mathbf v_i^{[0]} + \Delta t m_i^{-1}
+\mathbf f_i^{[1]}, \\
+        \mathbf x_i^{[1]} = \mathbf x_i^{[0]} + \Delta t \mathbf
+v_i^{[1]}
+    \end{cases}
+\]</span></p>
+<p>若顶点受力仅与其位置有关，消掉<span class="math inline">\(\mathbf
+v_i^{[1]}\)</span>，我们得到</p>
+<p><span class="math display">\[
+\mathbf x_i^{[1]} = \mathbf x_i^{[0]} + \Delta t \mathbf v_i^{[0]} +
+\Delta t^2 m_i^{-1} \mathbf f(\mathbf x_i^{[1]})
+\]</span></p>
+<p>这是一个关于<span class="math inline">\(\mathbf
+x_i^{[1]}\)</span>的非线性方程，可以用牛顿法求解------但在各类论文中，我们常见的是它的优化形式。</p>
+<h4 id="隐式积分---优化形式">隐式积分 - 优化形式</h4>
+<p>可以证明，方程</p>
+<p><span class="math display">\[
+\mathbf x^{[1]} = \mathbf x^{[0]} + \Delta t \mathbf v^{[0]} + \Delta
+t^2 \mathbf M^{-1} \mathbf f(\mathbf x^{[1]})
+\]</span></p>
+<p>有唯一解，当且仅当优化问题</p>
+<p><span class="math display">\[
+\begin{cases}
+    \mathbf x^{[1]} = \arg \min F(\mathbf x), \\
+    F(\mathbf x) = \frac{1}{2 \Delta t^2} ||\mathbf x - \mathbf x^{[0]}
+- \Delta t \mathbf v^{[0]}||^2_{\mathbf M} + E(\mathbf x)
+    \end{cases}
+\]</span></p>
+<p>有唯一解，其中<span class="math inline">\(||\mathbf x||^2_{\mathbf M}
+= \mathbf x^T \mathbf M \mathbf x\)</span>，<span
+class="math inline">\(\mathbf M \in \mathbb R^{3n \times
+3n}\)</span>为各顶点的质量矩阵，<span class="math inline">\(E(\mathbf
+x)\)</span>为系统势能。</p>
+<p>上式的物理意义为，最小化预测位置<span class="math inline">\(\mathbf
+x^{[0]} + \Delta t \mathbf v^{[0]}\)</span>与实际位置<span
+class="math inline">\(\mathbf x\)</span>的"距离"，与系统势能之和。</p>
+<h4 id="牛顿法">牛顿法</h4>
+<p>假设函数<span class="math inline">\(F(\mathbf
+x)\)</span>在区间内有唯一极小值<span class="math inline">\(\mathbf
+x\)</span>，那么由泰勒展开，得</p>
+<p><span class="math display">\[
+\mathbf 0 = \nabla F(\mathbf x) \approx \nabla F(\mathbf x^{(k)}) +
+\frac{\partial F^2(\mathbf x^{(k)})}{\partial \mathbf x^2}(\mathbf x -
+\mathbf x^{(k)})
+\]</span></p>
+<p>解出<span class="math inline">\(\mathbf x\)</span>，有</p>
+<p><span class="math display">\[
+\mathbf x = \mathbf x^{(k)} - \left(\frac{\partial F^2(\mathbf
+x^{(k)})}{\partial \mathbf x^2} \right)^{-1} \nabla F(\mathbf x^{(k)})
+\]</span></p>
+<p>于是，求解<span class="math inline">\(\mathbf
+x\)</span>，可以用如下的迭代步骤：</p>
+<p><img src="algorithm.png" /></p>
+<h4 id="牛顿法二阶梯度">牛顿法（二阶梯度）</h4>
+<p>对目标函数求导，有</p>
+<p><span class="math display">\[
+\begin{cases}
+        F(\mathbf x) = \frac{1}{2 \Delta t^2} ||\mathbf x - \mathbf
+x^{[0]} - \Delta t \mathbf v^{[0]}||^2_{\mathbf M} + E(\mathbf x), \\
+        \nabla F(\mathbf x) = \frac{1}{\Delta t^2} \mathbf M(\mathbf x -
+\mathbf x^{[0]} - \Delta t \mathbf v^{[0]}) - \mathbf f(\mathbf x), \\
+        \frac{\partial ^2 F(\mathbf x)}{\partial \mathbf x^2} =
+\frac{1}{\Delta t^2} \mathbf M + \mathbf H(\mathbf x)
+    \end{cases}
+\]</span></p>
+<p>在牛顿法隐式积分过程中，为求解</p>
+<p><span class="math display">\[
+\Delta \mathbf x \gets - \left(\frac{\partial F^2(\mathbf
+x^{(k)})}{\partial \mathbf x^2} \right)^{-1} \nabla F(\mathbf x^{(k)})
+\]</span></p>
+<p>这一步，需要求解线性方程组</p>
+<p><span class="math display">\[
+\left( \frac{1}{\Delta t^2} \mathbf M + \mathbf H(\mathbf x^{(k)})
+\right) \Delta \mathbf x = -\frac{1}{\Delta t^2} \mathbf M(\mathbf
+x^{(k)} - \mathbf x^{[0]} - \Delta t \mathbf v^{[0]}) + \mathbf
+f(\mathbf x^{(k)})
+\]</span></p>
+<p>实现时，常关注以下特征：</p>
+<ul>
+<li>初始值<span class="math inline">\(\mathbf
+x^{(0)}\)</span>的设定（往往为<span class="math inline">\(\mathbf
+x^{[0]}\)</span>或<span class="math inline">\(\mathbf x^{[0]} + \Delta t
+\mathbf v^{[0]}\)</span>）</li>
+<li>求解线性方程组的方法（直接法、迭代法）</li>
+<li>线性方程组系数矩阵<span class="math inline">\(\frac{1}{\Delta t^2}
+\mathbf M + \mathbf H(\mathbf
+x^{(k)})\)</span>是否半正定（影响解的唯一性和求解算法的选用），是否对角占优（影响求解算法的选用和优化）</li>
+<li>牛顿法迭代次数的多少（工程实践中，一般迭代次数不多）</li>
+</ul>
+<p>可以证明，当弹簧伸长时，系数矩阵一定是半正定的，有唯一解。当弹簧压缩时，系数矩阵不一定是半正定的，可能出现多解，如下图所示：</p>
+<p><img src="uniqueness.png" /></p>
+<h2 id="弯折模型">弯折模型</h2>
+<h3 id="简单的防弯折弹簧模型">简单的防弯折弹簧模型</h3>
+<p>简单的防止表面过度弯折的弹簧可以如下建立：在初始状态下，穿过相邻的三角形边，在对角顶点之间建立弹簧。</p>
+<p><img src="bendingnaive.png" /></p>
+<p>该模型存在问题：当顶点整体产生平移，而导致表面弯折时，由于两点之间距离没有发生改变，该弹簧不会产生有效的约束弹力。</p>
+<h3 id="局部曲率模型">局部曲率模型</h3>
+<p><img src="qbm.png" /></p>
+<p>为使软体表面维持原始的弯曲程度，可以利用数学上的概念，建立局部曲率模型，也称Quadratic
+Bending
+Model（二次弯曲模型）。根据离散拉普拉斯-贝尔特拉米算子的定义，建立与两个相邻三角面的表面几何有关的矩阵</p>
+<p><span class="math display">\[
+\mathbf q = \left[
+\begin{matrix}
+(\cot \theta_1 + \cot \theta_3 ) \mathbf I \\
+(\cot \theta_0 + \cot \theta_2 ) \mathbf I \\
+(\cot \theta_0 + \cot \theta_1 ) \mathbf I \\
+(\cot \theta_2 + \cot \theta_3 ) \mathbf I \\
+\end{matrix}
+\right] \in \mathbb R^{12 \times 3}，
+\]</span></p>
+<p>那么，该相邻三角面定义的局部弯曲能量为</p>
+<p><span class="math display">\[
+E(\mathbf x) = \frac{3||\mathbf q^T \mathbf x||^2}{2(A_0 + A_1)},
+\]</span></p>
+<p>其中<span class="math inline">\(\mathbf
+x\)</span>为四个顶点的原始位置，<span class="math inline">\(A_0,
+A_1\)</span>为两个三角形的原始面积。可以证明，当该相邻三角面形成的二面角的度数为<span
+class="math inline">\(0\)</span>时，<span
+class="math inline">\(E(\mathbf x) = 0\)</span>，否则<span
+class="math inline">\(E(\mathbf x) \neq 0\)</span>。</p>
+<p>当仿真过程中，三角面出现弯曲现象时，可以计算此时的<span
+class="math inline">\(E(\mathbf x)\)</span>产生的张力</p>
+<p><span class="math display">\[
+\mathbf f(\mathbf x) = -\nabla E(\mathbf x)
+\]</span></p>
+<p>进而对各顶点施加弯曲约束力。由于该方法容易得到解析形式的能量梯度和Hessian，因此与隐式积分方法契合度高。</p>
+<p>不过，当初始状态并非平面时，<span class="math inline">\(E \neq
+0\)</span>，该模型将给出不合预期的结果。可以采用Cubic shell
+model、Projective Dynamics model (cotangent formula) 等加以改进。</p>
+<h3 id="质点-弹簧系统的弯折锁问题-i">质点-弹簧系统的弯折锁问题 I</h3>
+<p>质点-弹簧系统往往具有"弯折锁"的问题：在某些方向上，被仿真的软体永远不可能产生弯曲现象，即便我们没有添加任何弯曲相关的约束。</p>
+<p>例如，若我们在顶点四边形的对角线上建立弹簧，则该四边形永远不可能沿着另一对角线弯折。这是因为该弹簧会阻碍其两端顶点互相接近。</p>
+<p><img src="lockingissue.png" /></p>
+<p>在实时物理仿真应用中，该问题在视觉上的表现通常并不明显，但由于欠缺物理真实性，因此质点-弹簧系统难以应用于严肃的应用中。</p>
+<p>产生这一问题的根本原因是，三角形网格上的质点-弹簧模型对软体模型的约束能力存在下确界，即模型各顶点的自由度存在上确界，而软体模型的各顶点本应可以具有更高的自由度。即，质点-弹簧系统对软体的仿真导致了自由度的丢失。</p>
+<p>设软体表面为三角形网格，且我们对网格中的每一条边都建立了弹簧。网格的顶点数为<span
+class="math inline">\(V\)</span>，边数为<span
+class="math inline">\(E\)</span>，位于模型边界处的边数为<span
+class="math inline">\(E_b\)</span>，那么由欧拉公式，可以证明</p>
+<p><span class="math display">\[
+E = 3(V - 1) - E_b
+\]</span></p>
+<p>软体仿真中的未知量为各顶点的位置，自由度为<span
+class="math inline">\(3V\)</span>，这也是理论上的最大自由度。但由于我们建立了<span
+class="math inline">\(E\)</span>个弹簧，若视它们均为刚性约束，则系统自由度变为</p>
+<p><span class="math display">\[
+3V - E = 3 + E_b.
+\]</span></p>
+<p>容易发现，这与模型内部的三角剖分方式无关。</p>
+<h3 id="质点-弹簧系统的弯折锁问题-iii">质点-弹簧系统的弯折锁问题
+III</h3>
+<p>提高质点-弹簧仿真系统的自由度的方式包括但不限于：</p>
+<ol type="1">
+<li>（hack）当弹簧压缩时，赋予更小的<span
+class="math inline">\(k\)</span></li>
+<li>（hack）在小范围的压缩/伸长量内，将弹簧弹力设为0</li>
+<li>选择性地对模型内部的每一条边建立弹簧</li>
+<li>进一步地，设置仿真LOD，进行逐层仿真，每层仿真使用的模型不同</li>
+</ol>
+<h1 id="约束法">约束法</h1>
+<h2 id="约束的建立与求解">约束的建立与求解</h2>
+<h3 id="高强度弹簧的仿真">高强度弹簧的仿真</h3>
+<p>生活中的布料、橡胶模型等物体，在小范围的变形之外会具有较高的刚性，对应质点-弹簧系统中较高的劲度系数<span
+class="math inline">\(k\)</span>。然而，质点-弹簧系统的半隐式/隐式积分法均对较大的<span
+class="math inline">\(k\)</span>敏感：</p>
+<ul>
+<li>对半隐式积分/显式积分而言，较大的<span
+class="math inline">\(k\)</span>将可能导致overshoot，需要更小的时间步长，对调参提出要求的同时降低了仿真效率</li>
+<li>对隐式积分而言，较大的<span
+class="math inline">\(k\)</span>将导致在弹簧压缩时，需要求解病态的线性方程组，所需计算时间更长</li>
+</ul>
+<p>因此，在实时物理仿真应用中，常采用约束法处理这类高强度弹簧的仿真。</p>
+<h3 id="弹簧约束">弹簧约束</h3>
+<p>若弹簧强度较高，我们期望在每一帧的仿真结束后，两端顶点<span
+class="math inline">\(i, j\)</span>的间距都能回到原长<span
+class="math inline">\(L\)</span>。于是，我们可以定义约束函数</p>
+<p><span class="math display">\[
+\phi(\mathbf x) = ||\mathbf x_i - \mathbf x_j|| - L
+\]</span></p>
+<p><img src="springconstraint.png" /></p>
+<p>当<span class="math inline">\(\phi(\mathbf x) =
+0\)</span>时，弹簧长度为原长，即满足约束。将当前状态变换到满足约束的状态的过程，称<strong>约束投影</strong>。</p>
+<h3 id="约束投影作为优化问题">约束投影作为优化问题</h3>
+<p>我们期望在约束投影的过程中，满足"最短路径"原则，即此过程中系统的状态（质量加权顶点的位置）的改变量最小。形式化地，这对应优化问题</p>
+<p><span class="math display">\[
+\begin{cases}
+    \{\mathbf x_{i}^{\text{new}}, \mathbf x_{j}^{\text{new}}\} = \arg
+\min \left \{ \frac{1}{2} (m_i ||\mathbf x_{i}^{\text{new}} - \mathbf
+x_i||^2 + m_j ||\mathbf x_{j}^{\text{new}} - \mathbf x_j||^2) \right \},
+\\
+    s. t. \ \phi(\mathbf x) = 0
+    \end{cases}
+\]</span></p>
+<p>几何上，该优化过程将不满足<span class="math inline">\(\phi(\mathbf x)
+= 0\)</span>的状态沿最短路径移动到了约束流形<span
+class="math inline">\(\phi(\mathbf x)\)</span>的边缘，如图所示：</p>
+<p><img src="projection.png" /></p>
+<p>对于弹簧约束而言，该优化问题的解是显然的：</p>
+<p><span class="math display">\[
+\begin{cases}
+    \mathbf x_{i}^{\text{new}} = \mathbf x_i - \frac{m_j}{m_i +
+m_j}(||\mathbf x_i - \mathbf x_j|| - L) \frac{\mathbf x_i - \mathbf
+x_j}{||\mathbf x_i - \mathbf x_j||}, \\
+    \mathbf x_{j}^{\text{new}} = \mathbf x_j + \frac{m_i}{m_i +
+m_j}(||\mathbf x_i - \mathbf x_j|| - L) \frac{\mathbf x_i - \mathbf
+x_j}{||\mathbf x_i - \mathbf x_j||}, \\
+    \end{cases}
+\]</span></p>
+<p>除了弹簧原长约束，我们也可以定义系统中的其他约束，如位置约束、弯曲约束、四面体张力约束等，有些碰撞也可以视作约束进行求解。但它们的约束函数可能更复杂，涉及系统中的更多变量，也更难求解。</p>
+<h3 id="整体约束的投影---串行法">整体约束的投影 - 串行法</h3>
+<p>对系统中的多个约束，我们需要保证它们在最终都能得到正确投影，因此需要一个整体的求解框架。基本方法包括串行法（Gauss-Seidel
+style）和并行法（Jacobi style）。UE5 Chaos
+采用CPU上的串行法求解约束。</p>
+<ul>
+<li>串行法的约束求解相当直接："对所有约束，按顺序求解它们，然后更新顶点位置"，迭代这一步骤若干次即可
+<img src="serialsolve.png" /></li>
+<li>如果要严格投影所有约束，该方法可能需要较多的迭代次数，且最终结果可能存在"振荡"现象，且与约束的求解顺序有关</li>
+<li>该方法天生难以并行化，但其并行化的实践也有一些研究成果（染色法）</li>
+</ul>
+<h3 id="整体约束的投影---并行法">整体约束的投影 - 并行法</h3>
+<ul>
+<li>并行法的约束求解，会"为每个约束记录其对顶点的影响程度，最后统一对各顶点根据其累积的影响程度，进行加权平均，更新顶点位置"，这一步骤也可以迭代若干次。</li>
+<li>如果要严格投影所有约束，该方法的收敛率较串行法低，但相对串行法避免了"振荡"现象</li>
+<li>该方法的整体计算量大于串行法，但可并行性较高，易于并行化</li>
+</ul>
+<h2 id="position-based-dynamics">Position Based Dynamics</h2>
+<h3 id="pbd流水线">PBD流水线</h3>
+<p>Position Based Dynamics (PBD)
+是一个被实时物理仿真应用广泛使用的经典约束仿真方法，UE5 Chaos、Nvidia
+PhysX和Bullet等物理引擎均使用PBD进行软体仿真，其仿真流水线如下：</p>
+<ol type="1">
+<li>输入状态<span class="math inline">\(\mathbf s^{[0]} = \{\mathbf
+v^{[0]}, \mathbf x^{[0]}\}\)</span></li>
+<li>对每个顶点<span
+class="math inline">\(i\)</span>，更新仿真状态，这里的<span
+class="math inline">\(\mathbf
+f^{[0]}\)</span>不考虑约束力（内力），只涉及环境力（如重力、空气阻力、用户施加的力等）
+<span class="math display">\[
+\begin{cases}
+            \mathbf v = \mathbf v^{[0]} + \Delta t \mathbf M^{-1}
+\mathbf f^{[0]}, \\
+            \mathbf x = \mathbf x^{[0]} + \Delta t \mathbf v
+        \end{cases}
+\]</span></li>
+<li>进行约束投影，得到新的顶点位置 <span class="math display">\[
+\mathbf x^{\text{new}} = \text{Projection}(\mathbf x)
+\]</span></li>
+<li>（进行碰撞后处理后）更新速度和位置 <span class="math display">\[
+\begin{cases}
+\mathbf v^{[1]} = \mathbf v + (\mathbf x^{\text{new}} - \mathbf x) /
+\Delta t, \\
+\mathbf x^{[1]} = \mathbf x^{\text{new}}
+\end{cases}
+\]</span></li>
+<li>输出状态<span class="math inline">\(\mathbf s^{[1]} = \{\mathbf
+v^{[1]}, \mathbf x^{[1]}\}\)</span></li>
+</ol>
+<p>注意：</p>
+<ul>
+<li><p>PBD方法在第一步仿真时，一般不考虑约束相关的力，如弹簧的弹力，仅将被仿真对象视作粒子系统处理。若这一步仿真考虑了约束相关的力，使用了较复杂的动力学仿真（如隐式积分），则一般将后续的约束投影视作让结果更合理的后处理过程，这一方法被称为Strain
+Limiting，可避免大形变时的瑕疵</p></li>
+<li><p>最后的速度更新<span class="math inline">\(\mathbf v^{[1]} =
+\mathbf v + (\mathbf x^{\text{new}} - \mathbf x) / \Delta
+t\)</span>在PBD原始论文中，是<span class="math inline">\(\mathbf v^{[1]}
+= (\mathbf x^{\text{new}} - \mathbf x) / \Delta
+t\)</span>，但如果综合考虑第一步仿真得到的<span
+class="math inline">\(\mathbf
+v\)</span>，通常可以带来更好的动力学效果。</p></li>
+<li><p>PBD的优点：</p>
+<ul>
+<li>计算量较小，在低分辨率下效果较好，适合实时物理仿真应用场景</li>
+<li>约束求解易于并行化（PhysX / nvcloth 在GPU上并行求解约束投影）</li>
+<li>与刚体Shape Matching和部分流体仿真算法框架契合，易于迁移</li>
+</ul></li>
+<li><p>PBD的缺点：</p>
+<ul>
+<li>约束投影的迭代次数往往直接影响到最终结果。一般地，若迭代次数较多，则最终的软体表面的刚性较强，容易产生"弯折锁"问题；反之，若迭代次数较少，则最终的软体表面更柔软。为呈现一定的美术效果，往往需要多次调试此参数</li>
+<li>软体表面的分辨率（弹簧约束的密度）也会直接影响到最终结果。一般地，若表面分辨率高，则弹簧约束密度较高，整体细节层次更高，只需较少的迭代次数即可收敛，因此一般会呈现出较高的刚性；反之，若表面分辨率低，则需较多的迭代次数才可收敛，当迭代次数设置较小时，会呈现出整体的柔性</li>
+<li>由于以上两个特性，PBD不具备较高的物理真实性，但能够通过调参控制整体的美术表现，因此在游戏物理引擎中应用广泛</li>
+</ul></li>
+</ul>
+<h2 id="projective-dynamics">Projective Dynamics</h2>
+<p>Projective Dynamics Projective Dynamics (PD)
+是一个更具有物理意义的约束法，其为每个约束定义了其势能（通常为二次形式），最终采用类似隐式积分的牛顿法求解。不同的是：</p>
+<ul>
+<li>该方法继承了PBD的约束投影思路，同样将约束力（内力）和环境力（外力）分开考虑，系统解耦程度高，应用范围广</li>
+<li>该方法的约束投影由独立步骤完成，进而使投影后的状态与投影前的状态无关，使得该方法的线性方程组的系数矩阵被简化为实对称矩阵（但不一定半正定），仅与当前系统的约束有关，与被仿真对象无关，因此可预计算，效率较高</li>
+</ul>
+<p>限于篇幅，本讲仅涉及PD对质点-弹簧系统的建模，不涉及其他约束形式和系统的具体实现。</p>
+<h3 id="pd定义的约束势能">PD定义的约束势能</h3>
+<p>对每个约束<span
+class="math inline">\(c\)</span>，根据约束类型，PD定义其约束势能的类型为</p>
+<p><span class="math display">\[
+E_c(\mathbf x) = \frac{w_c}{2} ||\mathbf A_c \mathbf x - \mathbf B_c
+\mathbf y||^2
+\]</span></p>
+<p>其中<span class="math inline">\(w_c\)</span>为约束<span
+class="math inline">\(c\)</span>的正权重，<span
+class="math inline">\(\mathbf y\)</span>是<span
+class="math inline">\(\mathbf x\)</span>在约束<span
+class="math inline">\(c\)</span>上的使势能为<span
+class="math inline">\(0\)</span>的投影，<span
+class="math inline">\(\mathbf A_c\)</span>和<span
+class="math inline">\(\mathbf B_c\)</span>是两个与<span
+class="math inline">\(c\)</span>的类型有关的常量矩阵。PD的约束投影为一独立过程，因此在求解<span
+class="math inline">\(E_c(\mathbf x)\)</span>的梯度时，认为<span
+class="math inline">\(\mathbf y\)</span>与<span
+class="math inline">\(\mathbf x\)</span>无关。</p>
+<p>例如，当<span class="math inline">\(c\)</span>为弹簧约束时，有</p>
+<p><span class="math display">\[
+E_c(\mathbf x, \mathbf y) = \frac{w_c}{2} ||(\mathbf x_i - \mathbf x_j)
+- (\mathbf x_i^{\text{new}} - \mathbf x_j^{\text{new}})||^2
+\]</span></p>
+<p>可以看出，该式与弹簧弹性势能的定义式相同，但劲度系数替换成了约束权重，且约束投影与原状态无关，故</p>
+<p><span class="math display">\[
+\begin{cases}
+        \mathbf f_{c, i}(\mathbf x, \mathbf y) = -\nabla_i E_c(\mathbf
+x, \mathbf y) = w_c ((\mathbf x_i^{\text{new}} - \mathbf
+x_j^{\text{new}}) - (\mathbf x_i - \mathbf x_j)), \\
+        \mathbf H_{c}(\mathbf x) = \frac{\partial^2 E_c(\mathbf x,
+\mathbf y)}{\partial \mathbf x_i^2} = w_c\mathbf I_3
+        \end{cases}
+\]</span></p>
+<p>注意到，此时由两个质点组成的弹簧系统的Hessian</p>
+<p><span class="math display">\[
+\mathbf H_c = \left[
+\begin{matrix}
+\mathbf H_{c}(\mathbf x) &amp; -\mathbf H_{c}(\mathbf x) \\
+-\mathbf H_{c}(\mathbf x) &amp; \mathbf H_{c}(\mathbf x)
+\end{matrix}
+\right] = w_c\left[
+\begin{matrix}
+\mathbf I_3 &amp; -\mathbf I_3 \\
+-\mathbf I_3 &amp; \mathbf I_3
+\end{matrix}
+\right]
+\]</span></p>
+<p>为常量矩阵。这使得PD相对隐式积分方法，在线性方程组的系数矩阵的计算上更方便。</p>
+<h3 id="pd在质点-弹簧系统上的实例">PD在质点-弹簧系统上的实例</h3>
+<p><img src="pd.png" /></p>
+<p>设所有弹簧的劲度系数相同为<span
+class="math inline">\(w_c\)</span>，则</p>
+<p><span class="math display">\[
+\begin{gathered}
+        E(\mathbf x) = \frac{w_c}{2} ||(\mathbf x_0 - \mathbf x_1) -
+(\mathbf x_{0, 0}^{\text{new}} - \mathbf x_{0, 1}^{\text{new}})||^2 + \\
+        \frac{w_c}{2} ||(\mathbf x_0 - \mathbf x_2) - (\mathbf x_{1,
+0}^{\text{new}} - \mathbf x_{1, 2}^{\text{new}})||^2 + \\
+        \frac{w_c}{2} ||(\mathbf x_0 - \mathbf x_3) - (\mathbf x_{2,
+0}^{\text{new}} - \mathbf x_{2, 3}^{\text{new}})||^2 + \\
+        \frac{w_c}{2} ||(\mathbf x_1 - \mathbf x_2) - (\mathbf x_{3,
+1}^{\text{new}} - \mathbf x_{3, 2}^{\text{new}})||^2 + \\
+         \frac{w_c}{2} ||(\mathbf x_2 - \mathbf x_3) - (\mathbf x_{4,
+2}^{\text{new}} - \mathbf x_{4, 3}^{\text{new}})||^2, \\
+         \mathbf f_0 = w_c((\mathbf x_{0, 0}^{\text{new}} - \mathbf
+x_{0, 1}^{\text{new}}) - (\mathbf x_0 - \mathbf x_1) + \\
+         (\mathbf x_{1, 0}^{\text{new}} - \mathbf x_{1, 2}^{\text{new}})
+- (\mathbf x_0 - \mathbf x_2) + \\
+         (\mathbf x_{2, 0}^{\text{new}} - \mathbf x_{2, 3}^{\text{new}})
+- (\mathbf x_0 - \mathbf x_3)),
+\end{gathered}
+\]</span></p>
+<p><span class="math display">\[
+\mathbf H = w_c\left[
+\begin{matrix}
+3\mathbf I_3 &amp; -\mathbf I_3 &amp; -\mathbf I_3 &amp; -\mathbf I_3\\
+-\mathbf I_3 &amp; 2 \mathbf I_3 &amp; -\mathbf I_3 &amp; \mathbf O_3\\
+-\mathbf I_3 &amp; -\mathbf I_3 &amp; 3 \mathbf I_3 &amp; -\mathbf I_3\\
+-\mathbf I_3 &amp; \mathbf O_3 &amp; -\mathbf I_3 &amp; 2 \mathbf I_3\\
+\end{matrix}
+\right]
+\]</span></p>
+<h3 id="pd流水线">PD流水线</h3>
+<ol type="1">
+<li>输入状态<span class="math inline">\(\mathbf s^{[0]} = \{\mathbf
+v^{[0]}, \mathbf x^{[0]}\}\)</span></li>
+<li>对每个顶点<span class="math inline">\(i\)</span>，根据外力<span
+class="math inline">\(\mathbf
+f_{\text{ext}}^{[0]}\)</span>更新仿真状态，不考虑约束力（内力），只涉及环境力（如重力、空气阻力、用户施加的力等）
+<span class="math display">\[
+\begin{cases}
+            \mathbf v = \mathbf v^{[0]} + \Delta t \mathbf M^{-1}
+\mathbf f_{\text{ext}}^{[0]}, \\
+            \mathbf s = \mathbf x^{[0]} + \Delta t \mathbf v
+        \end{cases}
+\]</span></li>
+<li>初始化<span class="math inline">\(\mathbf x^{(0)} = \mathbf
+x^{[0]}\)</span>或<span class="math inline">\(\mathbf x^{(0)} = \mathbf
+s\)</span>（推荐后者）。牛顿法迭代<span
+class="math inline">\(K\)</span>次：
+<ol type="1">
+<li><span class="math inline">\(\mathbf y = \text{Projection}(\mathbf
+x^{(k)})\)</span></li>
+<li>求解线性方程组 <span class="math display">\[
+\left( \frac{1}{\Delta t^2} \mathbf M + \mathbf H \right) \Delta \mathbf
+x = -\frac{1}{\Delta t^2} \mathbf M(\mathbf x^{(k)} - \mathbf s) +
+\mathbf f(\mathbf x^{(k)}, \mathbf y)
+\]</span></li>
+<li>更新<span class="math inline">\(\mathbf x^{(k+1)} = \mathbf x^{(k)}
++ \Delta \mathbf x\)</span></li>
+</ol></li>
+<li>（进行碰撞后处理后）更新速度和位置 <span class="math display">\[
+\begin{cases}
+\mathbf x^{[1]} = \mathbf x^{(k+1)}, \\
+\mathbf v^{[1]} = (\mathbf x^{[1]} - \mathbf x^{[0]}) / \Delta t,
+\end{cases}
+\]</span></li>
+<li>输出状态<span class="math inline">\(\mathbf s^{[1]} = \{\mathbf
+v^{[1]}, \mathbf x^{[1]}\}\)</span></li>
+</ol>
+<ul>
+<li>PD的优点：
+<ul>
+<li>由于定义了约束势能，求解过程相对PBD具有清晰的物理意义，是严格物理正确的方法的优秀近似</li>
+<li>线性方程组的系数矩阵可预计算，求解方便</li>
+<li>收敛速率较高，收敛行为与网格表面分辨率无关</li>
+</ul></li>
+<li>PD的缺点：
+<ul>
+<li>若在运行时修改约束，则会导致线性方程组系数矩阵发生变化，不利于实时求解</li>
+<li>虽然约束投影步骤（Jacobi
+style）易于并行，但线性方程组求解步骤不易并行</li>
+</ul></li>
+</ul>
+<h2 id="extended-pbd">eXtended PBD</h2>
+<h3 id="xpbd">XPBD</h3>
+<p>继承了PBD和PD的思想，Extended Position Based Dynamics
+(XPBD)是一种较新的约束法，将柔度矩阵<span class="math inline">\(\mathbf
+C\)</span>引入仿真流程，改进了PBD中的约束求解步骤，并引入了PD的势能的二次形式，使之具有物理意义。</p>
+<p>尽管XPBD的运行效率不及PBD，但物理正确性更高，且能稳健地仿真<span
+class="math inline">\(k \to
+\infty\)</span>时的弹簧约束。这种约束可用于骨骼动画中关节的连接。UE5
+Chaos在5.3版本后加入了基于XPBD的布料仿真功能。</p>
+<p>XPBD改进的是PBD中的约束投影这一步：</p>
+<p><span class="math display">\[
+    \mathbf x^{\text{new}} = \text{Projection}(\mathbf x)
+\]</span></p>
+<p>具体地，设系统中的总约束数目为<span
+class="math inline">\(m\)</span>，约束<span
+class="math inline">\(c\)</span>对应的函数<span
+class="math inline">\(\phi_c(\mathbf x)\)</span>和势能函数<span
+class="math inline">\(E_c(\mathbf x)\)</span>满足</p>
+<p><span class="math display">\[
+E_c(\mathbf x) = \frac{w_c}{2} (\phi_c(\mathbf x))^2
+\]</span></p>
+<p>那么，系统的总势能为一二次型，将其写成矩阵形式为</p>
+<p><span class="math display">\[
+E(\mathbf x) = \sum_c E_c(\mathbf x) = \sum_c \frac{w_c}{2}
+(\phi_c(\mathbf x))^2 = \frac{1}{2} \mathbf \Phi^T(\mathbf x) \mathbf
+C^{-1} \mathbf \Phi(\mathbf x)
+\]</span></p>
+<p>其中<span class="math inline">\(\mathbf \Phi(\mathbf x) \in \mathbb
+R^{m} = (\phi_{c_1}(\mathbf x), \dots, \phi_{c_m}(\mathbf
+x))^T\)</span>为所有约束对应函数组成的向量，<span
+class="math inline">\(\mathbf C = \frac{1}{w_c} \mathbf I_m \in \mathbb
+R^{m \times m}\)</span>为柔度矩阵，其为对角矩阵，且第<span
+class="math inline">\(i\)</span>个对角元素为第<span
+class="math inline">\(i\)</span>个约束对应的刚度<span
+class="math inline">\(w_c\)</span>的倒数。</p>
+<p>此时，系统的力为</p>
+<p><span class="math display">\[
+\mathbf f(\mathbf x) = - \nabla E(\mathbf x) = - \left( \frac{\partial
+E}{\partial \mathbf \Phi} \frac{\partial \mathbf \Phi}{\partial \mathbf
+x} \right)^T
+\]</span></p>
+<p>记<span class="math inline">\(\mathbf J(\mathbf x) = \frac{\partial
+\mathbf \Phi(\mathbf x)}{\partial \mathbf x} \in \mathbb R^{m \times
+3n}\)</span>为Jacobi矩阵，那么</p>
+<p><span class="math display">\[
+\mathbf f(\mathbf x) = -\mathbf J^T \mathbf C^{-1} \mathbf \Phi
+\]</span></p>
+<p>记</p>
+<p><span class="math display">\[
+\mathbf \lambda = C^{-1} \mathbf \Phi(\mathbf x)
+\]</span></p>
+<p>为拉格朗日乘子（辅助用的对偶变量）。由隐式积分，可得</p>
+<p><span class="math display">\[
+\begin{cases}
+    \mathbf x^{\text{new}} = \mathbf x + \Delta t \mathbf
+v^{\text{new}}, \\
+    \mathbf M \mathbf v^{\text{new}} = \mathbf M \mathbf v + \Delta t
+\mathbf f^{\text{new}}(\mathbf x)
+    \end{cases}
+\]</span></p>
+<p>由泰勒展开得</p>
+<p><span class="math display">\[
+\mathbf \Phi^{\text{new}} = \mathbf \Phi + \frac{\partial \mathbf
+\Phi}{\partial \mathbf x}(\mathbf x^{\text{new}} - \mathbf x) = \mathbf
+\Phi + \mathbf J(\mathbf x^{\text{new}} - \mathbf x)
+\]</span></p>
+<p>联立以上各式得</p>
+<p><span class="math display">\[
+\left[
+    \begin{matrix}
+    \mathbf M &amp; - \Delta t \mathbf J^T \\
+    \Delta t \mathbf J &amp; \mathbf C
+    \end{matrix}
+    \right] \left[
+    \begin{matrix}
+    \mathbf v^{\text{new}} \\
+    \mathbf \lambda^{\text{new}} \\
+    \end{matrix}
+    \right] =
+        \left[
+    \begin{matrix}
+    \mathbf M \mathbf v \\
+    -\mathbf \Phi
+    \end{matrix}
+    \right]
+\]</span></p>
+<p>求解此线性方程组，即可得到<span class="math inline">\(\mathbf
+v^{\text{new}}\)</span>，进而可以更新顶点位置<span
+class="math inline">\(\mathbf
+x^{\text{new}}\)</span>，完成约束投影的计算。求解方式包括直接构造线性系统，然后用各类方法求解，或者间接构造线性系统，用Gauss-Seidel迭代法求解，迭代<span
+class="math inline">\(K\)</span>步即可。原论文采用后者，且<span
+class="math inline">\(K\)</span>的值一般较小，以避免较高的计算开销。</p>
+<h3 id="xpbd---pros-cons">XPBD - Pros &amp; Cons</h3>
+<ul>
+<li>XPBD的优点：
+<ul>
+<li>相对PBD，迭代次数和分辨率不会影响仿真结果，有明确的物理意义（内力），稳健性强</li>
+<li>仿真框架继承PBD，调节柔度与调节刚度的工作流类似，利于应用迁移</li>
+<li>与刚体Shape
+Matching仿真方法契合，同时与骨骼关节长度约束契合，设置<span
+class="math inline">\(\mathbf C = \mathbf
+O\)</span>可应用于ragdoll动画</li>
+</ul></li>
+<li>XPBD的缺点：
+<ul>
+<li>相对PBD需要求解线性方程组，开销较大------但UE5
+Chaos并没有认真地解这个线性方程组，而是使用了一种Gauss-Seidel方法的近似用一步迭代解出结果</li>
+</ul></li>
+</ul>
+<h1 id="碰撞检测与处理">碰撞检测与处理</h1>
+<h2 id="概述-1">概述</h2>
+<h3 id="碰撞检测流水线">碰撞检测流水线</h3>
+<p><img src="cdpipeline.png" /></p>
+<h2 id="相交剔除">相交剔除</h2>
+<h3 id="空间物体的哈希存储">空间物体的哈希存储</h3>
+<ul>
+<li>重点思想：预先将空间物体的位置进行归类，以剔除大部分没有交集，不可能或极少产生碰撞的物体。</li>
+<li>更新处理：场景中大部分物体为静态物体，一般不需要更新；对于动态物体，也不一定需要每帧都更新其哈希存储，够用即可。</li>
+</ul>
+<p><img src="hash.png" /></p>
+<h3 id="morton-code">Morton Code</h3>
+<ul>
+<li>Morton
+码是一个利用了cache的空间局部性的空间哈希存储结构，相对简单的线性存储对硬件更友好</li>
+<li>Morton
+码基于以下的一般假设：对空间中的某个位置，若其被访问，则其相邻位置的数据也很有可能被访问，因此在存储该位置数据时，应当尽可能让与其在空间上相邻的数据在物理存储器上也相邻。因此，其具有"Z"字形的存储特点</li>
+<li>下图左为传统线性存储，右为二维Morton码存储</li>
+</ul>
+<p><img src="morton.png" /></p>
+<h3 id="层次包围体">层次包围体</h3>
+<ul>
+<li>层次包围体 (Bounding Volume Hierarchy, BVH)
+是一系列存储空间位置的树状数据结构的统称。</li>
+<li>空间哈希将各物体从空间位置上分类，而BVH则将各物体从空间上的包含关系分类。两者可以结合使用。</li>
+<li>查询碰撞时，逐层检测即可，直到检测到叶子结点方可确认相交。若未发生碰撞，通常在检测路径中途即可结束查询算法。</li>
+</ul>
+<p><img src="bvh.png" /></p>
+<h2 id="相交检测与处理">相交检测与处理</h2>
+<h3 id="碰撞检测---概述">碰撞检测 - 概述</h3>
+<ul>
+<li>一般地，刚体-刚体碰撞检测和软体-刚体碰撞检测可直接使用SDF，但软体-软体碰撞检测则无法很好地应用SDF，因为软体表面每时每刻都可能发生变化，因此SDF每时每刻都会发生变化</li>
+<li>对于布料-布料碰撞检测而言，难度会更大，因为布料不存在明确的外部、内部的定义</li>
+<li>对于软体的自相交检测，难度相当大，本讲不会涉及</li>
+</ul>
+<h3 id="离散碰撞检测与处理---基于sdf">离散碰撞检测与处理 - 基于SDF</h3>
+<ul>
+<li>对于软体-刚体碰撞检测，我们可以效仿刚体-刚体碰撞检测的方法（检测SDF值<span
+class="math inline">\(\phi(\mathbf x)\)</span>的正负）</li>
+<li>对于碰撞处理，也有许多类似刚体的方法，即惩罚法、冲量法等。一般的物理引擎使用冲量法，但可能不会严格地更新软体顶点在被推出后的速度向量</li>
+</ul>
+<p><img src="dcdsdf.png" /></p>
+<h3 id="离散碰撞检测---顶点-三角形相交检测">离散碰撞检测 -
+顶点-三角形相交检测</h3>
+<ul>
+<li>对于软体-软体碰撞检测，我们只能关注primitive（顶点、边、三角形）之间是否发生了相交现象，来判断是否发生了碰撞
+<img src="primitiveet.png" /></li>
+<li>形式化地，对每个软体顶点<span
+class="math inline">\(i\)</span>，设其在时刻<span
+class="math inline">\(0\)</span>时的位置为<span
+class="math inline">\(\mathbf x_a\)</span>，在时刻<span
+class="math inline">\(1\)</span>时的位置为<span
+class="math inline">\(\mathbf x_b\)</span>，且其在时间段<span
+class="math inline">\([0,1]\)</span>内近似做匀速直线运动，那么其在时刻<span
+class="math inline">\(t \in [0,1]\)</span>时的位置为 <span
+class="math display">\[
+\mathbf x(t) = (1 - t)\mathbf x_a + t \mathbf x_b
+\]</span></li>
+<li>而对每个需要检测的三角形<span class="math inline">\(\{\mathbf x_0,
+\mathbf x_1, \mathbf
+x_2\}\)</span>，我们假设其静止，可以运用向量混合积，检测其与软体顶点<span
+class="math inline">\(i\)</span>的共面情况，即求解方程 <span
+class="math display">\[
+(\mathbf x(t) - \mathbf x_0) \cdot (\mathbf x_1 - \mathbf x_0) \times
+(\mathbf x_2 - \mathbf x_0) = 0
+\]</span></li>
+<li>若上式的解<span class="math inline">\(t \in [0,1]\)</span>，且<span
+class="math inline">\(\mathbf x(t)\)</span>确实在<span
+class="math inline">\(\{\mathbf x_0, \mathbf x_1, \mathbf
+x_2\}\)</span>组成的三角形内部，则产生了相交，否则没有相交</li>
+</ul>
+<h3 id="离散碰撞检测---边-边相交检测">离散碰撞检测 - 边-边相交检测</h3>
+<ul>
+<li>仅仅进行顶点-三角形相交检测是不够的，可能存在顶点-三角形未相交，但边-边发生了相交的情况</li>
+<li>同时进行顶点-三角形和边-边检测，即可在三角形网格上排除所有可能的相交情况</li>
+<li>检测思路类似：设边<span class="math inline">\(\{ \mathbf x_a,
+\mathbf x_b \}\)</span>在下一帧的位置为<span class="math inline">\(\{
+\mathbf x_c, \mathbf x_d \}\)</span>，边<span class="math inline">\(\{
+\mathbf x_0, \mathbf x_1 \}\)</span>静止，该问题可转换为求解线段<span
+class="math inline">\(\{ \mathbf x_0, \mathbf x_1
+\}\)</span>是否存在点与<span class="math inline">\(\{ \mathbf x_a,
+\mathbf x_b, \mathbf x_c, \mathbf x_d \}\)</span>四边形相交</li>
+<li>因此，同顶点-三角形相交检测的算法，只需进行共面检测和点在四边形内部检测即可</li>
+</ul>
+<h3 id="连续碰撞检测与处理---基于sdf">连续碰撞检测与处理 - 基于SDF</h3>
+<ul>
+<li><p>如果时间步长较大，而SDF为负值的区域较小，有可能会发生两帧之间，物体发生了穿透，但未能检测到SDF为负的情况</p></li>
+<li><p>为此，需要列出一个关于<span
+class="math inline">\(t\)</span>的方程，查询该方程在两帧之间的时刻是否有解</p></li>
+<li><p>形式化地，对每个软体顶点<span
+class="math inline">\(i\)</span>，其在时刻<span class="math inline">\(t
+\in [0,1]\)</span>时的位置为</p>
+<p><span class="math display">\[
+\mathbf x(t) = (1 - t)\mathbf x_a + t \mathbf x_b
+\]</span></p></li>
+<li><p>对需要查询的刚体SDF<span class="math inline">\(\phi(\mathbf
+x)\)</span>，若其在时间段<span
+class="math inline">\([0,1]\)</span>也发生了运动，则需要从位置和朝向分别插值其位置，进而对SDF做线性变换（公式省略）。记在此时间段内的SDF为<span
+class="math inline">\(\phi(\mathbf x, t)\)</span>。</p></li>
+<li><p>最后我们需要求解方程</p>
+<p><span class="math display">\[
+\phi(\mathbf x(t), t) = 0
+\]</span></p>
+<p>在<span class="math inline">\([0,1]\)</span>内是否有解<span
+class="math inline">\((\mathbf x, t)\)</span>。若有解，则顶点<span
+class="math inline">\(i\)</span>在时刻<span
+class="math inline">\(t\)</span>位于<span class="math inline">\(\mathbf
+x(t)\)</span>，此时恰好位于刚体表面，即可以认为发生了相交，反之则没有相交</p></li>
+<li><p>对于复杂刚体而言，<span class="math inline">\(\phi(\mathbf x,
+t)\)</span>可能不是解析的，因此一般使用简单包围盒近似即可</p></li>
+</ul>
+<h3 id="连续碰撞检测---顶点-三角形相交检测">连续碰撞检测 -
+顶点-三角形相交检测</h3>
+<ul>
+<li><p>对于软体-软体连续碰撞检测，我们需要同时关注每个primitive的移动趋势，好在我们只需插值匀速直线运动即可</p></li>
+<li><p>形式化地，我们可以先进行共面检测</p>
+<p><span class="math display">\[
+(\mathbf x_3(t) - \mathbf x_0(t)) \cdot (\mathbf x_1(t) - \mathbf
+x_0(t)) \times (\mathbf x_2(t) - \mathbf x_0(t)) = 0,
+\]</span></p>
+<p>这是一个一元三次方程。使用二分法确定其在<span
+class="math inline">\([0,1]\)</span>内的解<span
+class="math inline">\(t\)</span>后，检测<span
+class="math inline">\(\mathbf x_3(t)\)</span>是否在<span
+class="math inline">\(\{ \mathbf x_0(t), \mathbf x_1(t), \mathbf x_2(t)
+\}\)</span>组成的三角形内。若在，则产生了碰撞</p></li>
+</ul>
+<p><img src="ccdvt.png" /></p>
+<h3 id="连续碰撞检测---边-边相交检测">连续碰撞检测 - 边-边相交检测</h3>
+<ul>
+<li><p>对于边-边相交检测，情况是类似的。先进行共面检测</p>
+<p><span class="math display">\[
+(\mathbf x_3(t) - \mathbf x_0(t)) \cdot (\mathbf x_1(t) - \mathbf
+x_0(t)) \times (\mathbf x_2(t) - \mathbf x_0(t)) = 0,
+\]</span></p>
+<p>确定其在<span class="math inline">\([0,1]\)</span>内的解<span
+class="math inline">\(t\)</span>后，检测线段<span
+class="math inline">\(\{ \mathbf x_2(t), \mathbf x_3(t)
+\}\)</span>是否与线段<span class="math inline">\(\{ \mathbf x_0(t),
+\mathbf x_1(t)\}\)</span>相交。若是，则产生了碰撞</p></li>
+</ul>
+<p><img src="ccdee.png" /></p>
+<p>注意：</p>
+<ul>
+<li>对于实时物理仿真应用而言，尽量避免使用连续碰撞检测，其开销将相对离散碰撞检测显著提高</li>
+<li>也有人认为，巧妙地设计相交剔除，才可以解决许多碰撞检测与处理流程的性能瓶颈</li>
+</ul>
+<h3 id="软体-软体的碰撞处理">软体-软体的碰撞处理</h3>
+<ul>
+<li>由于软体的表面是不规则的，没有SDF可以方便地将顶点"推出"，因此需要使用一些迭代法将产生碰撞的顶点从相交状态变为安全状态</li>
+<li>有两大类方法：Interior Point Methods和Impact Zone
+Optimization。前者在安全区中不断寻找与顶点最近的安全位置，后者在相交区不断试图朝安全区靠近。前者保证成功，但效率低，后者效率高，但可能失败</li>
+</ul>
+<p><img src="resolve.png" /></p>
+<h3 id="interior-point-methods-作为优化问题">Interior Point Methods
+作为优化问题</h3>
+<p>Interior Point Methods可以被形式化为如下的优化问题</p>
+<p><span class="math display">\[
+\mathbf x^{\text{resolved}} = \arg \min_{\mathbf x} \left \{ \frac{1}{2}
+||\mathbf x - \mathbf x^{[1]}||^2 + E(\mathbf x) \right \}
+\]</span></p>
+<p>其中，<span class="math inline">\(E(\mathbf
+x)\)</span>为barrier能量函数，用于控制目标点的位置：当点位于相交区时，<span
+class="math inline">\(E(\mathbf x) = +
+\infty\)</span>；当点位于安全区时，<span class="math inline">\(\mathbf
+x\)</span>与相交模型越远，<span class="math inline">\(E(\mathbf
+x)\)</span>的值越小。例如，可以用log-barrier函数实现之：</p>
+<p><span class="math display">\[
+E(\mathbf x) = \begin{cases}
+- \rho \sum_t \log \mathbf d_{t}(\mathbf x), \ \mathbf x
+\text{位于安全区} \\
++\infty, \ \mathbf x \text{位于相交区}
+    \end{cases}
+\]</span></p>
+<p>其中，<span class="math inline">\(\mathbf d_t(\mathbf
+x)\)</span>为<span class="math inline">\(\mathbf
+x\)</span>到陷入的相交模型的各三角形面<span
+class="math inline">\(t\)</span>的距离向量，由碰撞检测步骤给出。</p>
+<p>由于上式的函数均解析可微，因此为求解该问题，可以直接使用梯度下降法迭代：</p>
+<p><span class="math display">\[
+\mathbf x^{(k+1)} = \mathbf x^{(k)} + \alpha \left (\mathbf x^{[1]} -
+\mathbf x^{(k)} + \rho \sum_{t} \frac{\mathbf d_t(\mathbf x)}{||\mathbf
+d_t(\mathbf x)||^2} \right )
+\]</span></p>
+<h3 id="困难的布料-布料碰撞检测">困难的布料-布料碰撞检测</h3>
+<p>三维的布料-布料碰撞难以检测，这是因为布料没有内侧和外侧的定义，因此难以检测顶点-三角形是否是产生了相交，还是只是出现在了三角形的另一侧。</p>
+<p><img src="clothtangle.png" /></p>
+<p>有一些检测相交线的方法，在部分场景下表现还可以，但无法稳健地处理许多边界情况。</p>
+<p><img src="contour.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/" title="基于物理的动画：布料与软体动力学">https://zrephel.fun/2024/12/17/基于物理的动画：布料与软体动力学/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%89%A9%E7%90%86%E4%BB%BF%E7%9C%9F/" rel="tag"># 物理仿真</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/04/Voronoi%E5%9B%BE%E5%8F%8A%E5%85%B6%E5%BA%94%E7%94%A8%E7%AE%80%E4%BB%8B/" rel="prev" title="Voronoi图及其应用简介">
+                  <i class="fa fa-angle-left"></i> Voronoi图及其应用简介
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
