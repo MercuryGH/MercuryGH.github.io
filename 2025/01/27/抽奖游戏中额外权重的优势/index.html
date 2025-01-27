@@ -19,30 +19,31 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="https:&#x2F;&#x2F;ximera.osu.edu&#x2F;mooculus&#x2F;calculus3&#x2F;greensTheorem&#x2F;digInDivergenceAndGreensTheorem  记向量函数\(\mathbf F\)。 高斯公式 \[ \iiint _{V}\left(\mathbf {\nabla } \cdot \mathbf {F} \right) \, \mathrm d V&#x3D; \iint">
+    <meta name="description" content="某公司年会举办抽奖活动，共有 \(n\) 名员工参加，共有 \(m\) 件奖品。员工当中，有 \(k\) 人获得了额外的中奖权重：  抽奖前，拥有额外中奖权重的员工，会将自己的一个“分身”加入抽奖参与名单内。 对每件奖品抽奖时，抽奖程序从未中奖的参与名单中均匀随机选取一位，选取到自身或自身的“分身”均算作同一员工中奖。如果拥有额外的中奖权重的员工中奖，那么参与名单中会同时移除其本身和其“分身”。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="格林公式与高斯公式">
-<meta property="og:url" content="https://zrephel.fun/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/index.html">
+<meta property="og:title" content="抽奖游戏中额外权重的优势">
+<meta property="og:url" content="https://zrephel.fun/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/index.html">
 <meta property="og:site_name" content="Mercury&#39;s Blog">
-<meta property="og:description" content="https:&#x2F;&#x2F;ximera.osu.edu&#x2F;mooculus&#x2F;calculus3&#x2F;greensTheorem&#x2F;digInDivergenceAndGreensTheorem  记向量函数\(\mathbf F\)。 高斯公式 \[ \iiint _{V}\left(\mathbf {\nabla } \cdot \mathbf {F} \right) \, \mathrm d V&#x3D; \iint">
+<meta property="og:description" content="某公司年会举办抽奖活动，共有 \(n\) 名员工参加，共有 \(m\) 件奖品。员工当中，有 \(k\) 人获得了额外的中奖权重：  抽奖前，拥有额外中奖权重的员工，会将自己的一个“分身”加入抽奖参与名单内。 对每件奖品抽奖时，抽奖程序从未中奖的参与名单中均匀随机选取一位，选取到自身或自身的“分身”均算作同一员工中奖。如果拥有额外的中奖权重的员工中奖，那么参与名单中会同时移除其本身和其“分身”。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-07-18T05:43:08.000Z">
-<meta property="article:modified_time" content="2024-11-09T09:18:50.415Z">
+<meta property="article:published_time" content="2025-01-27T07:30:25.000Z">
+<meta property="article:modified_time" content="2025-01-27T07:31:51.370Z">
 <meta property="article:author" content="Mercury">
 <meta property="article:tag" content="数学">
-<meta property="article:tag" content="微积分">
-<meta property="article:tag" content="向量微积分">
+<meta property="article:tag" content="概率论">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="随机过程">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zrephel.fun/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/">
+<link rel="canonical" href="https://zrephel.fun/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/","path":"2023/07/18/格林公式与高斯公式/","title":"格林公式与高斯公式"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/","path":"2025/01/27/抽奖游戏中额外权重的优势/","title":"抽奖游戏中额外权重的优势"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>格林公式与高斯公式 | Mercury's Blog</title>
+<title>抽奖游戏中额外权重的优势 | Mercury's Blog</title>
   
 
 
@@ -115,7 +116,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">高斯公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">格林公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%80%E5%8C%96%E5%88%B0%E4%B8%80%E7%BB%B4"><span class="nav-number">3.</span> <span class="nav-text">退化到一维</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E7%AE%97%E5%AD%90%E5%BD%A2%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">拉普拉斯算子形式</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B2%BE%E7%A1%AE%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">精确解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%91%E4%BC%BC%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">近似解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-number">2.1.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -161,7 +162,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,12 +175,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="格林公式与高斯公式 | Mercury's Blog">
+      <meta itemprop="name" content="抽奖游戏中额外权重的优势 | Mercury's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          格林公式与高斯公式
+          抽奖游戏中额外权重的优势
         </h1>
 
         <div class="post-meta-container">
@@ -189,15 +190,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2023-07-18 13:43:08" itemprop="dateCreated datePublished" datetime="2023-07-18T13:43:08+08:00">2023-07-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-11-09 17:18:50" itemprop="dateModified" datetime="2024-11-09T17:18:50+08:00">2024-11-09</time>
+      <time title="Created: 2025-01-27 15:30:25 / Modified: 15:31:51" itemprop="dateCreated datePublished" datetime="2025-01-27T15:30:25+08:00">2025-01-27</time>
     </span>
 
   
@@ -209,8 +204,8 @@
     </span>
     <span class="post-meta-item-text">Waline: </span>
   
-    <a title="waline" href="/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/" itemprop="commentCount"></span>
+    <a title="waline" href="/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -223,39 +218,85 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><blockquote>
-<p>https://ximera.osu.edu/mooculus/calculus3/greensTheorem/digInDivergenceAndGreensTheorem</p>
-</blockquote>
-<p>记向量函数<span class="math inline">\(\mathbf F\)</span>。</p>
-<h2 id="高斯公式">高斯公式</h2>
-<p><span class="math display">\[
-\iiint _{V}\left(\mathbf {\nabla } \cdot \mathbf {F} \right) \, \mathrm
-d V= \iint_{\partial V}\!\!\!\!\!\!\!\!\!\!\!\!\!\!\!\;\subset\!\supset
-{\displaystyle (\mathbf {F} \cdot \mathbf {\hat {n}} )\, \mathrm dS.}
-\]</span></p>
+    <div class="post-body" itemprop="articleBody"><p>某公司年会举办抽奖活动，共有 <span class="math inline">\(n\)</span>
+名员工参加，共有 <span class="math inline">\(m\)</span>
+件奖品。员工当中，有 <span class="math inline">\(k\)</span>
+人获得了额外的中奖权重：</p>
+<ul>
+<li>抽奖前，拥有额外中奖权重的员工，会将自己的一个“分身”加入抽奖参与名单内。</li>
+<li>对每件奖品抽奖时，抽奖程序从未中奖的参与名单中均匀随机选取一位，选取到自身或自身的“分身”均算作同一员工中奖。如果拥有额外的中奖权重的员工中奖，那么参与名单中会同时移除其本身和其“分身”。</li>
+</ul>
+<p>求拥有额外的中奖权重的员工的中奖概率。</p>
 <span id="more"></span>
-<h2 id="格林公式">格林公式</h2>
+<h2 id="精确解">精确解</h2>
+<p>为简便叙述，我们称“拥有额外的中奖权重的员工”为 VIP 员工。</p>
+<p>考虑动态规划，状态为三元组 <span class="math inline">\((n, m,
+k)\)</span>：设当未中奖员工数为 <span
+class="math inline">\(n\)</span>，剩余奖品数为 <span
+class="math inline">\(m\)</span>，未中奖的 VIP 员工数为 <span
+class="math inline">\(k\)</span> 时，某 VIP 员工此时的中奖概率为 <span
+class="math inline">\(p_{n, m,
+k}\)</span>。根据接下来的单次抽奖，所有可能的转移方式如下：</p>
+<ol type="1">
+<li>接下来的奖品，抽到了该 VIP 员工，概率为 <span
+class="math inline">\(\frac{2}{n+k}\)</span></li>
+<li>接下来的奖品，抽到了其他 VIP 员工，概率为 <span
+class="math inline">\(\frac{2k-2}{n+k}\)</span>，状态转移到 <span
+class="math inline">\((n-1, m-1, k-1)\)</span></li>
+<li>接下来的奖品，抽到了普通员工，概率为 <span
+class="math inline">\(\frac{n-k}{n+k}\)</span>，状态转移到 <span
+class="math inline">\((n-1, m-1, k)\)</span></li>
+</ol>
+<p>故状态转移方程为</p>
 <p><span class="math display">\[
-\iint _{S}\left(\mathbf {\nabla } \cdot \mathbf {F} \right) \, \mathrm d
-S= \oint_{\partial S} {\displaystyle (\mathbf {F} \cdot \mathbf {\hat
-{n}} )\, \mathrm d l.}
+p_{n,m,k} = \frac{2}{n+k} + \frac{2k-2}{n+k} p_{n-1, m-1, k-1} +
+\frac{n-k}{n+k} p_{n-1, m-1, k}
 \]</span></p>
-<h2 id="退化到一维">退化到一维</h2>
+<p>边界条件为</p>
 <p><span class="math display">\[
-\int_a^b f&#39;(x) \, \mathrm d x = f(b) - f(a).
+p_{n, 0, k} = p_{n, m, 0} = 0, \\
+p_{n, m, n} = \frac{m}{n}.
 \]</span></p>
-<h2 id="拉普拉斯算子形式">拉普拉斯算子形式</h2>
-<p>由于<span class="math inline">\(\mathbf \Delta u = \mathbf \nabla^2 u
-= \mathbf \nabla \cdot \mathbf \nabla
-u\)</span>，故以上均可写成拉普拉斯算子形式。以格林公式为例：</p>
+<p>实际计算时，观察到状态转移方程中 <span
+class="math inline">\(n\)</span> 与 <span
+class="math inline">\(m\)</span>
+的差值始终恒定，因此可以减少一个复杂度维度，时间复杂度为 <span
+class="math inline">\(O(mk)\)</span>。</p>
+<h2 id="近似解">近似解</h2>
+<p>这里使用一个近似。我们允许 VIP
+员工在抽奖时，其自身或自身的“分身”同时中奖，但我们同时认为该中奖概率可忽略不计。这在
+<span class="math inline">\(m \ll n\)</span> 且 <span
+class="math inline">\(k \ll n\)</span> 时是合理的近似。</p>
+<p>普通员工的中奖概率为</p>
 <p><span class="math display">\[
-\iint _{S}\left(\mathbf \Delta \mathbf {F} \right) \, \mathrm d S=
-\oint_{\partial S} {\displaystyle (\mathbf \nabla \mathbf {F} \cdot
-\mathbf {\hat {n}} )\, \mathrm d l.}
+p_0 = \frac{\binom{n+k-1}{m-1}}{\binom{n+k}{m}} = \frac{m}{n+k}.
 \]</span></p>
-<p>这里的<span class="math inline">\(\mathbf
-F\)</span>实际上是原式取了梯度算子的<span class="math inline">\(\mathbf
-\nabla \mathbf F\)</span>。</p>
+<p>对 VIP 员工，其中奖概率为</p>
+<p><span class="math display">\[
+\begin{aligned}
+p_1 = 1 - \frac{\binom{n+k-2}{m}}{\binom{n+k}{m}} &amp;= 1 - \frac{(n +
+k - m)(n + k - m - 1)}{(n + k)(n + k - 1)} \\
+&amp; \approx 1 - \frac{(n+k-m)^2}{(n+k)^2} \\
+&amp;= \frac{m}{n+k} \left(2 - \frac{m}{n+k} \right).
+\end{aligned}
+\]</span></p>
+<p>可见，拥有额外的中奖权重，近似相当于为普通中奖概率乘上系数 <span
+class="math inline">\(2 - \frac{m}{n+k}\)</span>。可以证明，当 <span
+class="math inline">\(\frac{m}{n+k} = 1/2\)</span>
+时，该中奖概率与普通中奖概率的差值最大，为 $ p_1 - p_0 = $。</p>
+<p>对于一组数据 <span class="math inline">\(n=100, m = 30, k =
+10\)</span>，有 <span class="math inline">\(p_0 \approx 0.27, p_1
+\approx 0.47\)</span>，提升幅度不小。</p>
+<h3 id="补充">补充</h3>
+<p>若这 <span class="math inline">\(k\)</span> 人 VIP
+能够获得两个“分身”，则可以用同样方法近似得到</p>
+<p><span class="math display">\[
+p_2 = \left (\frac{m}{n+2k} \right)^3 - 3  \left (\frac{m}{n+2k}
+\right)^2 + 3 \left (\frac{m}{n+2k} \right)
+\]</span></p>
+<p>此时 VIP 具有更大优势。当 <span class="math inline">\(n=100, m = 30,
+k = 1\)</span> 时，<span class="math inline">\(p_2 \approx
+0.65\)</span>。</p>
 
     </div>
 
@@ -273,7 +314,7 @@ F\)</span>实际上是原式取了梯度算子的<span class="math inline">\(\ma
   </li>
   <li class="post-copyright-link">
       <strong>Post link: </strong>
-      <a href="https://zrephel.fun/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/" title="格林公式与高斯公式">https://zrephel.fun/2023/07/18/格林公式与高斯公式/</a>
+      <a href="https://zrephel.fun/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/" title="抽奖游戏中额外权重的优势">https://zrephel.fun/2025/01/27/抽奖游戏中额外权重的优势/</a>
   </li>
   <li class="post-copyright-license">
       <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
@@ -283,8 +324,9 @@ F\)</span>实际上是原式取了梯度算子的<span class="math inline">\(\ma
 
           <div class="post-tags">
               <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
-              <a href="/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/" rel="tag"># 微积分</a>
-              <a href="/tags/%E5%90%91%E9%87%8F%E5%BE%AE%E7%A7%AF%E5%88%86/" rel="tag"># 向量微积分</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"># 动态规划</a>
+              <a href="/tags/%E9%9A%8F%E6%9C%BA%E8%BF%87%E7%A8%8B/" rel="tag"># 随机过程</a>
           </div>
 
         
@@ -300,14 +342,11 @@ F\)</span>实际上是原式取了梯度算子的<span class="math inline">\(\ma
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/07/18/%E9%9A%8F%E6%9C%BA%E5%BA%8F%E5%88%97%E7%9A%84%E9%A6%96%E6%AC%A1%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98/" rel="prev" title="随机序列的首次生成问题">
-                  <i class="fa fa-angle-left"></i> 随机序列的首次生成问题
+                <a href="/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/" rel="prev" title="基于物理的动画：布料与软体动力学">
+                  <i class="fa fa-angle-left"></i> 基于物理的动画：布料与软体动力学
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/07/28/%E6%97%A0%E9%99%90%E9%87%8D%E6%8E%B7%E9%AA%B0%E5%AD%90%E7%9A%84%E6%94%B6%E7%9B%8A%E6%9C%9F%E6%9C%9B/" rel="next" title="无限重掷骰子的收益期望">
-                  无限重掷骰子的收益期望 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -380,7 +419,7 @@ F\)</span>实际上是原式取了梯度算子的<span class="math inline">\(\ma
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2023/07/18/%E6%A0%BC%E6%9E%97%E5%85%AC%E5%BC%8F%E4%B8%8E%E9%AB%98%E6%96%AF%E5%85%AC%E5%BC%8F/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/01/27/%E6%8A%BD%E5%A5%96%E6%B8%B8%E6%88%8F%E4%B8%AD%E9%A2%9D%E5%A4%96%E6%9D%83%E9%87%8D%E7%9A%84%E4%BC%98%E5%8A%BF/"}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
 <script>
 document.addEventListener('page:loaded', () => {
