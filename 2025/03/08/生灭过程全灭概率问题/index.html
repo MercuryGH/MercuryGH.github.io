@@ -19,29 +19,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="给定\(n\)个球和\(n\)个盒子，每个球会被串行地随机分配到一个盒子中。  求空盒的期望数目。 求每个盒子装有的球的期望数目。 若每个盒子都会在它已经装有\(1\)个球时，拒绝装下其他的球，然后被拒绝的球消失。求消失的球的期望数目。">
+    <meta name="description" content="某种细胞每回合均匀随机地选择一项：  无变化 自我毁灭 增殖 \(1\) 个相同的自身 增殖 \(2\) 个相同的自身  现初始有 \(n\) 个细胞，求最终细胞数为 \(0\) 的概率。  本题只有一个吸收壁，但有可能吸收不了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="占坑问题">
-<meta property="og:url" content="https://zrephel.fun/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="生灭过程全灭概率问题">
+<meta property="og:url" content="https://zrephel.fun/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Mercury&#39;s Blog">
-<meta property="og:description" content="给定\(n\)个球和\(n\)个盒子，每个球会被串行地随机分配到一个盒子中。  求空盒的期望数目。 求每个盒子装有的球的期望数目。 若每个盒子都会在它已经装有\(1\)个球时，拒绝装下其他的球，然后被拒绝的球消失。求消失的球的期望数目。">
+<meta property="og:description" content="某种细胞每回合均匀随机地选择一项：  无变化 自我毁灭 增殖 \(1\) 个相同的自身 增殖 \(2\) 个相同的自身  现初始有 \(n\) 个细胞，求最终细胞数为 \(0\) 的概率。  本题只有一个吸收壁，但有可能吸收不了。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-10T01:44:59.000Z">
-<meta property="article:modified_time" content="2024-11-09T09:18:50.290Z">
+<meta property="article:published_time" content="2025-03-08T15:15:27.000Z">
+<meta property="article:modified_time" content="2025-03-08T15:31:12.702Z">
 <meta property="article:author" content="Mercury">
 <meta property="article:tag" content="数学">
 <meta property="article:tag" content="概率论">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://zrephel.fun/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="https://zrephel.fun/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/","path":"2023/09/10/占坑问题/","title":"占坑问题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/","path":"2025/03/08/生灭过程全灭概率问题/","title":"生灭过程全灭概率问题"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>占坑问题 | Mercury's Blog</title>
+<title>生灭过程全灭概率问题 | Mercury's Blog</title>
   
 
 
@@ -114,7 +114,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8D%E7%94%9F%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">衍生题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#section"><span class="nav-number">2.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#section-1"><span class="nav-number">2.2.</span> <span class="nav-text">2</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,7 +160,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -173,12 +173,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="占坑问题 | Mercury's Blog">
+      <meta itemprop="name" content="生灭过程全灭概率问题 | Mercury's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          占坑问题
+          生灭过程全灭概率问题
         </h1>
 
         <div class="post-meta-container">
@@ -188,15 +188,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2023-09-10 09:44:59" itemprop="dateCreated datePublished" datetime="2023-09-10T09:44:59+08:00">2023-09-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-11-09 17:18:50" itemprop="dateModified" datetime="2024-11-09T17:18:50+08:00">2024-11-09</time>
+      <time title="Created: 2025-03-08 23:15:27 / Modified: 23:31:12" itemprop="dateCreated datePublished" datetime="2025-03-08T23:15:27+08:00">2025-03-08</time>
     </span>
 
   
@@ -208,8 +202,8 @@
     </span>
     <span class="post-meta-item-text">Waline: </span>
   
-    <a title="waline" href="/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    <a title="waline" href="/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -222,89 +216,123 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>给定<span class="math inline">\(n\)</span>个球和<span
-class="math inline">\(n\)</span>个盒子，每个球会被串行地随机分配到一个盒子中。</p>
-<ol type="1">
-<li>求空盒的期望数目。</li>
-<li>求每个盒子装有的球的期望数目。</li>
-<li>若每个盒子都会在它已经装有<span
-class="math inline">\(1\)</span>个球时，拒绝装下其他的球，然后被拒绝的球消失。求消失的球的期望数目。</li>
-</ol>
+    <div class="post-body" itemprop="articleBody"><p>某种细胞每回合均匀随机地选择一项：</p>
+<ul>
+<li>无变化</li>
+<li>自我毁灭</li>
+<li>增殖 <span class="math inline">\(1\)</span> 个相同的自身</li>
+<li>增殖 <span class="math inline">\(2\)</span> 个相同的自身</li>
+</ul>
+<p>现初始有 <span class="math inline">\(n\)</span>
+个细胞，求最终细胞数为 <span class="math inline">\(0\)</span>
+的概率。</p>
+<blockquote>
+<p>本题只有一个吸收壁，但有可能吸收不了。</p>
+</blockquote>
 <span id="more"></span>
-<p><strong>注：每个问题的条件相互独立。默认情况下，每个盒子可装任意多个球。</strong></p>
 <h2 id="解答">解答</h2>
-<ol type="1">
-<li>记<span class="math inline">\(X_i\in\{0,1\}\)</span>表示“第<span
-class="math inline">\(i\)</span>个盒子为空盒”，则</li>
-</ol>
+<p>设在存在 <span class="math inline">\(n\)</span>
+个细胞时，最终细胞数为 <span class="math inline">\(0\)</span> 的概率为
+<span class="math inline">\(p_n\)</span>。考虑状态 <span
+class="math inline">\(1\)</span> 下的转移</p>
 <p><span class="math display">\[
-P(X_i = 1) = \left(\frac{n - 1}{n} \right)^n
+p_1 = \frac{1}{4} + \frac{1}{4} p_1 + \frac{1}{4} p_{1 + 1} +
+\frac{1}{4} p_{1 + 2}.
 \]</span></p>
-<p>故<span class="math inline">\(E(X_i)=\left(\frac{n - 1}{n}
-\right)^n\)</span>，空盒的期望数目<span class="math inline">\(E(\sum
-X_i) = \sum E(X_i) = n\left(\frac{n - 1}{n} \right)^n\)</span>。当<span
-class="math inline">\(n\)</span>充分大时，<span
-class="math inline">\(E(\sum X_i) = \frac{n}{\mathrm e}\)</span>。</p>
-<ol start="2" type="1">
-<li>记<span class="math inline">\(Y_i \in \{0,1\}\)</span>表示“第<span
-class="math inline">\(j\)</span>个盒子装有第<span
-class="math inline">\(i\)</span>个球”（由对称性，<span
-class="math inline">\(Y_i\)</span>与<span
-class="math inline">\(j\)</span>无关），则<span
-class="math inline">\(P(Y_i= 1) =
-\frac{1}{n}\)</span>。故每个盒子装有的球的期望数目为</li>
-</ol>
+<p>但我们没办法迭代正整数。注意到，存在 <span
+class="math inline">\(n\)</span>
+个细胞时，“最终全部毁灭”的概率相当于“每个细胞单独都最终毁灭”的概率，于是有</p>
 <p><span class="math display">\[
-E(\sum Y_i) = \sum E(Y_i) = n \cdot \frac{1}{n} = 1.
+p_n = p_1^n.
 \]</span></p>
-<p>注意：若考虑用期望的定义计算：记<span
-class="math inline">\(T\)</span>表示“第<span
-class="math inline">\(j\)</span>个盒子里的球的数目”，则</p>
+<p>联立以上两式得</p>
 <p><span class="math display">\[
-E(T) = 0 \cdot P(T=0) + 1 \cdot P(T=1) + \dots + n \cdot P(T=n) =
-\sum_{i=1}^n i P(T=i).
+p_1 = \frac{1}{4} + \frac{1}{4} p_1 + \frac{1}{4} p_{1}^2 + \frac{1}{4}
+p_{1}^3.
 \]</span></p>
-<p>而且我们已经知道<span class="math inline">\(E(T) =
-1\)</span>。这个式子在下一题是有用的。</p>
-<ol start="3" type="1">
-<li>等价地，将题目的条件转化为：先假设每个盒子可装任意多个球，装完后，再统一地让超出容积的盒子里面的球消失。具体而言，在装完<span
-class="math inline">\(n\)</span>个球后，对第<span
-class="math inline">\(j\)</span>个盒子，若该盒子中装有<span
-class="math inline">\(k(k &gt; 1)\)</span>个球，则抛弃<span
-class="math inline">\(k - 1\)</span>个球，否则不抛弃。</li>
-</ol>
-<p>记<span class="math inline">\(S\)</span>表示“如此做后，第<span
-class="math inline">\(j\)</span>个盒子抛弃的球的个数”，由期望的线性性质，我们只需求<span
-class="math inline">\(nE(S)\)</span>。首先显然有</p>
+<p>解出 <span class="math inline">\(p_1 \in [0,1]\)</span>，得</p>
 <p><span class="math display">\[
-E(S) = 1 \cdot P(S=1) + 2 \cdot P(S=2) + \dots + (n-1) \cdot P(S=n-1).
+p_1 = 1, p_1 = \sqrt 2 - 1.
 \]</span></p>
-<p>注意到当<span class="math inline">\(S \geq 1\)</span>时，<span
-class="math inline">\(S\)</span>和<span
-class="math inline">\(T\)</span>的关系满足<span class="math inline">\(S
-= T - 1\)</span>。于是</p>
+<p>接下来我们要排除 <span class="math inline">\(p_1=1\)</span>
+的答案。设初始有 <span class="math inline">\(1\)</span>
+个细胞，这些细胞在 <span class="math inline">\(k\)</span>
+回合内最终毁灭的概率为 <span class="math inline">\(p_{1,
+k}\)</span>，我们要证明 <span class="math inline">\(\forall k, p_{1, k}
+&lt; 1\)</span>。</p>
+<p>首先计算 <span class="math inline">\(p_{1,1} =
+\frac{1}{4}\)</span>。</p>
+<p>又</p>
 <p><span class="math display">\[
-\begin{aligned}
-E(S) &amp;= 1 \cdot P(T = 2) + 2 \cdot P(T=3) + \dots + (n-1) \cdot
-P(T=n) \\
-&amp;= \sum_{i=1}^n (i-1)P(T=i)\\
-&amp;= \sum_{i=1}^n i P(T=i) - \sum_{i=1}^n P(T=i). \\
-&amp;= 1- (1- P(T=0)) \\
-&amp;= P(T=0) \\
-&amp;= \frac{n}{\mathrm e}.
-\end{aligned}
+p_{1,k} = \frac{1}{4} + \frac{1}{4} p_{1,k-1} + \frac{1}{4} p_{1,k-1}^2
++ \frac{1}{4} p_{1,k-1}^3.
 \]</span></p>
-<p><strong>另解</strong></p>
-<p>由于在这种情况下，所有有球的盒子里都有且只有<span
-class="math inline">\(1\)</span>个球，所以在所有球都分配完毕后，有</p>
+<p>同时，容易知道 <span class="math inline">\(p_{1,k}\)</span>
+数列单调不减，故先触碰到极限 <span class="math inline">\(\sqrt 2 -
+1\)</span>，因此</p>
 <p><span class="math display">\[
-非空盒的数目 = 未消失的球的数目
+\lim_{k \to \infty} p_{1, k} = \sqrt 2 - 1.
 \]</span></p>
-<p>于是</p>
+<p>因此，可以排除 <span class="math inline">\(p_1 = 1\)</span>
+的答案。</p>
+<p>于是，在存在 <span class="math inline">\(n\)</span>
+个细胞时，最终细胞数为 <span class="math inline">\(0\)</span> 的概率</p>
 <p><span class="math display">\[
-空盒的数目 = 消失的球的数目。
+p_n = (\sqrt 2 - 1)^n.
 \]</span></p>
-<p>所以答案是空盒的期望数目。</p>
+<p>使用数列 <span class="math inline">\(p_{n,k}\)</span>
+可以求解，最终细胞数变为为 <span class="math inline">\(0\)</span>
+所需经过回合数的数学期望，但由于基本不可能写出数列 <span
+class="math inline">\(p_{n,k}\)</span>
+的通项，因此只能一步步迭代到很大的 <span
+class="math inline">\(k\)</span> 做逼近。</p>
+<h2 id="衍生题">衍生题</h2>
+<h3 id="section">1</h3>
+<p>设 <span class="math inline">\(p \in [0,1]\)</span>，</p>
+<p><span class="math display">\[
+(1-p) + p \cdot x^k = x,
+\]</span></p>
+<p>的最小非负根为 <span class="math inline">\(x_1\)</span>。求证：</p>
+<p><span class="math display">\[
+\lim_{k \to \infty} x_1 = 1-p.
+\]</span></p>
+<hr />
+<p><em>证明</em>：这种细胞每回合要么死（概率为 <span
+class="math inline">\(1-p\)</span>），要么变成 <span
+class="math inline">\(k\)</span> 个自己（概率为 <span
+class="math inline">\(p\)</span>）。因此当 <span
+class="math inline">\(k\)</span>
+很大时，基本上一定能活下来，但要是第一回合以 <span
+class="math inline">\(1-p\)</span>
+概率死了，那游戏结束。所以，最终会死的机会基本等同于第一次死的机会，即
+<span class="math inline">\(1-p\)</span>。</p>
+<h3 id="section-1">2</h3>
+<p>设 <span class="math inline">\(p \in [0,1]\)</span>，</p>
+<p><span class="math display">\[
+(1-p) + p \cdot x^k = x,
+\]</span></p>
+<p>的最小非负根为 <span class="math inline">\(x_1\)</span>。求证：</p>
+<p><span class="math display">\[
+x_1 &lt; 1
+\]</span></p>
+<p>的充要条件为 <span class="math inline">\(p &gt;
+\frac{1}{k}\)</span>。</p>
+<hr />
+<p><em>证明</em>：这种细胞每回合要么死（概率为 <span
+class="math inline">\(1-p\)</span>），要么变成 <span
+class="math inline">\(k\)</span> 个自己（概率为 <span
+class="math inline">\(p\)</span>）。上式其实是“可能不死”应该满足的条件。</p>
+<p>如果细胞每回合期望变成 <span class="math inline">\(1\)</span>
+个自己，那么</p>
+<p><span class="math display">\[
+1 = (1-p) \cdot 0 + p \cdot k
+\]</span></p>
+<p>解得 <span class="math inline">\(p =
+\frac{1}{k}\)</span>。如果每回合期望变成自己的个数大于 <span
+class="math inline">\(1\)</span>，那么细胞就有增殖的倾向，从而“可能不死”，否则必死（以概率1死）。</p>
+<p>于是，若 <span class="math inline">\(p &gt;
+\frac{1}{k}\)</span>，则增殖倾向成立，全灭概率小于 <span
+class="math inline">\(1\)</span>，反之亦然。</p>
 
     </div>
 
@@ -322,7 +350,7 @@ class="math inline">\(1\)</span>个球，所以在所有球都分配完毕后，
   </li>
   <li class="post-copyright-link">
       <strong>Post link: </strong>
-      <a href="https://zrephel.fun/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/" title="占坑问题">https://zrephel.fun/2023/09/10/占坑问题/</a>
+      <a href="https://zrephel.fun/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/" title="生灭过程全灭概率问题">https://zrephel.fun/2025/03/08/生灭过程全灭概率问题/</a>
   </li>
   <li class="post-copyright-license">
       <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
@@ -348,14 +376,11 @@ class="math inline">\(1\)</span>个球，所以在所有球都分配完毕后，
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/07/28/%E6%97%A0%E9%99%90%E9%87%8D%E6%8E%B7%E9%AA%B0%E5%AD%90%E7%9A%84%E6%94%B6%E7%9B%8A%E6%9C%9F%E6%9C%9B/" rel="prev" title="无限重掷骰子的收益期望">
-                  <i class="fa fa-angle-left"></i> 无限重掷骰子的收益期望
+                <a href="/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/" rel="prev" title="反复横跳游戏">
+                  <i class="fa fa-angle-left"></i> 反复横跳游戏
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/10/01/%E9%9D%A2%E8%AF%95%E6%8E%92%E7%8F%AD%E9%97%AE%E9%A2%98/" rel="next" title="面试排班问题">
-                  面试排班问题 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -428,7 +453,7 @@ class="math inline">\(1\)</span>个球，所以在所有球都分配完毕后，
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2023/09/10/%E5%8D%A0%E5%9D%91%E9%97%AE%E9%A2%98/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/03/08/%E7%94%9F%E7%81%AD%E8%BF%87%E7%A8%8B%E5%85%A8%E7%81%AD%E6%A6%82%E7%8E%87%E9%97%AE%E9%A2%98/"}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
 <script>
 document.addEventListener('page:loaded', () => {
