@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="甲、乙两人玩一个反复横跳游戏。首先决定先手、后手，以及固定值 \(a, b, S_1\)。随后的每一轮，第 \(i\) 轮依次进行如下操作：  获取 \(X_i \sim U(0, 1)\)，计算 \(S_{2i} &#x3D; S_{2i-1} + X_i\)。若 \(S_{2i} \geq a\)，则先手获胜，游戏结束。 获取 \(Y_i \sim U(0,1)\)，计算 \(S_{2i + 1} &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反复横跳游戏">
+<meta property="og:url" content="https://zrephel.fun/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="甲、乙两人玩一个反复横跳游戏。首先决定先手、后手，以及固定值 \(a, b, S_1\)。随后的每一轮，第 \(i\) 轮依次进行如下操作：  获取 \(X_i \sim U(0, 1)\)，计算 \(S_{2i} &#x3D; S_{2i-1} + X_i\)。若 \(S_{2i} \geq a\)，则先手获胜，游戏结束。 获取 \(Y_i \sim U(0,1)\)，计算 \(S_{2i + 1} &#x3D;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-03-08T15:03:19.000Z">
+<meta property="article:modified_time" content="2025-03-08T15:05:41.160Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="概率论">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/","path":"2025/03/08/反复横跳游戏/","title":"反复横跳游戏"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>反复横跳游戏 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="反复横跳游戏 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          反复横跳游戏
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-03-08 23:03:19 / Modified: 23:05:41" itemprop="dateCreated datePublished" datetime="2025-03-08T23:03:19+08:00">2025-03-08</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>甲、乙两人玩一个反复横跳游戏。首先决定先手、后手，以及固定值 <span
+class="math inline">\(a, b, S_1\)</span>。随后的每一轮，第 <span
+class="math inline">\(i\)</span> 轮依次进行如下操作：</p>
+<ul>
+<li>获取 <span class="math inline">\(X_i \sim U(0, 1)\)</span>，计算
+<span class="math inline">\(S_{2i} = S_{2i-1} + X_i\)</span>。若 <span
+class="math inline">\(S_{2i} \geq
+a\)</span>，则先手获胜，游戏结束。</li>
+<li>获取 <span class="math inline">\(Y_i \sim U(0,1)\)</span>，计算
+<span class="math inline">\(S_{2i + 1} = S_{2i} - Y_i\)</span>。若 <span
+class="math inline">\(S_{2i+1} \leq
+b\)</span>，则后手获胜，游戏结束。</li>
+</ul>
+<p>所有的 <span class="math inline">\(X_i, Y_i\)</span>
+都是独立同分布的。</p>
+<ol type="1">
+<li>若 <span class="math inline">\(S_1 = 0, a = 1/2, b =
+-1/2\)</span>，求先手获胜的概率。</li>
+<li>若 <span class="math inline">\(a = 1/2, b = -1/2\)</span>，求 <span
+class="math inline">\(S_1\)</span>
+的值，使得先手和后手获胜的概率一致。</li>
+<li>（很困难）试着继续推广结论至更一般的 <span class="math inline">\(a,
+b, S_1\)</span>。</li>
+</ol>
+<span id="more"></span>
+<h2 id="解答">解答</h2>
+<p>记第 <span class="math inline">\(i\)</span> 轮结束时，状态为 <span
+class="math inline">\(S_{2i}\)</span>，先手获胜的概率为 <span
+class="math inline">\(p(S_{2i})\)</span>。</p>
+<p>设游戏从 <span class="math inline">\(S = x, x \in (b,a)\)</span>
+开始。若先手第一步没有获胜，记此时 <span class="math inline">\(S =
+y\)</span>，那么后手变成先手，且后手此时的获胜概率为</p>
+<p><span class="math display">\[
+(a-x) \frac{\int_x^a p(-b-a-y) \, \mathrm dy}{a-x} = 1 - p(x)
+\]</span></p>
+<p>其中 <span class="math inline">\(a-x\)</span>
+是先手第一步没有获胜的概率，<span class="math inline">\(\frac{\int_x^a
+p(-b-a-y)}{a-x}\)</span> 是条件概率，其意义是先手第一步结束后位于 <span
+class="math inline">\(y\)</span> 处，其中 <span
+class="math inline">\(y\)</span> 服从 <span class="math inline">\((x,
+a)\)</span> 上的均匀分布，且此时后手若想获胜，需要移动的相对 <span
+class="math inline">\(a\)</span> 的距离是 <span
+class="math inline">\((|b|-a) - y\)</span>。上式仅在 <span
+class="math inline">\(b &lt; 0 &lt; a\)</span> 且 <span
+class="math inline">\(|a-b| \leq 1\)</span>
+时成立。上述积分方程可化简为</p>
+<p><span class="math display">\[
+F(-(x+a+b)) - F(-(2a+b)) = 1 - F&#39;(x)
+\]</span></p>
+<p>其中 <span class="math inline">\(F&#39;(x) = p(x)\)</span>。</p>
+<p>我们分析一下这个函数方程和微分方程的混合等式。首先两边求导，得到</p>
+<p><span class="math display">\[
+-F&#39;(-(x+a+b)) = -F&#39;&#39;(x)
+\]</span></p>
+<p>即</p>
+<p><span class="math display">\[
+p(-(x+a+b)) = p&#39;(x).
+\]</span></p>
+<p>继续两边求导，得到</p>
+<p><span class="math display">\[
+p&#39;(-(x+a+b)) = -p&#39;&#39;(x)
+\]</span></p>
+<p>另一方面，做变量替换 <span class="math inline">\(y =
+-(x+a+b)\)</span>，得到</p>
+<p><span class="math display">\[
+p(y) = p&#39;(-(y+a+b))
+\]</span></p>
+<p>比较上下两式得</p>
+<p><span class="math display">\[
+p(x) = -p&#39;&#39;(x).
+\]</span></p>
+<p>这是一个简谐运动微分方程，其通解为</p>
+<p><span class="math display">\[
+p(x) = A \cos x + B \sin x,
+\]</span></p>
+<p>其中 <span class="math inline">\(A, B\)</span> 为待定系数。</p>
+<p>于是</p>
+<p><span class="math display">\[
+p&#39;(x) = B \cos x - A \sin x
+\]</span></p>
+<p>代入 <span class="math inline">\(p(-(x+a+b)) = p&#39;(x)\)</span>
+得到</p>
+<p><span class="math display">\[
+A \cos (x + a + b) - B \sin(x + a + b) = -A \sin x + B \cos x
+\]</span></p>
+<p>用和角公式展开左边并比较系数，得到</p>
+<p><span class="math display">\[
+\frac{B}{A} = \frac{\cos(a + b)}{1 + \sin(a + b)} = \frac{1 - \sin(a +
+b)}{\cos (a + b)}
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+p(x) = A \left(\cos x + \frac{1 - \sin(a + b)}{\cos (a + b)} \sin x
+\right).
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+F(x) = A \left(\sin x - \frac{1 - \sin(a + b)}{\cos (a + b)} \cos x
+\right) + D
+\]</span></p>
+<p>代入原式 <span class="math inline">\(F(-(x+a+b)) - F(-(2a+b)) = 1 -
+F&#39;(x)\)</span>，令 <span
+class="math inline">\(x=0\)</span>，解得</p>
+<p><span class="math display">\[
+A = \frac{1}{\sin (2a+b) + \frac{1 - \sin(a + b)}{\cos (a + b)} \cos
+(2a+b)}.
+\]</span></p>
+<p>于是，<span class="math inline">\(p(x)\)</span> 的表达式为</p>
+<p><span class="math display">\[
+p(x) = \frac{\cos x + \frac{1 - \sin(a + b)}{\cos (a + b)} \sin x }{\sin
+(2a+b) + \frac{1 - \sin(a + b)}{\cos (a + b)} \cos (2a+b)}.
+\]</span></p>
+<p>当 <span class="math inline">\(a+b=0\)</span>
+时，该公式退化到仅求解特殊情况时的情形</p>
+<p><span class="math display">\[
+p(x) = \frac{\cos x + \sin x}{\cos a + \sin a}.
+\]</span></p>
+<p>于是，1.，2. 的答案为：</p>
+<p>先手获胜的概率为</p>
+<p><span class="math display">\[
+p(0) = \frac{1}{\cos \frac{1}{2} + \sin \frac{1}{2}} \approx 0.737.
+\]</span></p>
+<p>令 <span class="math inline">\(p(x_0) = 1/2\)</span>，得 <span
+class="math inline">\(x_0 \approx -0.285\)</span>。于是，当 <span
+class="math inline">\(S_1 = x_0\)</span> 时，先手和后手的胜率一致。</p>
+<hr />
+<p>注意到 <span class="math inline">\(p(a)=1\)</span>
+恒成立。为了避免出现 <span class="math inline">\(p(x) \notin
+[0,1]\)</span> 的情况，需要确定该公式的适用范围为</p>
+<ul>
+<li><span class="math inline">\(b &lt; 0 &lt; a\)</span> 且 <span
+class="math inline">\(|a-b| \leq 1\)</span> 且 <span
+class="math inline">\(p(b) \geq 0\)</span> 且 <span
+class="math inline">\(\forall x \in [b, a], p&#39;(x) \geq
+0\)</span>。</li>
+</ul>
+<p>可以推出不等式后，画一个图看看这个范围。</p>
+<p>然后，对于更一般的 <span class="math inline">\(a,
+b\)</span>，没有什么好的思路，做蒙特卡洛模拟吧。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/" title="反复横跳游戏">https://zrephel.fun/2025/03/08/反复横跳游戏/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/03/08/%E9%9A%8F%E6%9C%BA%E6%8A%95%E7%A5%A8%E9%97%AE%E9%A2%98/" rel="prev" title="随机投票问题">
+                  <i class="fa fa-angle-left"></i> 随机投票问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/03/08/%E5%8F%8D%E5%A4%8D%E6%A8%AA%E8%B7%B3%E6%B8%B8%E6%88%8F/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
