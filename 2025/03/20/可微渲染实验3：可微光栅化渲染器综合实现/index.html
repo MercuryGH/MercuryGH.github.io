@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本系列实验是笔者参与2023腾讯游戏课题的一部分，代码已开源。  实验背景 渲染流程中存在许多参数。游戏开发流程中，将渲染结果调节至与原画美术风格或参考结果一致的过程，需要大量技术美术人员的工作。例如：  给定一个现实中的材质球的照片，或离线渲染的参考结果，如何调节渲染中材质的各项参数，使得游戏中的实时渲染结果与这些参考最接近？ 对于图像后处理任务，给定美术色调风格，如何调节色调映射和白平衡等过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可微渲染实验3：可微光栅化渲染器综合实现">
+<meta property="og:url" content="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="本系列实验是笔者参与2023腾讯游戏课题的一部分，代码已开源。  实验背景 渲染流程中存在许多参数。游戏开发流程中，将渲染结果调节至与原画美术风格或参考结果一致的过程，需要大量技术美术人员的工作。例如：  给定一个现实中的材质球的照片，或离线渲染的参考结果，如何调节渲染中材质的各项参数，使得游戏中的实时渲染结果与这些参考最接近？ 对于图像后处理任务，给定美术色调风格，如何调节色调映射和白平衡等过">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/cube.png">
+<meta property="og:image" content="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/spot_target.png">
+<meta property="og:image" content="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/soft_ras.gif">
+<meta property="article:published_time" content="2025-03-20T03:04:01.000Z">
+<meta property="article:modified_time" content="2025-03-20T03:38:06.758Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="可微渲染">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/cube.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/","path":"2025/03/20/可微渲染实验3：可微光栅化渲染器综合实现/","title":"可微渲染实验3：可微光栅化渲染器综合实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>可微渲染实验3：可微光栅化渲染器综合实现 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">实验背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#softras-%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">SoftRas 可微光栅化算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E5%B0%8F%E8%B4%B4%E5%A3%AB"><span class="nav-number">1.2.</span> <span class="nav-text">算法实现小贴士</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">实验目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">实验过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-gltf-%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5"><span class="nav-number">3.1.</span> <span class="nav-text">实现 glTF 模型导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-pbr-%E7%9D%80%E8%89%B2%E5%92%8C%E7%BA%B9%E7%90%86%E9%87%87%E6%A0%B7"><span class="nav-number">3.2.</span> <span class="nav-text">实现 PBR 着色和纹理采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96"><span class="nav-number">3.3.</span> <span class="nav-text">实现可微光栅化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-python-%E5%89%8D%E7%AB%AF"><span class="nav-number">3.4.</span> <span class="nav-text">实现 Python 前端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="可微渲染实验3：可微光栅化渲染器综合实现 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          可微渲染实验3：可微光栅化渲染器综合实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-03-20 11:04:01 / Modified: 11:38:06" itemprop="dateCreated datePublished" datetime="2025-03-20T11:04:01+08:00">2025-03-20</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>本系列实验是笔者参与2023腾讯游戏课题的一部分，代码<a
+target="_blank" rel="noopener" href="https://github.com/MercuryGH/diff-rendering-slang">已开源</a>。</p>
+</blockquote>
+<h2 id="实验背景">实验背景</h2>
+<p>渲染流程中存在许多参数。游戏开发流程中，将渲染结果调节至与原画美术风格或参考结果一致的过程，需要大量技术美术人员的工作。例如：</p>
+<ul>
+<li>给定一个现实中的材质球的照片，或离线渲染的参考结果，如何调节渲染中材质的各项参数，使得游戏中的实时渲染结果与这些参考最接近？</li>
+<li>对于图像后处理任务，给定美术色调风格，如何调节色调映射和白平衡等过程中的各项参数，使得生成图像与美术参考最接近？</li>
+<li>再如，给定高端机型上的参考结果，如何优化低端机型上低端光照模型的参数，使得渲染结果与参考最接近？</li>
+</ul>
+<p>这些问题长久以来依赖人工手动调参，是时候将这个过程自动化了。</p>
+<span id="more"></span>
+<p>果然，又到可微渲染发挥作用的时候了。本实验中，我们将实现一个可微光栅化渲染器，并且至少支持以下特性：</p>
+<ul>
+<li>glTF 模型导入</li>
+<li>纹理贴图导入和采样</li>
+<li>点光源照明</li>
+<li>PBR 着色</li>
+</ul>
+<p>不过，传统的三角形光栅化是一个不可微的过程，因为它通过离散采样（如
+z-buffering）确定像素归属，导致梯度无法传播到被遮挡的三角形。好在可微的三角形光栅化已经有很多研究成果，比如经典的
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.01786"><em>Soft Rasterizer: A
+Differentiable Renderer for Image-based 3D
+Reasoning</em></a>。本实验将基于该论文，在 Slang
+上通过计算着色器实现可微光栅化算法。</p>
+<h3 id="softras-可微光栅化算法">SoftRas 可微光栅化算法</h3>
+<p>在实验 2
+中，其实我们已经实现了一个简化的该算法的版本，而在本实验中，我们将完整实现它。这里简单介绍一下论文中的算法，更详细的分析请直接参考论文。</p>
+<p>给定 <span class="math inline">\(n\)</span> 个像素点和 <span
+class="math inline">\(m\)</span> 个屏幕空间三角形，SoftRas
+光栅化将传统基于深度的离散采样转换为概率过程：</p>
+<ul>
+<li>所有三角形对每个像素均有贡献，而非仅最近三角形；</li>
+<li>像素 <span class="math inline">\(i\)</span> 到三角形 <span
+class="math inline">\(j\)</span> 的平面距离（不考虑深度）决定了 <span
+class="math inline">\(j\)</span> 对 <span
+class="math inline">\(i\)</span> 的影响；</li>
+<li>最终像素 <span class="math inline">\(i\)</span>
+的颜色，由点与三角形的深度差和各三角形的影响共同贡献。</li>
+</ul>
+<p>具体地，三角形 <span class="math inline">\(j\)</span> 对像素 <span
+class="math inline">\(i\)</span> 的影响可定义为</p>
+<p><span class="math display">\[
+\mathcal{D}_j^i = \text{sigmoid}\left(\frac{\delta_j^i \cdot
+d^2(i,j)}{\sigma}\right)
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(\delta_j^i\)</span> 为距离符号，与 SDF
+距离符号恰好相反：若其为 <span class="math inline">\(-1\)</span>，则
+<span class="math inline">\(i\)</span> 位于三角形 <span
+class="math inline">\(j\)</span> 外部，否则位于 <span
+class="math inline">\(j\)</span> 边缘或内部</li>
+<li><span class="math inline">\(d(i, j)\)</span> 为 <span
+class="math inline">\(i\)</span> 到三角形 <span
+class="math inline">\(j\)</span> 的平面距离</li>
+<li><span class="math inline">\(\sigma &gt; 0\)</span> 控制锐度，若
+<span class="math inline">\(\sigma \to
+0\)</span>，则光栅化将呈现出硬边；当 <span
+class="math inline">\(\sigma\)</span>
+为不小的正数时，光栅化的边缘会变得模糊</li>
+</ul>
+<p>我们综合考虑三角形 <span class="math inline">\(j\)</span> 在像素
+<span class="math inline">\(i\)</span>
+的深度，决定颜色影响程度。深度通过重心坐标插值得到，并采用归一化逆深度（近大远小）表示为
+<span class="math inline">\(z_j^i\)</span>。具体地，三角形 <span
+class="math inline">\(j\)</span> 对像素 <span
+class="math inline">\(i\)</span> 的颜色贡献为</p>
+<p><span class="math display">\[
+w_j^i = \frac{\mathcal{D}_j^i \exp(z_j^i/\gamma)}{\sum_k \mathcal{D}_k^i
+\exp(z_k^i/\gamma) + \exp(\epsilon/\gamma)}
+\]</span></p>
+<p>可见，该计算基于 Softmax 函数。其中：</p>
+<ul>
+<li><span class="math inline">\(\epsilon &gt; 0\)</span>
+用于让背景色也具有权重</li>
+<li><span class="math inline">\(\gamma &gt; 0\)</span>
+控制权重分布的平滑性，当 <span class="math inline">\(\gamma \to
+0\)</span> 时，等价于只有像素 <span class="math inline">\(i\)</span>
+附近的三角形才能参与颜色贡献，即呈现出较合理的光栅化效果</li>
+</ul>
+<p>综合得到，最终颜色为该像素在各三角形下，在指定光照模型下的着色 <span
+class="math inline">\(c_j^i\)</span> 与背景颜色 <span
+class="math inline">\(c_b\)</span> 的加权和</p>
+<p><span class="math display">\[
+c^i = \sum_j w_j^i c_j^i + w_b^i c_b.
+\]</span></p>
+<h3 id="算法实现小贴士">算法实现小贴士</h3>
+<p>从以上算法可以看出，实现我们的软件光栅化过程时，需要对每个像素遍历所有三角形，时间复杂度为
+<span
+class="math inline">\(O(nm)\)</span>。即便在着色器中可以以像素数级别并行，写出
+<span class="math inline">\(O(m)\)</span> 的代码，但在着色器中写一个
+<code>for</code> 循环总是不太优雅。而且，在 Slang 中为存在
+<code>for</code>
+循环的函数自动微分时，需要显式指定其最大迭代次数，以帮助编译器自动针对可微变量生成反向传播函数。当这一最大迭代次数很大时（面数
+<span class="math inline">\(m\)</span>
+总是会很大），编译器可能会生成参数不合法的 CUDA 代码，使得反向传播时出现
+CUDA 运行时报错问题。</p>
+<p>或者，我们可以计算手动微分，这也是原论文的做法。这时，我们需要手动实现后向传播的导数。在
+Slang 中，可以使用 <code>[BackwardDerivative(aggregate_bwd)]</code>
+声明颜色累积过程 <code>aggregate</code> 的后向传播导数
+<code>aggregate_bwd</code>，并实现之。</p>
+<p>还有一个性能更佳的方法，是在每个像素的软件光栅化过程中再次调用一个三角形数级别并行的
+kernel，并结合着色结果对 <span class="math inline">\(c^i\)</span> 做
+<code>atomicAdd</code>。不过这可能需要更细致的并行程序设计。</p>
+<p>无论通过什么方法实现可微光栅化和反向传播过程，实验结果都应该是类似的。初次尝试时，可以先简单尝试
+<code>for</code> 循环的方法，再考虑其他实现。</p>
+<h2 id="实验目的">实验目的</h2>
+<p>本实验中，我们将在综合实现一个可微光栅化渲染器，支持上述特性，并可指定优化参数，包括光照参数、几何参数和着色器参数等。</p>
+<blockquote>
+<p>P.S. 对于那些不需要优化的参数，如 uv 纹理采样坐标，我们可以指定其为
+<code>no_diff</code>
+减轻编译压力。如果为过多变量指定可微，编译时间可能会非常长，且编译器可能报错。</p>
+</blockquote>
+<h2 id="实验过程">实验过程</h2>
+<h3 id="实现-gltf-模型导入">实现 glTF 模型导入</h3>
+<p>我们可以使用 Python 库 gltflib 和 trimesh
+实现模型导入和三角化处理。</p>
+<p>详细的实现过程不是本实验的重点，不再赘述。</p>
+<h3 id="实现-pbr-着色和纹理采样">实现 PBR 着色和纹理采样</h3>
+<p>实现它们的过程与普通渲染器没有区别。有了 Slang
+语言特性加持，我们可以轻松实现 shader
+模块化管理和面向对象的程序设计。</p>
+<p>如果希望优化纹理贴图，那么我们需要自己实现一个可微的纹理采样函数，可直接照搬实验
+1 我们已经实现的那个。</p>
+<h3 id="实现可微光栅化">实现可微光栅化</h3>
+<p>这是实验中最有挑战的部分。具体而言，我们需要对每个像素，遍历所有三角形：</p>
+<ul>
+<li>将三角形投影到屏幕空间</li>
+<li>如果三角形距离像素足够近：
+<ul>
+<li>计算颜色累积贡献 <code>softmax_max</code> 并累加
+<code>softmax_sum</code></li>
+<li>根据 PBR
+着色模型，采样纹理贴图，计算光照，计算当前像素在该三角形的颜色</li>
+<li>累加加权颜色</li>
+</ul></li>
+</ul>
+<p>在计算的最后，还需要将像素颜色除以
+<code>softmax_sum</code>。随后可进行各类后处理，如 gamma
+校正。详细的代码可参考<a
+target="_blank" rel="noopener" href="https://github.com/MercuryGH/diff-rendering-slang">开源仓库</a>中
+<code>shaders\soft_ras\main.slang</code> 的实现。</p>
+<h3 id="实现-python-前端">实现 Python 前端</h3>
+<p>经过前两个实验，我们应该已经很熟悉 Python
+前端的训练循环如何编写了。</p>
+<h2 id="实验结果">实验结果</h2>
+<p>首先我们用一个带有纹理的方块模型，测试渲染器前向渲染的能力：</p>
+<figure>
+<img src="./cube.png" alt="cube" />
+<figcaption aria-hidden="true">cube</figcaption>
+</figure>
+<p>可见，前向渲染应当是没有问题，左前方的光照也正常点亮了一个面。</p>
+<p>我们可以开始实验渲染器优化参数的能力。这次我们选择在同一模型，同一相机和同一光照，但不同固有色的设置下，模型的
+<code>metallic</code> 参数。具体而言，我们的目标是一个减面后的 spot
+模型：</p>
+<figure>
+<img src="./spot_target.png" alt="spot" />
+<figcaption aria-hidden="true">spot</figcaption>
+</figure>
+<p>它的参数配置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">target_diffuse = [0.4, 0.8, 1.0]</span><br><span class="line">target_metallic = 0.75</span><br></pre></td></tr></table></figure>
+<p>我们需要优化的 spot 模型的初始参数配置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">diffuse = [0.0, 0.5, 1.0]</span><br><span class="line">metallic = wrap_float_tensor(0.1, True)</span><br></pre></td></tr></table></figure>
+<p>我们将不优化 <code>diffuse</code> 参数，看看仅仅在优化
+<code>metallic</code> 的情况下，渲染结果将会有多接近目标结果。</p>
+<p>训练过程可视化（GIF）如下：</p>
+<figure>
+<img src="./soft_ras.gif" alt="soft_ras" />
+<figcaption aria-hidden="true">soft_ras</figcaption>
+</figure>
+<p>其中，左图为待优化模型的渲染结果，中图为损失函数 <span
+class="math inline">\(L = \text{avg}((T - O_i)^2)\)</span>
+的梯度可视化结果，右图为目标渲染结果。注意上图中的训练过程中，同时也优化了背景颜色
+<code>bg_color</code>。训练过程中，牛牛的金属化总体上越来越明显，符合预期。</p>
+<p>最后收敛的结果是 <code>metallic = 0.560</code>，这是一个与目标
+<code>0.75</code> 不接近的值，但却是在 <code>diffuse</code>
+无法被优化时的最优解。可见，可微渲染确实可以发现一些“光照模型的奥秘”。</p>
+<p>由于笔者忙碌，本系列实验到此就告一段落了。虽然本系列实验整体上是玩具级别的小打小闹，不过整体思想和技术原理与实际项目中使用的别无二致，应当能成为一定的参考。</p>
+<p>总之，在当下和未来，可微渲染将是游戏资产工业化管线重要的支撑技术，研究其技术原理对引擎、图形开发和技术美术人员的能力扩充大有裨益。未来，可以展望其与神经网络有机结合，带来更多生产力的提高。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/" title="可微渲染实验3：可微光栅化渲染器综合实现">https://zrephel.fun/2025/03/20/可微渲染实验3：可微光栅化渲染器综合实现/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93/" rel="tag"># 可微渲染</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C2%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E5%87%A0%E4%BD%95%E5%8F%82%E6%95%B0%E8%87%AA%E5%8A%A8%E8%B0%83%E6%95%B4/" rel="prev" title="可微渲染实验2：可微光栅化几何参数自动调整">
+                  <i class="fa fa-angle-left"></i> 可微渲染实验2：可微光栅化几何参数自动调整
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/03/20/%E5%8F%AF%E5%BE%AE%E6%B8%B2%E6%9F%93%E5%AE%9E%E9%AA%8C3%EF%BC%9A%E5%8F%AF%E5%BE%AE%E5%85%89%E6%A0%85%E5%8C%96%E6%B8%B2%E6%9F%93%E5%99%A8%E7%BB%BC%E5%90%88%E5%AE%9E%E7%8E%B0/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
