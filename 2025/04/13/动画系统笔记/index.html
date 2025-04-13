@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是笔者大三在游戏公司实习时做的的动画系统笔记，基于 Game Engine Architecture, Third Edition 这本书的相关章节，挖出来给大家分享。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动画系统笔记">
+<meta property="og:url" content="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="这是笔者大三在游戏公司实习时做的的动画系统笔记，基于 Game Engine Architecture, Third Edition 这本书的相关章节，挖出来给大家分享。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/animation_pipeline.png">
+<meta property="article:published_time" content="2025-04-13T03:34:20.000Z">
+<meta property="article:modified_time" content="2025-04-13T03:37:38.921Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="图形学">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/animation_pipeline.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/","path":"2025/04/13/动画系统笔记/","title":"动画系统笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>动画系统笔记 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#per-vertex-animation-%E5%92%8C-morph-target-animation"><span class="nav-number">1.</span> <span class="nav-text">Per-Vertex
+Animation 和 Morph Target Animation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%92%99%E7%9A%AE%E5%8A%A8%E7%94%BB%E5%92%8C-skinnedvertex"><span class="nav-number">2.</span> <span class="nav-text">蒙皮动画和 SkinnedVertex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E8%8A%82%E7%9A%84%E7%BB%91%E5%AE%9A%E5%A7%BF%E5%8A%BF"><span class="nav-number">3.</span> <span class="nav-text">关节的绑定姿势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#globalpose%E9%93%BE%E5%BC%8F%E5%8F%98%E6%8D%A2%E5%92%8C-skeletonposes"><span class="nav-number">4.</span> <span class="nav-text">GlobalPose、链式变换和
+SkeletonPoses</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%92%99%E7%9A%AE%E7%9F%A9%E9%98%B5"><span class="nav-number">5.</span> <span class="nav-text">蒙皮矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E4%BA%86%E5%8D%95%E4%B8%AA%E5%85%B3%E8%8A%82%E7%9A%84%E9%A1%B6%E7%82%B9"><span class="nav-number">5.1.</span> <span class="nav-text">绑定了单个关节的顶点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%91%E5%AE%9A%E4%BA%86-k-%E4%B8%AA%E5%85%B3%E8%8A%82%E7%9A%84%E9%A1%B6%E7%82%B9"><span class="nav-number">5.2.</span> <span class="nav-text">绑定了 k 个关节的顶点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E6%A8%A1%E5%9E%8B%E8%87%B3%E4%B8%96%E7%95%8C%E5%8F%98%E6%8D%A2"><span class="nav-number">5.3.</span> <span class="nav-text">引入模型至世界变换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#skeleton-%E5%92%8C-joint"><span class="nav-number">6.</span> <span class="nav-text">Skeleton 和 Joint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jointpose"><span class="nav-number">7.</span> <span class="nav-text">JointPose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E7%89%87%E6%AE%B5%E7%9A%84%E7%AE%A1%E7%90%86"><span class="nav-number">8.</span> <span class="nav-text">动画片段的管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blending"><span class="nav-number">9.</span> <span class="nav-text">Blending</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E8%89%B2%E7%9A%84%E7%A7%BB%E5%8A%A8"><span class="nav-number">9.1.</span> <span class="nav-text">角色的移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blend-mask"><span class="nav-number">9.2.</span> <span class="nav-text">blend mask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#additive-blending"><span class="nav-number">9.3.</span> <span class="nav-text">additive blending</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E5%A4%84%E7%90%86"><span class="nav-number">10.</span> <span class="nav-text">后处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#procedural-animation"><span class="nav-number">10.1.</span> <span class="nav-text">procedural animation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ragdoll"><span class="nav-number">10.2.</span> <span class="nav-text">Ragdoll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ik"><span class="nav-number">10.3.</span> <span class="nav-text">IK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E7%89%87%E6%AE%B5%E5%8E%8B%E7%BC%A9"><span class="nav-number">11.</span> <span class="nav-text">动画片段压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#animation-pipeline"><span class="nav-number">12.</span> <span class="nav-text">Animation Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">13.</span> <span class="nav-text">动画状态机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">14.</span> <span class="nav-text">动画控制器</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="动画系统笔记 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          动画系统笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-04-13 11:34:20 / Modified: 11:37:38" itemprop="dateCreated datePublished" datetime="2025-04-13T11:34:20+08:00">2025-04-13</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这是笔者大三在游戏公司实习时做的的动画系统笔记，基于 <em>Game Engine
+Architecture, Third Edition</em>
+这本书的相关章节，挖出来给大家分享。</p>
+<span id="more"></span>
+<h2 id="per-vertex-animation-和-morph-target-animation">Per-Vertex
+Animation 和 Morph Target Animation</h2>
+<p>逐顶点动画把每个顶点的在动画的每一帧该如何移动，编码至顶点位置的表示中。</p>
+<p>morph target animation 是 per-vertex animation
+的变种，由艺术家预先制作几个极端动画下顶点的位置，然后在实际表现中让顶点在这几个极端位置上插值。这项技术广泛用于面部表情动画。Morph
+Targets, Morpher, Blendshapes, 变形器, 混合变形, Shape Keys,
+形态键，都是指这个动画技术。</p>
+<h2 id="蒙皮动画和-skinnedvertex">蒙皮动画和 SkinnedVertex</h2>
+<p>蒙皮动画就是（非简单粗暴的刚性）骨架动画，是现代电影、游戏使用最广泛的动画技术。</p>
+<p>在蒙皮动画中，我们不关心 bone（当我们提到 bone 时，它就是 joint
+的别称）。skeleton 是 joint 的集合，skin 是连接若干 joint 的 triangle
+mesh。skin 的各顶点可以与各 joint 形成权重表，从而控制当 joint
+发生位移时，skin 的表现。</p>
+<p>对于每个顶点，我们不希望它绑定太多关节，这样既不合理也浪费计算资源。典型的限制为一个顶点至多绑定到
+4 个关节。</p>
+<p>对于任一顶点 <span
+class="math inline">\(v\)</span>，对其绑定的关节集合 <span
+class="math inline">\(J_v\)</span> 中的任一关节 <span
+class="math inline">\(j\)</span>，我们需要为其赋予权重 <span
+class="math inline">\(w_{v,j}\)</span>，并保证 <span
+class="math inline">\(\sum_{j \in J_v} w_{v,j} =
+1\)</span>。顶点绑定后，它的移动行为相当于其绑定的各关节的移动行为的加权平均。特别地，对于一个仅绑定到一个关节的顶点，它的移动行为必然保持它在这个关节空间（joint
+space, 或 local space）的坐标的一致性。</p>
+<p>蒙皮顶点可以如下存储：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SkinnedVertex</span> &#123;</span><br><span class="line">    <span class="comment">// 与关节无关的字段</span></span><br><span class="line">    Vector3 positions;</span><br><span class="line">    Vector3 normals;</span><br><span class="line">    Vector2 uv;</span><br><span class="line"></span><br><span class="line">    uint8[MAX_BIND_JOINT_NUM] jointIndex; <span class="comment">// 绑定的关节的索引</span></span><br><span class="line">    <span class="type">float</span>[MAX_BIND_JOINT_NUM - <span class="number">1</span>] jointWeight;  <span class="comment">// 绑定的关节的权重（最后一个可通过1 - 其他权重算出）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="关节的绑定姿势">关节的绑定姿势</h2>
+<p>The bind pose of a joint 是指该 joint 在 model 的 bind
+pose（T-pose）下的位置、角度和缩放信息。</p>
+<p>在 bind pose 下，mesh
+不受骨骼影响而形变，是蒙皮动画系统的恒等元。之所以在 humanoid 上使用
+T-pose 或 A-pose，仅仅是艺术家的一种习惯。</p>
+<h2 id="globalpose链式变换和-skeletonposes">GlobalPose、链式变换和
+SkeletonPoses</h2>
+<p>由于每个 joint pose 都是相对于父结点定义的，我们只要额外定义根结点的
+joint pose 为根结点在 model space 下的仿射变换 <span
+class="math inline">\(P_{0 \to M}\)</span>，那么对于任意结点 <span
+class="math inline">\(j\)</span>，它到 model space 的变换矩阵即为</p>
+<p><span class="math display">\[
+P_{j \to M} = P_{j \to p(j)} P_{p(j) \to p(p(j))} \dots P_{0 \to M}
+\tag{1}
+\]</span></p>
+<p>其中 <span class="math inline">\(p(j)\)</span> 表示结点 <span
+class="math inline">\(j\)</span> 的父结点。最后的计算结果 <span
+class="math inline">\(P_{j \to M}\)</span> 称为全局姿势，也就是从 joint
+space 到 model space 的变换矩阵。</p>
+<p>GlobalPose 是在 model space 下定义的，而非 world space。</p>
+<p>为了方便预计算，并考虑到一个 Skeleton 可能有多个
+Pose，骨骼姿势可以如下存储：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SkeletonPose</span> &#123;</span><br><span class="line">    Skeleton skeleton;</span><br><span class="line">    DynamicArray&lt;JointPose&gt; localPoses;  <span class="comment">// Dynamic Array for local joint poses</span></span><br><span class="line">    DynamicArray&lt;Matrix44&gt; globalPoses;  <span class="comment">// Dynamic Array for all global poses in the skeleton</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="蒙皮矩阵">蒙皮矩阵</h2>
+<p>skinning matrix
+用于将网格顶点从绑定姿势变换到当前姿势，从而帮助后续渲染获取正确的顶点坐标。</p>
+<h3 id="绑定了单个关节的顶点">绑定了单个关节的顶点</h3>
+<p>我们先来明确绑定了单个关节 <span class="math inline">\(j\)</span>
+的顶点 <span class="math inline">\(v\)</span> 的运动过程。记 <span
+class="math inline">\(B_{j, M}\)</span> 为关节 <span
+class="math inline">\(j\)</span> 从在 model space 的 bind pose
+姿势，通过式 <span class="math inline">\((1)\)</span> 计算；<span
+class="math inline">\(v_{B,M}\)</span> 为 bind pose 下，用 model space
+表示的顶点 <span class="math inline">\(v\)</span> 的行向量坐标。那么</p>
+<p><span class="math display">\[
+v_j = v_{B,M} B_{j,M}^{-1}
+\]</span></p>
+<p>为 bind pose 下，用 joint space 表示的顶点 <span
+class="math inline">\(v\)</span> 的行向量坐标。</p>
+<p>记 <span class="math inline">\(C_{j,M}(t)\)</span>
+为在时刻（帧）<span class="math inline">\(t\)</span> 下，关节 <span
+class="math inline">\(j\)</span> 从在 model space 的当前姿势，同样通过式
+<span class="math inline">\((1)\)</span> 计算。同理有</p>
+<p><span class="math display">\[
+v_{C,M} = v_{j}C_{j,M}(t)
+\]</span></p>
+<p>那么</p>
+<p><span class="math display">\[
+v_{C,M} = v_{B,M} B_{j,M}^{-1}  C_{j,M}(t) = v_{B,M}K_j(t)
+\]</span></p>
+<p>其中 <span class="math inline">\(K_j(t) = B_{j,M}^{-1}
+C_{j,M}(t)\)</span>
+被称为蒙皮矩阵。模型中所有关节的蒙皮矩阵组成的集合，称为 matrix
+palette。使用 matrix palette
+变换坐标系的计算，在现代游戏引擎中已经不会由动画系统完成——动画系统会将该
+palette 提交给渲染系统，由渲染系统 apply 到各顶点上进行坐标变换，即 GPU
+上的蒙皮。</p>
+<p>变换示意图如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M --- B^&#123;-1&#125; ---&gt; J --- I ---&gt; J --- C ---&gt; M</span><br></pre></td></tr></table></figure>
+<h3 id="绑定了-k-个关节的顶点">绑定了 k 个关节的顶点</h3>
+<p>接下来，我们将该结论推广至绑定了 <span
+class="math inline">\(k\)</span> 个关节 <span class="math inline">\(j_1,
+j_2, \dots, j_k\)</span> 的顶点 <span class="math inline">\(v\)</span>
+的运动过程。加权平均即可：</p>
+<p><span class="math display">\[
+v_{C,M} = v_{B,M} \sum_{i = 1}^k w_{v,j_i} K_{j_i}(t)
+\]</span></p>
+<h3 id="引入模型至世界变换">引入模型至世界变换</h3>
+<p>由于每个顶点最终都要从 model space 变换到 world space
+才能被绘制，所以有的引擎提供另一种蒙皮矩阵的表达形式，以节省一次矩阵乘法。记
+model space 变换到 world space 的变换矩阵为 <span
+class="math inline">\(M_{M,W}\)</span>，那么</p>
+<p><span class="math display">\[
+K_j(t) = B_{j,M}^{-1}  C_{j,M}(t) M_{M,W}
+\]</span></p>
+<p>但有的情况下，如此表达蒙皮矩阵并不合适。在我们需要对多个位于不同世界坐标的相同模型
+apply 相同动画时，由于所有模型可以共享 <span
+class="math inline">\(C_{j,M}(t)\)</span>，故对所有模型，<span
+class="math inline">\(B_{j,M}^{-1} C_{j,M}(t)\)</span> 成为常量，<span
+class="math inline">\(M_{M,W}\)</span> 成为变量，因此 <span
+class="math inline">\(K_j(t)\)</span> 不应包含 <span
+class="math inline">\(M_{M,W}\)</span> 项，而应让每个模型乘上自己的
+<span class="math inline">\(M_{M,W}\)</span> 完成坐标变换。</p>
+<h2 id="skeleton-和-joint">Skeleton 和 Joint</h2>
+<p>一个模型的 skeleton 通常直接存储一个 joint 的数组。</p>
+<p>由于 skeleton 通常具有层次结构（如
+<code>Thigh-&gt;Knee-&gt;Ankle</code> 这样的结构），因此 skeleton
+hierarchy 通常使用树状结构存储：</p>
+<ol type="1">
+<li>记 skeleton 有 <span class="math inline">\(n\)</span> 个
+joints，将每个 joint 依照某种顺序进行索引编码 <span
+class="math inline">\(0, 1, \dots, n - 1\)</span>。</li>
+<li>让每个 joint 仅存储它的 parent joint 的索引。对于没有 parent 的
+root，该存储值用一个约定的特殊值（如 -1）表示。</li>
+</ol>
+<p>对于每个 joint，我们显然还需要存储它的位置信息，这里我们会存储它的
+bind pose 的从 joint space 到 model space
+的变换矩阵的逆矩阵（这是一个常量），以方便与 <span
+class="math inline">\(C(t)\)</span> 做矩阵乘法进行蒙皮矩阵 <span
+class="math inline">\(K(t)\)</span> 的计算。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Skeleton</span> &#123;</span><br><span class="line">    Joint[] joints;</span><br><span class="line">    uint jointCnt; <span class="comment">// joints.size()</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Joint</span> &#123;</span><br><span class="line">    Matrix43 invBindPose;  <span class="comment">// inverse bind pose transform matrix</span></span><br><span class="line">    String name;  <span class="comment">// human readable name</span></span><br><span class="line">    uint8 parent; <span class="comment">// index of parent joint</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="jointpose">JointPose</h2>
+<p>对某个 Joint 而言的关节姿势，是指该关节在某坐标系下的仿射变换。对整个
+Skeleton 而言的姿势（骨骼姿势），是指该 Skeleton 下所有 Joint
+的关节姿势的整体表示。</p>
+<p>除了矩阵，关节姿势还可以用 SQT（Scale, Quaternion,
+Transform）数据结构存储。</p>
+<p>bind pose 是指 skin 没有发生关节形变下的关节姿势，它通常作为 model
+的默认关节姿势。</p>
+<p>为了让“手臂绕肩膀转动”的表示更自然，我们提出了 local pose
+的概念。local pose
+是指该关节在它的父关节所定义的坐标系下的仿射变换。</p>
+<p>关节姿势可以采用 local pose 的方式如下存储：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">JointPose</span> &#123;   <span class="comment">// SQT Format</span></span><br><span class="line">    Vector3 scale;  <span class="comment">// 若引擎不支持关节缩放，则可省略</span></span><br><span class="line">    Quaternion rot; <span class="comment">// 存储表达旋转的四元数只需三个分量，因为分量是归一化的</span></span><br><span class="line">    Vector3 trans;  <span class="comment">// 若关节不能平移，则可省略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="动画片段的管理">动画片段的管理</h2>
+<p>一个动画片段的存储由离散的若干个关键帧组成，而关键帧的存储完全类似
+SkeletonPose 的存储（还要加上 FPS、总帧数、是否循环等）。</p>
+<p>游戏中每时每刻都有若干个 clip
+在播放，为此需要使用数据结构管理它们。</p>
+<h2 id="blending">Blending</h2>
+<p>Animation Blending
+将多个输入姿势混合（插值），产生单个输出姿势。在两个关键帧之间的插值不是
+Animation
+Blending；但在两个采样帧之间的插值（这是因为游戏可能会在非整数帧时刻下进行绘制），也属于
+Animation Blending。</p>
+<p>由于我们常用 SQT 方式存储姿势，故插值的操作会在 scale、quaternion 和
+translate 上分别进行。</p>
+<p>由于我们存储姿势的坐标系由父关节定义，故对同一关节的不同姿势进行插值，直接在其
+local space 下进行即可。</p>
+<h3 id="角色的移动">角色的移动</h3>
+<p>永远沿着模型朝向进行的移动，是 pivotal movement；</p>
+<p>以模型朝向为前方，通过前后左右进行的自由移动，是 targeted
+movement。</p>
+<h3 id="blend-mask">blend mask</h3>
+<p>若要混合跑步和挥手两个姿势，如果粗暴地进行显然会导致一只手的行为古怪。为此，我们可以定义挥手动画的
+blend
+mask，将与手无关的关节都置为0，与手有关的关节置为1，在两个姿势插值时额外乘上这个
+mask vector 即可达成效果。</p>
+<h3 id="additive-blending">additive blending</h3>
+<p>加法混合引入了加法动画，或称区别动画，在语义上清晰地表达了动画的特征，被艺术家应用广泛。例如，将一个语义为“疲惫”的动画加入跑步动画，即可产生一个疲惫地跑步的动画。</p>
+<p>一般地，我们将基动画称作 reference
+clip（如跑步），加入/区别的动画称作 difference
+clip（如“疲惫”），和动画称作 source clip（如“疲惫地跑步”）。对每个关节
+<span class="math inline">\(j\)</span>，记 reference clip、difference
+clip 和 source clip 的局部姿势表示分别为 <span
+class="math inline">\(R_j, D_j, S_j\)</span>，那么</p>
+<p><span class="math display">\[
+S_j = D_j R_j
+\]</span></p>
+<p>只有提取 difference clip
+才能让艺术家构建更多加法动画，它的方式相当直接：</p>
+<p><span class="math display">\[
+D_j = S_j R_j^{-1}
+\]</span></p>
+<p>随后，艺术家可以对任意 reference clip 加以 difference
+clip，完成加法动画的制作。</p>
+<h2 id="后处理">后处理</h2>
+<h3 id="procedural-animation">procedural animation</h3>
+<p>程序式动画指的是游戏运行时使用预先设定的脚本生成的动画，它并非由 DCC
+创造而来。典型的应用是风中摆动、并能在生物靠近时自然被拨开的草木。</p>
+<h3 id="ragdoll">Ragdoll</h3>
+<p>布娃娃物理在动画系统中的地位可以看成一种特殊的 procedural
+animation，它由物理系统驱动动画系统计算关节的位置和朝向。</p>
+<h3 id="ik">IK</h3>
+<p>正向运动学是已知各关节的局部姿势，求解各关节的全局姿势和蒙皮矩阵的过程。</p>
+<p>逆向运动学是在给定一个关节的全局姿势（称为 end effector，它可能需要
+model space 或 world space
+信息）的情况下，求解各关节的局部姿势的过程。IK
+问题通常很难得到解析解，可以采用最小化距离函数建模，用梯度下降方法得到数值解。</p>
+<h2 id="动画片段压缩">动画片段压缩</h2>
+<p>对于内存不高的机器而言，压缩动画数据显得较为重要，但在今日内存充裕的情况下显得有些没必要。</p>
+<p>压缩 clip 的策略包括：</p>
+<ul>
+<li>运行时可以较方便计算出来的成员；</li>
+<li>动画曲线硬编码改为用样条曲线拟合表示；</li>
+<li>压缩小范围的浮点数为低位宽浮点数或定点数；</li>
+<li>降低采样率及用特殊标记表达重复采样；</li>
+<li>……</li>
+</ul>
+<h2 id="animation-pipeline">Animation Pipeline</h2>
+<p>动画管线由游戏引擎实现。</p>
+<figure>
+<img src="./animation_pipeline.png" alt="img" />
+<figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>输入：帧时钟、clip、骨骼和 blend 规则。</p>
+<p>输出：提交给渲染系统的 palette，以及提交给 GamePlay 系统的 Animation
+Logic（Animation State Machine 和 Animation Controller）。</p>
+<p>注意：Post processing 有时依赖于 global
+pose，但这样的依赖一般在一趟内只会计算一次。因此这样的 global pose
+的重计算一般只会在在一趟内出现一次。</p>
+<h2 id="动画状态机">动画状态机</h2>
+<p>动画状态机由游戏开发人员或艺术家填写，定义当动画切换（如走路和跑步、跳跃和落地）时的过渡情况，同时可以利用状态层让模型的不同部位呈现不同的动画。</p>
+<p>典型的状态层的应用是手势与躯干运动的分离。</p>
+<h2 id="动画控制器">动画控制器</h2>
+<p>动画控制器由游戏开发人员编写，通常可与 Animation State Machine
+结合使用，用于控制玩家和 AI 逻辑。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" title="动画系统笔记">https://zrephel.fun/2025/04/13/动画系统笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/04/07/%E8%AE%AD%E6%B0%91%E6%AD%A3%E9%9F%B3%E7%9A%84%E8%AF%AD%E9%9F%B3%E7%A7%91%E5%AD%A6%E6%80%A7/" rel="prev" title="训民正音的语音科学性">
+                  <i class="fa fa-angle-left"></i> 训民正音的语音科学性
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
