@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文是博主在实习公司制作的课程讲义，内容是有向距离场（SDF）的构建与应用。 原课程对应的幻灯片可以点击这里下载。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有向距离场的构建与应用">
+<meta property="og:url" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="本文是博主在实习公司制作的课程讲义，内容是有向距离场（SDF）的构建与应用。 原课程对应的幻灯片可以点击这里下载。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/primitive.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/volume.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/tridis.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/notwatertight.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/badcase.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/mipmap.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf-radius.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf-compress.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/origin.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf-1.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf-32.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf-31.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/raymarching.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/ue-scene-sdf.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/soft.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/hardshadow.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/softshadow.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/cone.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdfshadow.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/dfao.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/dcdsdf.png">
+<meta property="og:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/triangle_collision.png">
+<meta property="article:published_time" content="2025-04-18T06:31:17.000Z">
+<meta property="article:modified_time" content="2025-04-18T06:39:00.670Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="SDF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/sdf.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/","path":"2025/04/18/有向距离场的构建与应用/","title":"有向距离场的构建与应用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>有向距离场的构建与应用 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf-%E6%8A%80%E6%9C%AF%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">SDF 技术概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sdf%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.</span> <span class="nav-text">SDF：定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84-sdf"><span class="nav-number">1.2.</span> <span class="nav-text">解析的 SDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdf-%E4%B8%89%E7%BB%B4%E7%BA%B9%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">SDF 三维纹理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf-%E7%9A%84%E7%94%9F%E6%88%90%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SDF 的生成算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">距离场的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E4%BC%98%E5%8C%96"><span class="nav-number">2.1.1.</span> <span class="nav-text">并行优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%A6%E5%8F%B7%E4%BF%A1%E6%81%AF%E7%9A%84%E7%94%9F%E6%88%90"><span class="nav-number">2.2.</span> <span class="nav-text">符号信息的生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf-%E7%9A%84%E5%8E%8B%E7%BC%A9%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">SDF 的压缩算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%BA%A7%E7%BA%B9%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">多级纹理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%B9%E7%90%86%E5%9F%BA%E6%9C%AC%E5%8D%95%E5%85%83%E4%B8%8E%E6%9D%A1%E5%B8%A6%E9%98%88%E5%80%BC%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.2.</span> <span class="nav-text">纹理基本单元与条带阈值压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E5%B8%A6%E9%98%88%E5%80%BC%E5%8E%8B%E7%BC%A9%E4%B8%8E%E5%81%8F%E7%A7%BB%E8%AE%BF%E9%97%AE"><span class="nav-number">3.3.</span> <span class="nav-text">条带阈值压缩与偏移访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E9%87%8F%E5%8C%96%E8%B7%9D%E7%A6%BB"><span class="nav-number">3.4.</span> <span class="nav-text">线性量化距离</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf-%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E6%9F%A5%E8%AF%A2"><span class="nav-number">4.</span> <span class="nav-text">SDF 的使用与查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gpu-%E4%B8%8A%E7%9A%84-sdf"><span class="nav-number">4.1.</span> <span class="nav-text">GPU 上的 SDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdf-%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-number">4.2.</span> <span class="nav-text">SDF 的实例化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BB%E6%9F%A5%E8%AF%A2"><span class="nav-number">4.3.</span> <span class="nav-text">距离查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E6%9F%A5%E8%AF%A2"><span class="nav-number">4.4.</span> <span class="nav-text">梯度查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdf-%E7%9A%84%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">4.5.</span> <span class="nav-text">SDF 的可视化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf-%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">SDF 的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ray-marching-%E7%9A%84%E5%8A%A0%E9%80%9F"><span class="nav-number">5.1.</span> <span class="nav-text">Ray Marching 的加速</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdf-%E9%98%B4%E5%BD%B1"><span class="nav-number">5.2.</span> <span class="nav-text">SDF 阴影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfao"><span class="nav-number">5.3.</span> <span class="nav-text">DFAO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sdf-%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86"><span class="nav-number">5.4.</span> <span class="nav-text">SDF 碰撞检测与处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%BA%94%E7%94%A8"><span class="nav-number">5.5.</span> <span class="nav-text">其他应用</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="有向距离场的构建与应用 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          有向距离场的构建与应用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-04-18 14:31:17 / Modified: 14:39:00" itemprop="dateCreated datePublished" datetime="2025-04-18T14:31:17+08:00">2025-04-18</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文是博主在实习公司制作的课程讲义，内容是有向距离场（SDF）的构建与应用。</p>
+<p>原课程对应的幻灯片可以<a href="sdf.pdf">点击这里下载</a>。</p>
+<span id="more"></span>
+<h2 id="sdf-技术概述">SDF 技术概述</h2>
+<h3 id="sdf定义">SDF：定义</h3>
+<p>有向距离场（Signed Distance Field, SDF）<span
+class="math inline">\(\varphi(\mathbf{x}):\mathbb{R}^{3} \rightarrow
+\mathbb{R}\)</span> 针对空间中的位置 <span
+class="math inline">\(\mathbf{x}\)</span>
+输出其到某个物体表面的最短距离。若该位置在物体内部，则输出距离为负，否则距离为正。</p>
+<p><img src="sdf.png" /></p>
+<p><span class="math inline">\(\varphi(\mathbf{x})\)</span> 的梯度 <span
+class="math inline">\(\nabla\varphi(\mathbf{x})\)</span>
+的方向给出了最快朝外远离物体表面的方向，可用在模型表面近似法线方向。</p>
+<h3 id="解析的-sdf">解析的 SDF</h3>
+<p>解析的 SDF 是一种隐式表达，许多基础几何形体都可以用解析的 SDF
+表达。比如球体、立方体、圆柱体、三角形等<a href="#fn1"
+class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>。</p>
+<p><img src="primitive.png" /></p>
+<ul>
+<li>中心为 <span class="math inline">\(\mathbf{c}\)</span>，半径为 <span
+class="math inline">\(r\)</span> 的球体：<span
+class="math inline">\(\varphi(\mathbf{x}) = |\mathbf{x} - \mathbf{c}| -
+r\)</span></li>
+<li>中心为 <span class="math inline">\(\mathbf{c}\)</span>，长宽高为
+<span class="math inline">\(\mathbf{b}\)</span> 的立方体：<span
+class="math inline">\(\varphi(\mathbf{x}) = \|\max(|\mathbf{x}| -
+\mathbf{b},\mathbf{0})\| + \min(\max(|x_{1}| - b_{1},|x_{2}| -
+b_{2},|x_{3}| - b_{3}),0)\)</span></li>
+<li>......</li>
+</ul>
+<p>进一步地，可以方便地对 SDF
+基础几何形体做布尔运算，如并集、交集、差集，得到更复杂的几何形体，这就是基于
+SDF 的建模，是一种程序化建模方法。它是许多 Shadertoy
+魔法的基本原理。</p>
+<h3 id="sdf-三维纹理">SDF 三维纹理</h3>
+<p>然而，传统建模流程得到的三角网格体无法用解析的 SDF
+表达，因此游戏引擎需要维护一个离散的三维纹理存储其
+SDF，这是一种显式表达。该三维纹理的每个
+texel，称之为<strong>采样点</strong>，即存储此位置的 SDF。</p>
+<figure>
+<img src="volume.png" alt="SDF 三维纹理示意图" />
+<figcaption aria-hidden="true">SDF 三维纹理示意图</figcaption>
+</figure>
+<h2 id="sdf-的生成算法">SDF 的生成算法</h2>
+<h3 id="距离场的生成">距离场的生成</h3>
+<p>导入三角网格模型并确定其包围盒后，即可进行距离场（DF）的生成。</p>
+<p>设三维轴 <span class="math inline">\((x,y,z)\)</span>
+上每个轴的采样点数分别为 <span
+class="math inline">\(a,b,c\)</span>，模型的三角形数为 <span
+class="math inline">\(m\)</span>。对每个采样点，我们需要：</p>
+<ul>
+<li>遍历当前模型的所有三角形，求该采样点距离三角形的最短距离。</li>
+</ul>
+<p><img src="tridis.png" /></p>
+<p>朴素做法时间复杂度为 <span
+class="math inline">\(O(abcm)\)</span>。</p>
+<h4 id="并行优化">并行优化</h4>
+<p>若事先对三角形建立 BVH，则每个采样点查找其 DF
+值时不再需要遍历所有三角形，生成 mesh DF 的整体时间复杂度将优化到 <span
+class="math inline">\(O\left( abc\log m \right)\)</span>。</p>
+<p>引擎采用 Intel <em>Embree</em> 库在 CPU 上对三角形建立
+BVH，并对所有采样点并行生成 DF，并行线程数为 <span
+class="math inline">\(abc\)</span>。由于该任务需要频繁访存，因此 GPU
+计算着色器表现不佳，计算均在 CPU 上并行处理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::for_each(</span><br><span class="line">  std::execution::par_unseq, brick_tasks.<span class="built_in">begin</span>(), brick_tasks.<span class="built_in">end</span>(), [](Distance_Field_Brick_Task&amp; task) &#123; task.<span class="built_in">do_work</span>(); &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="符号信息的生成">符号信息的生成</h3>
+<p>由于生成的 DF 是无符号的，因此还需要判断采样点位于 mesh
+内部还是外部，生成
+SDF。由于许多三维模型不密封，因此设计一个绝对正确的内外部判断算法会存在一些困难。</p>
+<p><img src="notwatertight.png" /></p>
+<p>不过，内外部判断的算法设计还是比较丰富的。这里将介绍两个常用算法：随机投射算法和最近三角面算法。其他的诸如
+JFA 算法，通常更精确，但计算量更大，不再赘述。</p>
+<p><strong>随机投射算法</strong>，就是在采样点随机发射多个射线与 mesh
+求交，根据法线方向判断交点位于 mesh 内部还是外部。若交点在 mesh
+的内部多，则采样点位于 mesh
+内部，否则位于外部。该算法较常用且准确，引擎默认使用该算法计算符号。</p>
+<p>引擎还可以使用一个计算量很低，但效果还不错的<strong>最近三角面算法</strong>：</p>
+<ul>
+<li>根据距采样点最近的三角形面片的法线方向：
+<ul>
+<li>若采样点位于该法线方向指向的半空间，则采样点在 mesh 外部</li>
+<li>否则，在 mesh 内部。</li>
+</ul></li>
+</ul>
+<figure>
+<img src="badcase.png"
+alt="如果 \mathbf{p} 选中了法线为 \mathbf{n}^2 的三角面，则会错误地被判定在 mesh 内部" />
+<figcaption aria-hidden="true">如果 <span
+class="math inline">\(\mathbf{p}\)</span> 选中了法线为 <span
+class="math inline">\(\mathbf{n}^2\)</span> 的三角面，则会错误地被判定在
+mesh 内部</figcaption>
+</figure>
+<p>尽管该算法可能会在一些几何体的高频凹凸区域给出错误的结果，但也基本不会造成可以察觉的问题，可作为备选。</p>
+<h2 id="sdf-的压缩算法">SDF 的压缩算法</h2>
+<h3 id="多级纹理">多级纹理</h3>
+<p>与所有纹理类似，SDF 也可以具有纹理层级
+mipmap，以方便后续的优化。细粒度的纹理层级的分辨率较高，粗粒度的分辨率较低。</p>
+<p><img src="mipmap.png" /></p>
+<p>由于距离场数据的特殊性，插值可能产生错误的结果，因此不能简单地调用图形
+API 的普通三维纹理的 mipmap
+生成接口。实践时，需要手动以不同的采样密度多次生成纹理。</p>
+<h3 id="纹理基本单元与条带阈值压缩">纹理基本单元与条带阈值压缩</h3>
+<p>为保持空间局部性，引擎将 <span class="math inline">\(k \times k
+\times k\)</span>
+个<strong>采样点</strong>作为管理的基本单元，称为一个<strong>采样块</strong><a
+href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>。综合考虑内存对齐，当前取值为 <span
+class="math inline">\(k = 8\)</span>。查询 SDF
+时，我们首先确定查询位置位于哪个采样块，然后在块内插值结果。</p>
+<p>由于我们通常只关心模型表面的 SDF
+信息，为尽可能只存储有价值的数据，需要对过大的 SDF
+值进行阈值压缩处理。具体地：</p>
+<ul>
+<li>选定一个阈值 <span
+class="math inline">\(r\)</span>，如果一个采样点的 DF 值 <span
+class="math inline">\(|d| &gt; r\)</span>，则该采样点的 <span
+class="math inline">\(d\)</span> 将被 clamp 到 <span
+class="math inline">\(\pm r\)</span>。</li>
+<li>如果一个采样块中，所有采样点均满足 <span class="math inline">\(|d|
+&gt; r\)</span>，则该采样块将被丢弃。</li>
+</ul>
+<p><span class="math inline">\(r\)</span> 可称为
+<strong>条带半径参数</strong>，它是一个与</p>
+<ul>
+<li>mesh 的 bounding box 的大小，</li>
+<li>mesh 的 SDF 分辨率，</li>
+<li>允许 SDF 距离场在 mesh 表面附近的有效覆盖范围（以采样点为单位）</li>
+</ul>
+<p>均有关的阈值。具体而言，前两者增大时，<span
+class="math inline">\(r\)</span> 减小；第三者（"半径"）增大时，<span
+class="math inline">\(r\)</span> 增大。条带增大将导致存储的 SDF
+从稀疏变得密集，导致存储压力增加。</p>
+<h3 id="条带阈值压缩与偏移访问">条带阈值压缩与偏移访问</h3>
+<p><img src="sdf-radius.png" /></p>
+<p>由于我们丢弃了包围盒中部分的采样块，我们需要一个哈希表来确定各个采样块在包围盒中的位置。</p>
+<p><img src="sdf-compress.png" /></p>
+<p>在显存中，我们仍将所有未被丢弃的采样块线性存储，但需要一个额外的"偏移值"，在实际访问块时，需要查询
+<code>索引 - 偏移值</code> 访问到相应的块。</p>
+<h3 id="线性量化距离">线性量化距离</h3>
+<p>由于我们存储的 SDF
+最大距离由阈值约束，所以可以不直接存储浮点数，而将距离存储到
+<code>uint8_t</code>
+量化的数据内，节约内存的同时保持一定的精度。原始距离的绝对值的最大值为
+<span class="math inline">\(r\)</span>，以此决定量化数据的范围。</p>
+<p>具体地，若计算得到的原始距离值为 <span
+class="math inline">\(d\)</span>，<code>uint8_t</code> 量化后的结果为
+<span class="math inline">\(s\)</span>，那么</p>
+<p><span class="math display">\[
+d = \frac{s}{255} \cdot \text{scale} + \text{bias},
+\]</span></p>
+<p>其中 <span class="math inline">\(\text{scale} = 2r,\text{bias} = -
+r\)</span>。这样一来：</p>
+<ul>
+<li>当 <span class="math inline">\(d = - r\)</span> 时，<span
+class="math inline">\(s = 0\)</span></li>
+<li>当 <span class="math inline">\(d = r\)</span> 时，<span
+class="math inline">\(s = 255\)</span></li>
+</ul>
+<p>因此有效的 <span class="math inline">\(d\)</span> 的取值范围为 <span
+class="math inline">\(\lbrack - r,r\rbrack\)</span>。</p>
+<h2 id="sdf-的使用与查询">SDF 的使用与查询</h2>
+<h3 id="gpu-上的-sdf">GPU 上的 SDF</h3>
+<p>我们在 CPU 上完成 SDF 的生成和压缩后，需要将数据拷贝到 GPU
+上使用，以帮助应用程序完成 shader 上的 ray marching
+和碰撞检测等任务。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nonstd::unique_ptr&lt;Texture&gt; sdf_atlas;</span></span><br><span class="line">builder-&gt;<span class="built_in">add_texture</span>(<span class="string">&quot;sdf_brick_atlas&quot;</span>_s, sdf_atlas.<span class="built_in">get</span>(), &amp;sdf_atlas_sampler, <span class="literal">true</span>); <span class="comment">// bind to Lighting_Injector</span></span><br><span class="line">pass.<span class="built_in">set_uniform</span>(<span class="string">&quot;sdf_brick_atlas&quot;</span>, sdf_atlas.<span class="built_in">get</span>()); <span class="comment">// bind to pass</span></span><br></pre></td></tr></table></figure>
+<p>我们在 OpenGL 中用 <code>sampler3D</code> 存储 SDF，采样坐标空间为
+<span
+class="math inline">\((0,1)^{3}\)</span>，因此需要将纹理采样坐标归一化。</p>
+<p>若场景有新模型需要生成 SDF，GPU 上的 SDF 纹理也将得到更新。</p>
+<h3 id="sdf-的实例化">SDF 的实例化</h3>
+<p>如果加入了原先模型的一个实例，则我们不需要重新建立
+SDF，可以复用原模型的 SDF
+数据。不过，如果模型发生了平移、旋转或缩放变换，SDF
+也需要相应地变换。因此，我们需要在 SDF 中存储模型的变换信息。</p>
+<p>因此，引擎将记录 <span class="math inline">\((0,1)^{3}\)</span>
+归一化体积空间（volume space）到原始模型空间的变换：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">volume_to_local = Affine&#123;</span><br><span class="line">    .position = center,</span><br><span class="line">    .scaling = math::Vector3&#123;bb_max_extent&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这将用于后续模型发生平移、旋转或均匀缩放变换时，对应 SDF
+的变换。请注意：发生非均匀缩放变换时，尽管 SDF
+仍可以使用，但其中数据将变得不准确。</p>
+<p>SDF 纹理绑定在 imported mesh 上，以实现 SDF 的实例化：不同 mesh
+instance 将引用相同的 SDF 纹理，但可以具有不同的变换。</p>
+<h3 id="距离查询">距离查询</h3>
+<p>输入：世界坐标 <span
+class="math inline">\(\mathbf{p}\)</span>，要获取该处的 SDF
+值，引擎将执行如下流程：</p>
+<ul>
+<li>对每个模型 <span class="math inline">\(m_{i}\)</span> 的 mesh SDF：
+<ul>
+<li>若 <span class="math inline">\(\mathbf{p}\)</span> 在 <span
+class="math inline">\(m_{i}\)</span> 的包围盒之内：
+<ul>
+<li>获取 mesh SDF 世界空间到其 volume 空间的变换 <span
+class="math inline">\(\mathbf{M}_{i,\text{ world} \rightarrow
+\text{volume}}\)</span>。该变换与模型 <span
+class="math inline">\(m_{i}\)</span> 此时的变换有关，也与建立 SDF
+时模型的变换有关。</li>
+<li>查询纹理 <code>sample_mesh_sdf(</code><span
+class="math inline">\(i,\mathbf{M}_{i,\text{ world} \rightarrow
+\text{volume}}\mathbf{p}\)</span><code>, mip_level)</code>，输出 SDF
+的值。具体地：
+<ul>
+<li>若 <span class="math inline">\(\mathbf{p}\)</span>
+在被存储的采样块之内，则获取 <span
+class="math inline">\(\mathbf{p}\)</span>
+所在的采样块，三线性插值附近的采样点获取 SDF 的值</li>
+<li>若 <span class="math inline">\(\mathbf{p}\)</span>
+不在被存储的采样块之内，则：取 <span class="math inline">\(d = \pm
+r\)</span> 作为 SDF 的近似值，或者用水平集算法获取 SDF 的值</li>
+</ul></li>
+</ul></li>
+<li>若 <span class="math inline">\(\mathbf{p}\)</span> 不在 <span
+class="math inline">\(m_{i}\)</span> 的包围盒之内：
+<ul>
+<li>取 <span class="math inline">\(\mathbf{p}\)</span> 与 <span
+class="math inline">\(m_{i}\)</span> 的包围盒的距离，作为 SDF
+的近似值，或者用水平集算法获取 SDF 的值</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>如果 <span class="math inline">\(\mathbf{p}\)</span>
+不在任何模型的内部，则可以获取每个 SDF 查询结果的最小值，作为该位置最终
+SDF 值 <span class="math inline">\(\varphi(\mathbf{p})\)</span>。</p>
+<h3 id="梯度查询">梯度查询</h3>
+<p>梯度查询的流程是类似的，这里介绍一下引擎对
+<code>sample_mesh_sdf_gradient(</code><span
+class="math inline">\(i,\mathbf{M}_{i,\text{ world} \rightarrow
+\text{volume}}\mathbf{p}\)</span><code>, mip_level)</code> 的实现。</p>
+<p>为了计算 <span class="math inline">\(\mathbf{p}\)</span> 处的 SDF
+梯度，简单的想法是中心差分法，即查询目标点所在位置六个方向上偏移 <span
+class="math inline">\(h\)</span> 的 SDF
+值，用离散差分近似梯度。首先是单方向差分：</p>
+<p><span class="math display">\[
+\frac{\partial\varphi(\mathbf{p})}{\partial x} \approx
+\frac{\varphi(\mathbf{p}{+ (h,0,0)}^{T}) - \varphi(\mathbf{p})}{h},
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial\varphi(\mathbf{p})}{\partial x} \approx
+\frac{\varphi(\mathbf{p}) - \varphi(\mathbf{p}{- (h,0,0)}^{T})}{h}
+\]</span></p>
+<p>复合得到轴向差分：</p>
+<p><span class="math display">\[
+\frac{\partial\varphi(\mathbf{p})}{\partial x} \approx
+\frac{\varphi(\mathbf{p}{+ (h,0,0)}^{T}) - \varphi(\mathbf{p}{-
+(h,0,0)}^{T})}{2h}
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+\begin{aligned}
+\nabla\varphi(\mathbf{p}) &amp; = \left(
+\frac{\partial\varphi(\mathbf{p})}{\partial
+x},\frac{\partial\varphi(\mathbf{p})}{\partial
+y},\frac{\partial\varphi(\mathbf{p})}{\partial z} \right)^{T} \\
+&amp; = \text{ normalize}\left( \varphi(\mathbf{p} +
+h\mathrm{\mathbf{i}}) - \varphi(\mathbf{p} -
+h\mathrm{\mathbf{i}}),\varphi(\mathbf{p} + h\mathrm{\mathbf{j}}) -
+\varphi(\mathbf{p} - h\mathrm{\mathbf{j}}),\varphi(\mathbf{p} +
+h\mathrm{\mathbf{k}}) - \varphi(\mathbf{p} - h\mathrm{\mathbf{k}})
+\right)
+\end{aligned}
+\]</span></p>
+<p>该方法需要查询 6 次 SDF。</p>
+<p>引擎使用一种基于四面体方向改进的方法<a href="#fn3"
+class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a>，在假设 <span
+class="math inline">\(\varphi(\mathbf{p}) \approx 0\)</span>
+时，只需查询 4 次 SDF：</p>
+<p><span class="math display">\[
+\nabla\varphi(\mathbf{p}) = \text{ normalize}\left( \sum_{i =
+1}^{4}\varphi(\mathbf{p} + h\mathbf{k}_{i})\mathbf{k}_{i} \right)
+\]</span></p>
+<p>其中 <span class="math inline">\(\mathbf{k}_{0} = (1, - 1, -
+1)^{T},\mathbf{k}_{1} = ( - 1, - 1,1)^{T},\mathbf{k}_{2} = ( - 1,1, -
+1)^{T},\mathbf{k}_{3} = (1,1,1)^{T}\)</span>。由于 SDF
+碰撞检测算法通常只在模型边缘发挥作用，且我们建立的 SDF 条带半径由 <span
+class="math inline">\(r\)</span> 决定，<span
+class="math inline">\(r\)</span> 通常是一个小值，因此 <span
+class="math inline">\(\varphi(\mathbf{p}) \approx 0\)</span>
+一般成立，故可以使用该算法。</p>
+<h3 id="sdf-的可视化">SDF 的可视化</h3>
+<figure>
+<img src="origin.png" alt="原始场景" />
+<figcaption aria-hidden="true">原始场景</figcaption>
+</figure>
+<figure>
+<img src="sdf-1.png" alt="世界空间法线可视化，低精细度 SDF" />
+<figcaption aria-hidden="true">世界空间法线可视化，低精细度
+SDF</figcaption>
+</figure>
+<figure>
+<img src="sdf-32.png" alt="sphere tracing 可视化，高精细度 SDF" />
+<figcaption aria-hidden="true">sphere tracing 可视化，高精细度
+SDF</figcaption>
+</figure>
+<figure>
+<img src="sdf-31.png" alt="模型空间法线可视化，高精细度 SDF" />
+<figcaption aria-hidden="true">模型空间法线可视化，高精细度
+SDF</figcaption>
+</figure>
+<p>我们效仿 UE4，利用 ray marching (sphere tracing)
+进行可视化：从摄像机出发向场景发射光线，做 sphere
+tracing：从起点开始，不断采样射线上的 SDF 值 <span
+class="math inline">\(d\)</span>，并用 <span
+class="math inline">\(\max(|d|,\varepsilon)\)</span> 步进光线，其中
+<span class="math inline">\(\varepsilon\)</span> 是一个较小的正值。</p>
+<p><img src="raymarching.png" /></p>
+<p>最终，我们根据 sphere trace 的次数累积该像素的亮度。可见，trace
+次数越多，该像素就越亮，因此可以在模型边缘观察到高亮度，而在距离边缘有一定距离的模型内部和外部观察到低亮度。在
+Bounding box 之外，由于无法查询 SDF 的值，因此不会有任何亮度。</p>
+<h2 id="sdf-的应用">SDF 的应用</h2>
+<h3 id="ray-marching-的加速">Ray Marching 的加速</h3>
+<p>SDF 与实时渲染紧密结合，就在于它是一个非常适合用于加速 ray marching
+的数据结构，可用于实现大量全局光照算法，因此成为了 UE5 Lumen
+最重要的基础设施之一。</p>
+<figure>
+<img src="ue-scene-sdf.png"
+alt="UE 的 SDF 系统更加复杂，包含 mesh SDF 和 global SDF，后者由粗粒度的 mesh SDF 合并而来，用于大场景查询优化" />
+<figcaption aria-hidden="true">UE 的 SDF 系统更加复杂，包含 mesh SDF 和
+global SDF，后者由粗粒度的 mesh SDF
+合并而来，用于大场景查询优化</figcaption>
+</figure>
+<h3 id="sdf-阴影">SDF 阴影</h3>
+<p>SDF 阴影是一个与 shadow mapping 不同的阴影技术，实际技术原理是基于
+ray marching 的 occlusion 计算。但由于 SDF 能够加速 ray marching
+过程，因此工业界往往误导性地将其称为"SDF 阴影"。</p>
+<p>尽管并不十分物理，但这是一个能够产生软阴影的技术，且支持艺术家调整阴影的"柔软程度"，同时性能消耗小于光线追踪阴影，因此在实时渲染领域具有一定的应用价值。</p>
+<figure>
+<img src="soft.png" alt="引擎中的 SDF 软阴影" />
+<figcaption aria-hidden="true">引擎中的 SDF 软阴影</figcaption>
+</figure>
+<p>如图所示，理想点光源只能产生硬阴影。然而对自然界中占绝大多数的体积光源而言，阴影部位可分为无阴影、半影和全影部分。</p>
+<p><img src="hardshadow.png" /></p>
+<p><img src="softshadow.png" /></p>
+<p>为了确定当前片元是否能被自然光源照亮，照亮的程度有多高，可以想到一个直接的方法：作一条片元到光源的连线，看看这条连线是否与遮挡几何体接近：如果很接近，说明该片元的阴影较重，否则阴影较轻。</p>
+<p><img src="cone.png" /></p>
+<p>我们假设目标光源是球形光源。具体地，在 shading
+pass，我们希望对一个像素计算其是否被某个光源遮蔽，得到遮蔽值 <span
+class="math inline">\(V \in \lbrack 0,1\rbrack\)</span>
+与最终像素颜色相乘。</p>
+<p>我们从该像素出发做 sphere
+tracing：向光源发射光线，从起点开始，不断采样射线上的 SDF 值 <span
+class="math inline">\(d\)</span>，并根据 <span
+class="math inline">\(\max(|d|,\varepsilon)\)</span>
+步进光线。可见，在与几何体较近的位置，SDF 的值较小，sphere
+的半径较小。</p>
+<p><img src="sdfshadow.png" /></p>
+<p>直到射线超过光源位置或抵达一个很远的地方，我们可以结束 ray
+marching。最终，我们统计得到一个最小 SDF 值 <span
+class="math inline">\(d\)</span> 和该半径 <span
+class="math inline">\(d\)</span> 对应的射线参数 <span
+class="math inline">\(t \in \left\lbrack t_{\min},t_{\max}
+\right\rbrack\)</span>：若 <span class="math inline">\(d &lt;
+0\)</span>，则该像素完全被遮蔽，<span class="math inline">\(V =
+0\)</span>，否则</p>
+<p><span class="math display">\[
+V = \max(\frac{d}{t \cdot \tan\alpha},1)
+\]</span></p>
+<p>其中 <span class="math inline">\(\alpha\)</span>
+为球形光源投射张角的一半，为像素-光源中心连线到像素-光源边缘连线的张角。这里这个参数可供艺术家修改以调整半影面积的大小。</p>
+<p>上述 <span class="math inline">\(V\)</span>
+的公式过于简单，也不够物理，在一些尖锐几何表面容易出现
+artifact。有许多关于 <span class="math inline">\(V\)</span>
+的计算的改进，比如</p>
+<ul>
+<li>GDC 2018: <em>GPU based clay simulation and ray tracing tech in
+Claybook</em></li>
+<li>UE4/5 SDF 阴影的实现</li>
+</ul>
+<p>引擎内部已经参考 UE 进行了改进，限于篇幅，这里不再赘述。</p>
+<h3 id="dfao">DFAO</h3>
+<p>距离场环境光遮蔽（Distance Field Ambient Occlusion,
+DFAO）也是一个基于 ray marching 的 occlusion 计算技术。UE 的 DFAO
+使用多个圆锥来采样遮蔽值，最终对各个圆锥的采样结果做加权平均即可获得片段的遮蔽值。</p>
+<p><img src="dfao.png" /></p>
+<p>大体思路如下：</p>
+<ul>
+<li>在像素所在的表面正半球方向，随机采样 <span
+class="math inline">\(n\)</span> 个圆锥，每个圆锥的张角为 <span
+class="math inline">\(2\alpha\)</span></li>
+<li>对每个圆锥：对第 <span class="math inline">\(i\)</span> 个圆锥进行
+sphere tracing，统计最小 SDF 值 <span
+class="math inline">\(d_{i}\)</span> 和 <span
+class="math inline">\(d_{i}\)</span> 对应的射线参数 <span
+class="math inline">\(t_{i} \in \left\lbrack t_{i,\min},t_{i,\max}
+\right\rbrack\)</span></li>
+<li>计算遮蔽值 <span class="math display">\[
+V_{i} = \text{ saturate}\left( \frac{d_{i}}{t_{i} \cdot \tan\alpha}
+\right).
+\]</span></li>
+<li>加权平均 <span class="math inline">\(V = \sum_{i =
+1}^{n}k_{i}V_{i}\)</span>，获得最终遮蔽值</li>
+</ul>
+<p>UE 对 DFAO 还进行了被称为 sphere AO
+的改进，即在每个模型本体的基础上再建立一个球体计算其 AO，将该 AO 与模型
+SDF 计算的 DFAO 加权平均混合起来，达到更好的 AO 视觉效果。</p>
+<h3 id="sdf-碰撞检测与处理">SDF 碰撞检测与处理</h3>
+<ul>
+<li>质点<strong>碰撞检测</strong>的一般方法：检测其位置 <span
+class="math inline">\(\mathbf{x}\)</span> 是否满足 <span
+class="math inline">\(\varphi(\mathbf{x}) \geq
+0\)</span>，若否，则意味着该质点位于物体内部，需进行碰撞处理。</li>
+<li>质点<strong>碰撞处理</strong>的一般方法：将其沿 <span
+class="math inline">\(\nabla\varphi(\mathbf{x})\)</span>
+的方向，移动到物体外，并按需计算库仑摩擦；或者将其沿 <span
+class="math inline">\(\nabla\varphi(\mathbf{x})\)</span>
+的方向施加惩罚力。</li>
+</ul>
+<p>一般地，刚体-刚体碰撞检测和软体-刚体碰撞检测可直接应用
+SDF，适用于离散碰撞检测。只有解析的，时间连续的 SDF
+可以较方便地应用于连续碰撞检测。</p>
+<p><img src="dcdsdf.png" /></p>
+<figure>
+<img src="triangle_collision.png" alt="将穿插从 SDF 为负的区域中推开" />
+<figcaption aria-hidden="true">将穿插从 SDF
+为负的区域中推开</figcaption>
+</figure>
+<h3 id="其他应用">其他应用</h3>
+<p>SDF 还在许多领域得到了广泛应用，如：</p>
+<ul>
+<li><strong>描边与抗锯齿</strong>。事先为图像中的边缘烘焙 DF
+后，可在渲染时线性插值边缘附近的像素，获取柔和而不失真的效果。可用于
+(S)DF 字体和二维图形渲染，以及卡通渲染描边。</li>
+<li><strong>SDF 图形插值</strong><a href="#fn4" class="footnote-ref"
+id="fnref4"
+role="doc-noteref"><sup>4</sup></a>。将两张灰度图形明确边界后，可建立
+SDF "等高线"后获得两者之间的过渡图形。可用于卡通渲染角色阴影贴图。</li>
+<li><strong>程序化建模</strong>。使用解析的 SDF
+进行程序化建模和布尔运算，在运行时生成简单或复杂的几何体。</li>
+<li><strong>Gameplay效果</strong>。例如，在潜入类游戏中，角色贴近掩体时，计算角色模型各点上
+SDF 的值，值小则给予该部分模型较高的透明度，实现"隐身"效果。</li>
+<li><strong>AI 优化</strong>。例如，将 SDF
+作为损失函数的一部分，引导机器人 AI 运动轨迹规划算法生成安全路径。</li>
+</ul>
+<p>限于篇幅，本讲不再赘述。</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a
+target="_blank" rel="noopener" href="https://iquilezles.org/articles/distfunctions/">https://iquilezles.org/articles/distfunctions/</a><a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Dreams (<a
+target="_blank" rel="noopener" href="https://www.mediamolecule.com/blog/article/siggraph_2015">https://www.mediamolecule.com/blog/article/siggraph_2015</a>)
+和 OpenVDB 的 SDF 实现<a href="#fnref2" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a
+target="_blank" rel="noopener" href="https://iquilezles.org/articles/normalsSDF/">https://iquilezles.org/articles/normalsSDF/</a><a
+href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/337944099">https://zhuanlan.zhihu.com/p/337944099</a><a
+href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/" title="有向距离场的构建与应用">https://zrephel.fun/2025/04/18/有向距离场的构建与应用/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/SDF/" rel="tag"># SDF</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" rel="prev" title="动画系统笔记">
+                  <i class="fa fa-angle-left"></i> 动画系统笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
