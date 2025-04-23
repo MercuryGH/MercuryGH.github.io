@@ -51,7 +51,7 @@
 <meta property="og:image" content="https://zrephel.fun/2024/11/06/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%88%9A%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/complex.png">
 <meta property="og:image" content="https://zrephel.fun/2024/11/06/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%88%9A%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/shape_matching_collision.png">
 <meta property="article:published_time" content="2024-11-06T11:54:06.000Z">
-<meta property="article:modified_time" content="2024-12-04T16:01:37.379Z">
+<meta property="article:modified_time" content="2025-04-23T11:56:27.045Z">
 <meta property="article:author" content="Mercury">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="物理仿真">
@@ -140,7 +140,7 @@
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
             <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E4%B8%8E%E7%89%A9%E7%90%86%E4%BB%BF%E7%9C%9F"><span class="nav-number">1.</span> <span class="nav-text">动画与物理仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E6%B5%81%E6%B0%B4%E7%BA%BF---%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8A%A8%E7%94%BB"><span class="nav-number">1.1.1.</span> <span class="nav-text">动画流水线 - 基于数据的动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E7%94%BB%E6%B5%81%E6%B0%B4%E7%BA%BF---%E5%AE%9E%E6%97%B6%E7%89%A9%E7%90%86%E4%BB%BF%E7%9C%9F"><span class="nav-number">1.1.2.</span> <span class="nav-text">动画流水线 - 实时物理仿真</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E5%B8%A7%E7%9A%84%E5%8A%A8%E7%94%BB%E8%AE%A1%E7%AE%97"><span class="nav-number">1.1.3.</span> <span class="nav-text">每帧的动画计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E4%BB%BF%E7%9C%9F%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">1.1.4.</span> <span class="nav-text">物理仿真流水线</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6"><span class="nav-number">2.</span> <span class="nav-text">刚体动力学</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86"><span class="nav-number">2.1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">2.1.1.</span> <span class="nav-text">刚体的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%9A%84%E8%BF%90%E5%8A%A8"><span class="nav-number">2.1.2.</span> <span class="nav-text">刚体的运动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E5%8A%A8%E5%8A%A8%E5%8A%9B%E5%AD%A6"><span class="nav-number">2.2.</span> <span class="nav-text">平动动力学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E5%8A%A8%E5%8A%A8%E5%8A%9B%E5%AD%A6-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">平动动力学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F-%E4%BB%85%E5%B9%B3%E5%8A%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">刚体仿真-仅平动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AC%E5%8A%A8%E5%8A%A8%E5%8A%9B%E5%AD%A6"><span class="nav-number">2.3.</span> <span class="nav-text">转动动力学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E7%9A%84%E8%A1%A8%E8%BE%BE---%E6%97%8B%E8%BD%AC%E7%9F%A9%E9%98%B5%E4%B8%8E%E6%AC%A7%E6%8B%89%E8%A7%92"><span class="nav-number">2.3.1.</span> <span class="nav-text">旋转的表达 -
-旋转矩阵与欧拉角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E7%9A%84%E8%A1%A8%E8%BE%BE---%E5%9B%9B%E5%85%83%E6%95%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">旋转的表达 - 四元数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E7%9A%84%E8%A1%A8%E8%BE%BE---%E5%9B%9B%E5%85%83%E6%95%B0%E8%BF%90%E7%AE%97"><span class="nav-number">2.3.3.</span> <span class="nav-text">旋转的表达 - 四元数运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8A%A8%E5%8A%A8%E5%8A%9B%E5%AD%A6-1"><span class="nav-number">2.3.4.</span> <span class="nav-text">转动动力学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9B%E7%9F%A9"><span class="nav-number">2.3.5.</span> <span class="nav-text">力矩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8A%A8%E6%83%AF%E9%87%8F"><span class="nav-number">2.3.6.</span> <span class="nav-text">转动惯量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F-%E4%BB%85%E8%BD%AC%E5%8A%A8"><span class="nav-number">2.3.7.</span> <span class="nav-text">刚体仿真-仅转动</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E5%8A%A8%E7%94%BB"><span class="nav-number">3.</span> <span class="nav-text">刚体动画</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.1.</span> <span class="nav-text">一般刚体仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">3.1.1.</span> <span class="nav-text">刚体仿真流水线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-matching-%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.2.</span> <span class="nav-text">Shape Matching 刚体仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E4%B8%8E%E6%9E%81%E5%88%86%E8%A7%A3"><span class="nav-number">3.2.1.</span> <span class="nav-text">预备知识：奇异值分解与极分解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching"><span class="nav-number">3.2.2.</span> <span class="nav-text">Shape Matching</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching---%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">3.2.3.</span> <span class="nav-text">Shape Matching - 公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching---%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">Shape Matching - 公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching---%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC-2"><span class="nav-number">3.2.5.</span> <span class="nav-text">Shape Matching - 公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching-%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">3.2.6.</span> <span class="nav-text">Shape Matching 流水线</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%A8%E7%82%B9%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">质点碰撞处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86-1"><span class="nav-number">4.1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA"><span class="nav-number">4.1.1.</span> <span class="nav-text">有向距离场</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%9A%E5%87%BD%E6%95%B0%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">罚函数法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E7%BA%BF%E6%80%A7%E7%BD%9A%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.1.</span> <span class="nav-text">朴素线性罚函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E7%BA%BF%E6%80%A7%E7%BD%9A%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.2.</span> <span class="nav-text">有缓冲区的线性罚函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8log-barrier%E7%9A%84%E7%BD%9A%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.3.</span> <span class="nav-text">使用log-barrier的罚函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">冲量法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95-1"><span class="nav-number">4.3.1.</span> <span class="nav-text">冲量法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95---%E9%80%9F%E5%BA%A6%E6%9B%B4%E6%96%B0"><span class="nav-number">4.3.2.</span> <span class="nav-text">冲量法 - 速度更新</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">刚体碰撞检测与处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B"><span class="nav-number">5.1.</span> <span class="nav-text">刚体碰撞检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%83%A9%E7%BD%9A%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.1.1.</span> <span class="nav-text">刚体碰撞检测与惩罚法的碰撞处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.2.</span> <span class="nav-text">冲量法的碰撞处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">冲量法的碰撞处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86-%E4%BB%8E%E5%B1%80%E9%83%A8%E5%88%B0%E6%95%B4%E4%BD%93"><span class="nav-number">5.2.2.</span> <span class="nav-text">冲量法的碰撞处理-从局部到整体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86---%E6%8E%A8%E5%AF%BC"><span class="nav-number">5.2.3.</span> <span class="nav-text">冲量法的碰撞处理 - 推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86---%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">5.2.4.</span> <span class="nav-text">冲量法的碰撞处理 - 流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.2.5.</span> <span class="nav-text">并行碰撞处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-matching-%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.3.</span> <span class="nav-text">Shape Matching 的碰撞处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching-%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86-1"><span class="nav-number">5.3.1.</span> <span class="nav-text">Shape Matching 的碰撞处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thanks-for-your-watching"><span class="nav-number">5.3.2.</span> <span class="nav-text">Thanks for your watching!</span></a></li></ol></li></ol></li></ol></div>
+旋转矩阵与欧拉角</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E7%9A%84%E8%A1%A8%E8%BE%BE---%E5%9B%9B%E5%85%83%E6%95%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">旋转的表达 - 四元数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E7%9A%84%E8%A1%A8%E8%BE%BE---%E5%9B%9B%E5%85%83%E6%95%B0%E8%BF%90%E7%AE%97"><span class="nav-number">2.3.3.</span> <span class="nav-text">旋转的表达 - 四元数运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8A%A8%E5%8A%A8%E5%8A%9B%E5%AD%A6-1"><span class="nav-number">2.3.4.</span> <span class="nav-text">转动动力学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9B%E7%9F%A9"><span class="nav-number">2.3.5.</span> <span class="nav-text">力矩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8A%A8%E6%83%AF%E9%87%8F"><span class="nav-number">2.3.6.</span> <span class="nav-text">转动惯量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F-%E4%BB%85%E8%BD%AC%E5%8A%A8"><span class="nav-number">2.3.7.</span> <span class="nav-text">刚体仿真-仅转动</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E5%8A%A8%E7%94%BB"><span class="nav-number">3.</span> <span class="nav-text">刚体动画</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.1.</span> <span class="nav-text">一般刚体仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">3.1.1.</span> <span class="nav-text">刚体仿真流水线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-matching-%E5%88%9A%E4%BD%93%E4%BB%BF%E7%9C%9F"><span class="nav-number">3.2.</span> <span class="nav-text">Shape Matching 刚体仿真</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E4%B8%8E%E6%9E%81%E5%88%86%E8%A7%A3"><span class="nav-number">3.2.1.</span> <span class="nav-text">预备知识：奇异值分解与极分解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching"><span class="nav-number">3.2.2.</span> <span class="nav-text">Shape Matching</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching---%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC"><span class="nav-number">3.2.3.</span> <span class="nav-text">Shape Matching - 公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching---%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">Shape Matching - 公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching---%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC-2"><span class="nav-number">3.2.5.</span> <span class="nav-text">Shape Matching - 公式推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching-%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">3.2.6.</span> <span class="nav-text">Shape Matching 流水线</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%A8%E7%82%B9%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">质点碰撞处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%84%E5%A4%87%E7%9F%A5%E8%AF%86-1"><span class="nav-number">4.1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA"><span class="nav-number">4.1.1.</span> <span class="nav-text">有向距离场</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%9A%E5%87%BD%E6%95%B0%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">罚函数法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E7%BA%BF%E6%80%A7%E7%BD%9A%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.1.</span> <span class="nav-text">朴素线性罚函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%BC%93%E5%86%B2%E5%8C%BA%E7%9A%84%E7%BA%BF%E6%80%A7%E7%BD%9A%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.2.</span> <span class="nav-text">有缓冲区的线性罚函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-log-barrier-%E7%9A%84%E7%BD%9A%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.3.</span> <span class="nav-text">使用 log-barrier 的罚函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">冲量法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95-1"><span class="nav-number">4.3.1.</span> <span class="nav-text">冲量法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95---%E9%80%9F%E5%BA%A6%E6%9B%B4%E6%96%B0"><span class="nav-number">4.3.2.</span> <span class="nav-text">冲量法 - 速度更新</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%A4%84%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">刚体碰撞检测与处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B"><span class="nav-number">5.1.</span> <span class="nav-text">刚体碰撞检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9A%E4%BD%93%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%83%A9%E7%BD%9A%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.1.1.</span> <span class="nav-text">刚体碰撞检测与惩罚法的碰撞处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.2.</span> <span class="nav-text">冲量法的碰撞处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">冲量法的碰撞处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86-%E4%BB%8E%E5%B1%80%E9%83%A8%E5%88%B0%E6%95%B4%E4%BD%93"><span class="nav-number">5.2.2.</span> <span class="nav-text">冲量法的碰撞处理-从局部到整体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86---%E6%8E%A8%E5%AF%BC"><span class="nav-number">5.2.3.</span> <span class="nav-text">冲量法的碰撞处理 - 推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%B2%E9%87%8F%E6%B3%95%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86---%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">5.2.4.</span> <span class="nav-text">冲量法的碰撞处理 - 流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.2.5.</span> <span class="nav-text">并行碰撞处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-matching-%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86"><span class="nav-number">5.3.</span> <span class="nav-text">Shape Matching 的碰撞处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shape-matching-%E7%9A%84%E7%A2%B0%E6%92%9E%E5%A4%84%E7%90%86-1"><span class="nav-number">5.3.1.</span> <span class="nav-text">Shape Matching 的碰撞处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thanks-for-your-watching"><span class="nav-number">5.3.2.</span> <span class="nav-text">Thanks for your watching!</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -222,7 +222,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-12-05 00:01:37" itemprop="dateModified" datetime="2024-12-05T00:01:37+08:00">2024-12-05</time>
+      <time title="Modified: 2025-04-23 19:56:27" itemprop="dateModified" datetime="2025-04-23T19:56:27+08:00">2025-04-23</time>
     </span>
 
   
@@ -290,26 +290,26 @@ class="math inline">\(k\)</span> 帧时的状态。</p>
 <p><img src="rigids.png" /></p>
 <ul>
 <li>刚体是不会产生形状、大小改变的理想物体。只有整体的<strong>平动</strong>和<strong>转动</strong>。</li>
-<li>一般地，物理引擎存储的刚体仿真状态<span
+<li>一般地，物理引擎存储的刚体仿真状态 <span
 class="math inline">\(\mathbf s = \{\mathbf v, \mathbf x, \mathbf
-\omega, \mathbf q\}\)</span>是一个四元组，其中 <span
+\omega, \mathbf q\}\)</span> 是一个四元组，其中 <span
 class="math inline">\(\mathbf v\)</span> 为刚体的线速度，<span
-class="math inline">\(\mathbf x\)</span>为位移，<span
-class="math inline">\(\mathbf \omega\)</span>为角速度，<span
-class="math inline">\(\mathbf q\)</span>为表示朝向的四元数 。</li>
-<li>记<span
-class="math inline">\(n\)</span>为刚体的顶点数。如果刚体的各顶点质量不一，记顶点<span
-class="math inline">\(i\)</span>的质量为<span
-class="math inline">\(m_i\)</span>，则<span class="math inline">\(M =
-(m_1, \dots, m_n)^T\)</span>，记<span class="math inline">\(M^{-1} = (1
+class="math inline">\(\mathbf x\)</span> 为位移，<span
+class="math inline">\(\mathbf \omega\)</span> 为角速度，<span
+class="math inline">\(\mathbf q\)</span> 为表示朝向的四元数 。</li>
+<li>记 <span class="math inline">\(n\)</span>
+为刚体的顶点数。如果刚体的各顶点质量不一，记顶点 <span
+class="math inline">\(i\)</span> 的质量为 <span
+class="math inline">\(m_i\)</span>，则 <span class="math inline">\(M =
+(m_1, \dots, m_n)^T\)</span>，记 <span class="math inline">\(M^{-1} = (1
 / m_1, \dots, 1 / m_n) \in \mathbb R^{1 \times
-n}\)</span>。此时我们需要让<span class="math inline">\(\mathbf f =
-(\mathbf f_1, \dots, \mathbf
-f_n)^T\)</span>分别储存各顶点的受力情况。</li>
+n}\)</span>。此时我们需要让 <span class="math inline">\(\mathbf f =
+(\mathbf f_1, \dots, \mathbf f_n)^T\)</span>
+分别储存各顶点的受力情况。</li>
 </ul>
 <h3 id="刚体的运动">刚体的运动</h3>
-<p>刚体整体不缩放，只发生平动<span class="math inline">\(\mathbf
-x\)</span>（translation）和转动<span class="math inline">\(\mathbf
+<p>刚体整体不缩放，只发生平动 <span class="math inline">\(\mathbf
+x\)</span>（translation）和转动 <span class="math inline">\(\mathbf
 R\)</span>（rotation）变换。</p>
 <p><img src="rt.png" /></p>
 <h2 id="平动动力学">平动动力学</h2>
@@ -333,17 +333,17 @@ f^{(0)}, \\
         \mathbf x^{(1)} = \mathbf x^{(0)} + \Delta t \mathbf v^{(1)}
         \end{cases}
 \]</span></p>
-<p>其中<span class="math inline">\(\mathbf v\)</span>用上一帧的<span
-class="math inline">\(\mathbf f\)</span>数据更新，是显式积分，<span
-class="math inline">\(\mathbf x\)</span>用当前帧的<span
-class="math inline">\(\mathbf
-v\)</span>数据更新，是隐式积分。可以证明，如此更新的<span
-class="math inline">\(\mathbf
-x\)</span>相对完全显式法和完全隐式法是二阶精确的。</p>
+<p>其中 <span class="math inline">\(\mathbf v\)</span> 用上一帧的 <span
+class="math inline">\(\mathbf f\)</span> 数据更新，是显式积分，<span
+class="math inline">\(\mathbf x\)</span> 用当前帧的 <span
+class="math inline">\(\mathbf v\)</span>
+数据更新，是隐式积分。可以证明，如此更新的 <span
+class="math inline">\(\mathbf x\)</span>
+相对完全显式法和完全隐式法是二阶精确的。</p>
 <h3 id="刚体仿真-仅平动">刚体仿真-仅平动</h3>
 <p>仿真流程：</p>
 <ol type="1">
-<li>输入状态<span class="math inline">\(\mathbf s^{(0)} = \{\mathbf
+<li>输入状态 <span class="math inline">\(\mathbf s^{(0)} = \{\mathbf
 v^{(0)}, \mathbf x^{(0)}\}\)</span></li>
 <li><span class="math display">\[
 \begin{cases}
@@ -356,16 +356,16 @@ f^{(0)}, \\
         \mathbf x^{(1)} = \mathbf x^{(0)} + \Delta t \mathbf v^{(1)}
         \end{cases}
 \]</span></li>
-<li>输出状态<span class="math inline">\(\mathbf s^{(1)} = \{\mathbf
+<li>输出状态 <span class="math inline">\(\mathbf s^{(1)} = \{\mathbf
 v^{(1)}, \mathbf x^{(1)}\}\)</span></li>
 </ol>
 <p>注意：</p>
 <ul>
-<li>各顶点质量<span class="math inline">\(M = (m_1, \dots,
-m_n)^T\)</span>为常向量，表记<span class="math inline">\(M^{-1} =
+<li>各顶点质量 <span class="math inline">\(M = (m_1, \dots,
+m_n)^T\)</span> 为常向量，表记 <span class="math inline">\(M^{-1} =
 (1/m_1, \dots, 1/m_n) \in \mathbb R^{1 \times n}\)</span></li>
-<li>时间间隔<span class="math inline">\(\Delta
-t\)</span>可自定义，不一定是常量，也不一定与实际物理帧计算的时间间隔相同</li>
+<li>时间间隔 <span class="math inline">\(\Delta t\)</span>
+可自定义，不一定是常量，也不一定与实际物理帧计算的时间间隔相同</li>
 </ul>
 <h2 id="转动动力学">转动动力学</h2>
 <h3 id="旋转的表达---旋转矩阵与欧拉角">旋转的表达 -
@@ -373,12 +373,12 @@ t\)</span>可自定义，不一定是常量，也不一定与实际物理帧计�
 <p>在讨论三维旋转时，我们只讨论绕某个过原点的旋转轴旋转。若旋转轴不过原点，需要先进行平移变换。</p>
 <p>旋转矩阵：</p>
 <ul>
-<li>三维空间中的旋转可用一个自由度为3的<span class="math inline">\(3
-\times 3\)</span>矩阵<span class="math inline">\(\mathbf
-R\)</span>表示</li>
-<li>对空间向量<span class="math inline">\(\mathbf v \in \mathbb
-R^{3}\)</span>，矩阵-向量乘积<span class="math inline">\(\mathbf R
-\mathbf v\)</span>可表示对该向量施加旋转变换</li>
+<li>三维空间中的旋转可用一个自由度为3的 <span class="math inline">\(3
+\times 3\)</span> 矩阵 <span class="math inline">\(\mathbf R\)</span>
+表示</li>
+<li>对空间向量 <span class="math inline">\(\mathbf v \in \mathbb
+R^{3}\)</span>，矩阵-向量乘积 <span class="math inline">\(\mathbf R
+\mathbf v\)</span> 可表示对该向量施加旋转变换</li>
 <li>缺点：不够直观；自由度低，浪费空间；难以计算旋转相关的速度</li>
 </ul>
 <p>欧拉角：</p>
@@ -389,19 +389,19 @@ angle）表示</li>
 <li>缺点：可能丢失自由度（万向节死锁）；难以计算旋转相关的速度</li>
 </ul>
 <h3 id="旋转的表达---四元数">旋转的表达 - 四元数</h3>
-<p>四元数<span class="math inline">\(\mathbf q = a + b \textrm i + c
+<p>四元数 <span class="math inline">\(\mathbf q = a + b \textrm i + c
 \textrm j + d \textrm k \in \mathbb H \leftrightarrow \mathbb
-R^4\)</span>是对复数域<span class="math inline">\(\mathbb C
-\leftrightarrow \mathbb R^2\)</span>的扩展，遵从运算法则</p>
+R^4\)</span> 是对复数域 <span class="math inline">\(\mathbb C
+\leftrightarrow \mathbb R^2\)</span> 的扩展，遵从运算法则</p>
 <p><span class="math display">\[
 \textrm i^2 = \textrm j^2 = \textrm k^2 = \textrm i \textrm j \textrm k
 = -1,
 \]</span></p>
-<p>我们可以表记四元数<span class="math inline">\(\mathbf q = [s, \mathbf
-v]\)</span>，其中<span class="math inline">\(s\)</span>为<span
-class="math inline">\(\mathbf q\)</span>的标量部分，<span
-class="math inline">\(\mathbf
-v\)</span>为向量部分。可以推导四元数的标量积、加法和乘法运算：</p>
+<p>我们可以表记四元数 <span class="math inline">\(\mathbf q = [s,
+\mathbf v]\)</span>，其中 <span class="math inline">\(s\)</span> 为
+<span class="math inline">\(\mathbf q\)</span> 的标量部分，<span
+class="math inline">\(\mathbf v\)</span>
+为向量部分。可以推导四元数的标量积、加法和乘法运算：</p>
 <p><span class="math display">\[
 \begin{cases}
         a \mathbf q = [as, a \mathbf v], \\
@@ -412,45 +412,48 @@ v_2], \\
 v_1 + \mathbf v_1 \times \mathbf v_2].
         \end{cases}
 \]</span></p>
-<p>特别地，我们可以让三维向量<span class="math inline">\(\mathbf
-v\)</span>也参与上述计算，只需视其为四元数<span
-class="math inline">\([0, \mathbf v]\)</span>即可。</p>
+<p>特别地，我们可以让三维向量 <span class="math inline">\(\mathbf
+v\)</span> 也参与上述计算，只需视其为四元数 <span
+class="math inline">\([0, \mathbf v]\)</span> 即可。</p>
 <h3 id="旋转的表达---四元数运算">旋转的表达 - 四元数运算</h3>
 <p>正如一个归一化的复数可以表示二维旋转一样，一个归一化的四元数也可以表示一个三维旋转，它满足</p>
 <p><span class="math display">\[
 ||\mathbf q|| = \sqrt{s^2 + \mathbf v \cdot \mathbf v} = 1.
 \]</span></p>
-<p>具体地，我们让向量<span class="math inline">\(\mathbf
-v\)</span>绕某个过原点的空间轴<span class="math inline">\(\mathbf
-u\)</span>旋转<span
-class="math inline">\(\theta\)</span>角度，旋转方向使用右手螺旋判断。记</p>
+<p>具体地，我们让向量 <span class="math inline">\(\mathbf v\)</span>
+绕某个过原点的空间轴 <span class="math inline">\(\mathbf u\)</span> 旋转
+<span class="math inline">\(\theta\)</span>
+角度，旋转方向使用右手螺旋判断。记</p>
 <p><span class="math display">\[
-\begin{cases}
-        \mathbf q = \left[\cos \frac{\theta}{2}, \mathbf u \right], \\
-        ||\mathbf q|| = 1,
-        \end{cases}
+\mathbf q = \left[\cos \frac{\theta}{2}, \sin \frac{\theta}{2} \mathbf u
+\right], \\
 \]</span></p>
-<p>那么，可以证明，<span class="math inline">\(\mathbf q \mathbf v
-\mathbf q^{*}\)</span>就是空间向量<span class="math inline">\(\mathbf
-v\)</span>如上旋转后的结果的四元数表示，即<span
-class="math inline">\(\mathbf q \mathbf v \mathbf
-q^{*}\)</span>的标量部分总是为<span
-class="math inline">\(0\)</span>；其中<span
-class="math inline">\(\mathbf q^{*} = \left [\cos \frac{\theta}{2},
--\mathbf u \right]\)</span>为<span class="math inline">\(\mathbf
-q\)</span>的共轭四元数。</p>
-<p>归一化的四元数可以与三维旋转形成一一对应。四元数也可以方便地转换为矩阵和欧拉角，因此成为了物理引擎内部旋转运算的常用数据类型。</p>
+<p>可见上式满足 <span class="math inline">\(||\mathbf q|| =
+1\)</span>。那么，可以证明，<span class="math inline">\(\mathbf q
+\mathbf v \mathbf q^{*}\)</span> 就是空间向量 <span
+class="math inline">\(\mathbf v\)</span>
+如上旋转后的结果的四元数表示，即 <span class="math inline">\(\mathbf q
+\mathbf v \mathbf q^{*}\)</span> 的标量部分总是为 <span
+class="math inline">\(0\)</span>；其中 <span
+class="math inline">\(\mathbf q^{*} = \left [\cos \frac{\theta}{2}, -
+\sin \frac{\theta}{2} \mathbf u \right]\)</span> 为 <span
+class="math inline">\(\mathbf q\)</span> 的共轭四元数。</p>
+<p>可以证明，归一化的四元数可以与三维旋转形成二一对应，或者说归一化的四元数<strong>双倍覆盖</strong>了三维旋转，这是因为
+<span class="math inline">\(\mathbf q \mathbf v \mathbf q^{*}\)</span>
+和 <span class="math inline">\((-\mathbf q) \mathbf v (-\mathbf
+q)^{*}\)</span>
+的结果是相同的。四元数也可以方便地转换为矩阵和欧拉角，因此成为了物理引擎内部旋转运算的常用数据类型。</p>
 <h3 id="转动动力学-1">转动动力学</h3>
 <p><img src="rotation.png" /> <img src="omega.png" /></p>
-<p>记<span class="math inline">\(\mathbf
-q\)</span>为表示刚体旋转的四元数，<span class="math inline">\(\mathbf
-R\)</span>表示该旋转的变换矩阵，<span class="math inline">\(\mathbf
-\omega \in \mathbb R^3\)</span>为旋转的角速度，规定：</p>
+<p>记 <span class="math inline">\(\mathbf q\)</span>
+为表示刚体旋转的四元数，<span class="math inline">\(\mathbf R\)</span>
+表示该旋转的变换矩阵，<span class="math inline">\(\mathbf \omega \in
+\mathbb R^3\)</span> 为旋转的角速度，规定：</p>
 <ul>
-<li><span class="math inline">\(\mathbf
-\omega\)</span>的方向为旋转轴（与旋转方向形成右手螺旋关系），</li>
-<li><span class="math inline">\(\mathbf
-\omega\)</span>的大小为旋转的角速率。</li>
+<li><span class="math inline">\(\mathbf \omega\)</span>
+的方向为旋转轴（与旋转方向形成右手螺旋关系），</li>
+<li><span class="math inline">\(\mathbf \omega\)</span>
+的大小为旋转的角速率。</li>
 </ul>
 <h3 id="力矩">力矩</h3>
 <p>转动动力学中的力矩（torque）是平动动力学中的力（force）的等效，定义式为</p>
@@ -459,26 +462,27 @@ R\)</span>表示该旋转的变换矩阵，<span class="math inline">\(\mathbf
 \]</span></p>
 <p><img src="torque.png" /></p>
 <h3 id="转动惯量">转动惯量</h3>
-<p>转动动力学中的转动惯量（inertia）是平动动力学中的质量（mass）的等效，是一个<span
-class="math inline">\(3 \times
-3\)</span>矩阵。在初始状态下，转动惯量为一常量，定义式为</p>
+<p>转动动力学中的转动惯量（inertia）是平动动力学中的质量（mass）的等效，是一个
+<span class="math inline">\(3 \times 3\)</span>
+矩阵。在初始状态下，转动惯量为一常量，定义式为</p>
 <p><span class="math display">\[
 \mathbf I_{\text{ref}} = \sum m_i (\mathbf r_i^T \mathbf r_i \mathbf 1 -
 \mathbf r_i \mathbf r_i^T).
 \]</span></p>
-<p>在刚体经过旋转变换<span class="math inline">\(\mathbf
-R\)</span>后，可以证明，此时转动惯量为</p>
+<p>在刚体经过旋转变换 <span class="math inline">\(\mathbf R\)</span>
+后，可以证明，此时转动惯量为</p>
 <p><span class="math display">\[
 \mathbf I = \mathbf R \mathbf I_{\text{ref}} \mathbf R^T.
 \]</span></p>
 <p><img src="inertia.png" /></p>
-<p>请注意：一个三维空间中的物体存在无数个可能的转动轴，每个转动轴都对应着一个描述其转动惯性大小的标量<span
-class="math inline">\(I\)</span>。但这些量并非完全相互独立，它们可以被整理成一个<span
-class="math inline">\(3 \times 3\)</span>的矩阵<span
+<p>请注意：一个三维空间中的物体存在无数个可能的转动轴，每个转动轴都对应着一个描述其转动惯性大小的标量
+<span
+class="math inline">\(I\)</span>。但这些量并非完全相互独立，它们可以被整理成一个
+<span class="math inline">\(3 \times 3\)</span> 的矩阵 <span
 class="math inline">\(\mathbf I_{\text{ref}}\)</span>。</p>
 <h3 id="刚体仿真-仅转动">刚体仿真-仅转动</h3>
 <ol type="1">
-<li><p>输入状态<span class="math inline">\(\mathbf s^{(0)} = \{\mathbf
+<li><p>输入状态 <span class="math inline">\(\mathbf s^{(0)} = \{\mathbf
 q^{(0)}, \mathbf \omega^{(0)}\}\)</span></p></li>
 <li><p>更新中间物理状态</p>
 <p><span class="math display">\[
@@ -500,14 +504,14 @@ I^{(0)})^{-1} \mathbf \tau^{(0)}, \\
 \omega^{(1)} \right] \times \mathbf q^{(0)}
 \end{cases}
 \]</span></p></li>
-<li><p>输出状态<span class="math inline">\(\mathbf s^{(1)} = \{\mathbf
+<li><p>输出状态 <span class="math inline">\(\mathbf s^{(1)} = \{\mathbf
 q^{(1)}, \mathbf \omega^{(1)}\}\)</span></p></li>
 </ol>
 <h1 id="刚体动画">刚体动画</h1>
 <h2 id="一般刚体仿真">一般刚体仿真</h2>
 <h3 id="刚体仿真流水线">刚体仿真流水线</h3>
 <ol type="1">
-<li><p>输入状态<span class="math inline">\(\mathbf s^{(0)} = \{\mathbf
+<li><p>输入状态 <span class="math inline">\(\mathbf s^{(0)} = \{\mathbf
 v^{(0)}, \mathbf x^{(0)}, \mathbf \omega^{(0)}, \mathbf
 q^{(0)}\}\)</span></p></li>
 <li><p>更新中间物理状态</p>
@@ -535,7 +539,7 @@ I^{(0)})^{-1} \mathbf \tau^{(0)}, \\
 \omega^{(1)} \right] \times \mathbf q^{(0)}
 \end{cases}
 \]</span></p></li>
-<li><p>输出状态<span class="math inline">\(\mathbf s^{(1)} = \{\mathbf
+<li><p>输出状态 <span class="math inline">\(\mathbf s^{(1)} = \{\mathbf
 v^{(1)}, \mathbf x^{(1)}, \mathbf \omega^{(1)}, \mathbf
 q^{(1)}\}\)</span></p></li>
 </ol>
@@ -546,17 +550,17 @@ q^{(1)}\}\)</span></p></li>
 <p><span class="math display">\[
 \mathbf A = \mathbf U \mathbf D \mathbf V^T,
 \]</span></p>
-<p>其中<span class="math inline">\(\mathbf A\)</span>为任意方阵，<span
-class="math inline">\(\mathbf U\)</span>和<span
-class="math inline">\(\mathbf V^T\)</span>为正交矩阵，<span
-class="math inline">\(\mathbf D\)</span>为对角矩阵</p></li>
+<p>其中 <span class="math inline">\(\mathbf A\)</span> 为任意方阵，<span
+class="math inline">\(\mathbf U\)</span> 和 <span
+class="math inline">\(\mathbf V^T\)</span> 为正交矩阵，<span
+class="math inline">\(\mathbf D\)</span> 为对角矩阵</p></li>
 <li><p>极分解：任何变换均可被依次分解成两个部分：（可能带翻转的）旋转和其他变形。即</p>
 <p><span class="math display">\[
 \mathbf A = \mathbf U \mathbf D \mathbf V^T = (\mathbf U \mathbf V^T) (
 \mathbf V \mathbf D \mathbf V^T) = \mathbf R \mathbf S,
 \]</span></p>
-<p>其中<span class="math inline">\(\mathbf R\)</span>为正交矩阵，<span
-class="math inline">\(\mathbf S\)</span>为半正定对称矩阵</p></li>
+<p>其中 <span class="math inline">\(\mathbf R\)</span> 为正交矩阵，<span
+class="math inline">\(\mathbf S\)</span> 为半正定对称矩阵</p></li>
 </ul>
 <h3 id="shape-matching">Shape Matching</h3>
 <ul>
@@ -570,16 +574,15 @@ decomposition）得到</li>
 <p><img src="shape_matching.png" /></p>
 <h3 id="shape-matching---公式推导">Shape Matching - 公式推导</h3>
 <ul>
-<li><p>记仿真得到的刚体的预期质心为<span class="math inline">\(\mathbf
-c\)</span>，顶点<span class="math inline">\(i\)</span>的位置为<span
-class="math inline">\(\mathbf r_i\)</span>，依质心性质有<span
+<li><p>记仿真得到的刚体的预期质心为 <span class="math inline">\(\mathbf
+c\)</span>，顶点 <span class="math inline">\(i\)</span> 的位置为 <span
+class="math inline">\(\mathbf r_i\)</span>，依质心性质有 <span
 class="math inline">\(\sum_i \mathbf r_i = \mathbf 0\)</span></p></li>
-<li><p>设<span class="math inline">\(\mathbf
-y_i\)</span>为自由仿真后的顶点位置，<span class="math inline">\(\mathbf
-x_i\)</span>为满足刚体约束的顶点位置，则有<span
-class="math inline">\(\mathbf x_i = \mathbf c + \mathbf R \mathbf
-r_i\)</span>，其中<span class="math inline">\(\mathbf
-R\)</span>为某旋转矩阵</p></li>
+<li><p>设 <span class="math inline">\(\mathbf y_i\)</span>
+为自由仿真后的顶点位置，<span class="math inline">\(\mathbf x_i\)</span>
+为满足刚体约束的顶点位置，则有 <span class="math inline">\(\mathbf x_i =
+\mathbf c + \mathbf R \mathbf r_i\)</span>，其中 <span
+class="math inline">\(\mathbf R\)</span> 为某旋转矩阵</p></li>
 <li><p>优化目标为</p>
 <p><span class="math display">\[
 \{ \mathbf c, \mathbf R \} = \text{argmin} \sum_{i} ||\mathbf c +
@@ -592,9 +595,9 @@ R\)</span>为某旋转矩阵</p></li>
 \{ \mathbf c, \mathbf R \} = \text{argmin} \sum_{i} ||\mathbf c +
 \mathbf R \mathbf r_i - \mathbf y_i||^2
 \]</span></p>
-<p>考虑<span class="math inline">\(\mathbf
-A\)</span>为任意矩阵，其中的旋转分量为<span
-class="math inline">\(\mathbf R\)</span>，那么我们可以优化</p>
+<p>考虑 <span class="math inline">\(\mathbf A\)</span>
+为任意矩阵，其中的旋转分量为 <span class="math inline">\(\mathbf
+R\)</span>，那么我们可以优化</p>
 <p><span class="math display">\[
 \{ \mathbf c, \mathbf A \} = \text{argmin} \sum_{i} ||\mathbf c +
 \mathbf A \mathbf r_i - \mathbf y_i||^2
@@ -624,18 +627,18 @@ class="math inline">\(\mathbf R\)</span>，那么我们可以优化</p>
 \mathbf A = \left(\sum_i (\mathbf y_i - \mathbf c) \mathbf r_i^T \right)
 \left( \sum_i \mathbf r_i \mathbf r_i^T \right )^{-1}
 \]</span></p>
-<p>最后，我们将<span class="math inline">\(\mathbf
-A\)</span>做极分解</p>
+<p>最后，我们将 <span class="math inline">\(\mathbf A\)</span>
+做极分解</p>
 <p><span class="math display">\[
 \mathbf A = \mathbf R \mathbf S
 \]</span></p>
-<p>使用其中的旋转部分<span class="math inline">\(\mathbf
-R\)</span>即可。</p>
+<p>使用其中的旋转部分 <span class="math inline">\(\mathbf R\)</span>
+即可。</p>
 <h3 id="shape-matching-流水线">Shape Matching 流水线</h3>
-<p>在 Shape Matching 刚体仿真流程中，不再以统一的<span
-class="math inline">\(\mathbb
-R^3\)</span>向量更新刚体的位置、速度等仿真状态，而是单独仿真每个顶点；也不再考虑转动动力学。即此时<span
-class="math inline">\(\mathbf x = (\mathbf x_1, \dots, \mathbf
+<p>在 Shape Matching 刚体仿真流程中，不再以统一的 <span
+class="math inline">\(\mathbb R^3\)</span>
+向量更新刚体的位置、速度等仿真状态，而是单独仿真每个顶点；也不再考虑转动动力学。即此时
+<span class="math inline">\(\mathbf x = (\mathbf x_1, \dots, \mathbf
 x_n)^T\)</span>，<span class="math inline">\(\mathbf v = (\mathbf v_1
 \dots, \mathbf v_n)^T\)</span>。</p>
 <ol type="1">
@@ -674,26 +677,27 @@ x^{(1)}, \mathbf v^{(1)} \}\)</span></p></li>
 <h3 id="有向距离场">有向距离场</h3>
 <p>有向距离场（signed distance field, SDF）<span
 class="math inline">\(\phi(\mathbf x): \mathbb R^3 \to \mathbb
-R\)</span>针对空间中的位置输出其到某个物体表面的最短距离。若该位置在物体内部，则输出距离为负，否则距离为正。</p>
+R\)</span>
+针对空间中的位置输出其到某个物体表面的最短距离。若该位置在物体内部，则输出距离为负，否则距离为正。</p>
 <p><img src="sdf.png" /></p>
-<p><span class="math inline">\(\phi(\mathbf x)\)</span>的梯度<span
-class="math inline">\(\nabla \phi(\mathbf
-x)\)</span>的方向给出了最快朝外远离物体表面的方向，可以类比法线方向理解。</p>
+<p><span class="math inline">\(\phi(\mathbf x)\)</span> 的梯度 <span
+class="math inline">\(\nabla \phi(\mathbf x)\)</span>
+的方向给出了最快朝外远离物体表面的方向，可以类比法线方向理解。</p>
 <h2 id="罚函数法">罚函数法</h2>
 <h3 id="朴素线性罚函数">朴素线性罚函数</h3>
 <ul>
-<li><p>质点碰撞检测的一般方法：检测其位置<span
-class="math inline">\(\mathbf x\)</span>是否满足<span
+<li><p>质点碰撞检测的一般方法：检测其位置 <span
+class="math inline">\(\mathbf x\)</span> 是否满足 <span
 class="math inline">\(\phi(\mathbf x) \geq
 0\)</span>，若否，则意味着该质点位于物体内部，需进行碰撞处理</p></li>
-<li><p>质点碰撞处理的一般方法：将其沿<span class="math inline">\(\nabla
-\phi(\mathbf x)\)</span>的方向，移动到物体外</p></li>
+<li><p>质点碰撞处理的一般方法：将其沿 <span class="math inline">\(\nabla
+\phi(\mathbf x)\)</span> 的方向，移动到物体外</p></li>
 <li><p>罚函数法（penalty
-method）是一类简单的碰撞处理方法，但在宏观物理上不一定正确。它的一般思路是在质点位于物体内部，或接近物体时，给其一个推力，使其远离物体。推力的方向<span
-class="math inline">\(\mathbf N\)</span>一般是归一化的<span
+method）是一类简单的碰撞处理方法，但在宏观物理上不一定正确。它的一般思路是在质点位于物体内部，或接近物体时，给其一个推力，使其远离物体。推力的方向
+<span class="math inline">\(\mathbf N\)</span> 一般是归一化的 <span
 class="math inline">\(\nabla \phi(\mathbf x)\)</span></p></li>
-<li><p>朴素的罚函数法使用一个正比于<span
-class="math inline">\(\phi(\mathbf x)\)</span>的惩罚推力</p>
+<li><p>朴素的罚函数法使用一个正比于 <span
+class="math inline">\(\phi(\mathbf x)\)</span> 的惩罚推力</p>
 <p><span class="math display">\[
 \mathbf f = -k \phi(\mathbf x) \mathbf N
 \]</span></p></li>
@@ -702,8 +706,8 @@ class="math inline">\(\phi(\mathbf x)\)</span>的惩罚推力</p>
 <p><img src="qpm.png" /></p>
 <h3 id="有缓冲区的线性罚函数">有缓冲区的线性罚函数</h3>
 <ul>
-<li><p>加入一个宽度为<span
-class="math inline">\(\varepsilon\)</span>的缓冲区，可一定程度上缓解穿透问题。此时若检测到<span
+<li><p>加入一个宽度为 <span class="math inline">\(\varepsilon\)</span>
+的缓冲区，可一定程度上缓解穿透问题。此时若检测到 <span
 class="math inline">\(\phi(\mathbf x) &lt;
 \varepsilon\)</span>，就要启动碰撞处理，施加惩罚推力</p>
 <p><span class="math display">\[
@@ -712,9 +716,10 @@ class="math inline">\(\phi(\mathbf x) &lt;
 <li><p>此方法可以让质点在穿透之前就有远离物体的倾向，且计算简单。但若质点速率很高，直接穿进了碰撞体，将导致推力过大，产生视觉不正确的"飞天"现象。</p></li>
 </ul>
 <p><img src="qpmb.png" /></p>
-<h3 id="使用log-barrier的罚函数">使用log-barrier的罚函数</h3>
+<h3 id="使用-log-barrier-的罚函数">使用 log-barrier 的罚函数</h3>
 <ul>
-<li><p>同样地，考虑在一定距离上就施加惩罚推力，可以设计使用log-barrier的罚函数</p>
+<li><p>同样地，考虑在一定距离上就施加惩罚推力，可以设计使用 log-barrier
+的罚函数</p>
 <p><span class="math display">\[
 \mathbf f = \rho \frac{1}{\phi(\mathbf x)} \mathbf N
 \]</span></p></li>
@@ -723,7 +728,9 @@ class="math inline">\(\phi(\mathbf x) &lt;
 <p><img src="lbpm.png" /></p>
 <p>总结：</p>
 <ul>
-<li>如今的物理引擎一般都实装一套简单的罚函数法，罚函数一般为有缓冲区的线性罚函数或log-barrier罚函数。它们实现简单，但都可能存在穿透瑕疵和推力可能过大的问题</li>
+<li>如今的物理引擎一般都实装一套简单的罚函数法，罚函数一般为有缓冲区的线性罚函数或
+log-barrier
+罚函数。它们实现简单，但都可能存在穿透瑕疵和推力可能过大的问题</li>
 <li>罚函数法不适合处理摩擦碰撞的情况</li>
 </ul>
 <h2 id="冲量法">冲量法</h2>
@@ -731,9 +738,9 @@ class="math inline">\(\phi(\mathbf x) &lt;
 <ul>
 <li><p>冲量法（impulse
 method）是一类假设质点的碰撞将导致位置和速度的突变的碰撞处理方法，它基于库仑摩擦定律，在宏观物理上表现得更正确。它的一般思路是在质点位于物体内部时，将质点的位置直接移动到最近的物体表面，并改变其速度方向使其不要再接近物体</p></li>
-<li><p>对碰撞位置<span class="math inline">\(\mathbf
-x\)</span>，新的位置<span class="math inline">\(\mathbf
-x^{\text{new}}\)</span>的更新方法是</p>
+<li><p>对碰撞位置 <span class="math inline">\(\mathbf
+x\)</span>，新的位置 <span class="math inline">\(\mathbf
+x^{\text{new}}\)</span> 的更新方法是</p>
 <p><span class="math display">\[
 \mathbf x^{\text{new}} = \mathbf x - \nabla \phi(\mathbf x) \phi(\mathbf
 x)
@@ -743,8 +750,8 @@ x)
 <h3 id="冲量法---速度更新">冲量法 - 速度更新</h3>
 <ul>
 <li><p>仅仅更新位置是不够的，为了避免接下来仍然发生穿透，我们还需要更新质点的速度</p></li>
-<li><p>对碰撞时的速度<span class="math inline">\(\mathbf
-v\)</span>正交分解得到</p>
+<li><p>对碰撞时的速度 <span class="math inline">\(\mathbf v\)</span>
+正交分解得到</p>
 <p><span class="math display">\[
 \begin{cases}
 \mathbf v_N = (\mathbf v \cdot \mathbf N) \mathbf N, \\
@@ -779,22 +786,22 @@ v_T||}, 0 \right )
 id="刚体碰撞检测与惩罚法的碰撞处理">刚体碰撞检测与惩罚法的碰撞处理</h3>
 <p><img src="detection.png" /></p>
 <ul>
-<li>朴素的刚体碰撞检测方法：对刚体的所有顶点<span
-class="math inline">\(i\)</span>，逐一检测<span
-class="math inline">\(\phi(\mathbf x_i)\)</span>是否为负值</li>
-<li>聪明一点的碰撞检测方法：对碰撞不频繁的刚体，预先建立BVH，进行<span
-class="math inline">\(O(\log n)\)</span>级别的检测</li>
-<li>惩罚法的碰撞处理：对产生碰撞的顶点<span
-class="math inline">\(i\)</span>，累加相应的惩罚力<span
+<li>朴素的刚体碰撞检测方法：对刚体的所有顶点 <span
+class="math inline">\(i\)</span>，逐一检测 <span
+class="math inline">\(\phi(\mathbf x_i)\)</span> 是否为负值</li>
+<li>聪明一点的碰撞检测方法：对碰撞不频繁的刚体，预先建立 BVH，进行 <span
+class="math inline">\(O(\log n)\)</span> 级别的检测</li>
+<li>惩罚法的碰撞处理：对产生碰撞的顶点 <span
+class="math inline">\(i\)</span>，累加相应的惩罚力 <span
 class="math inline">\(\mathbf f_i\)</span></li>
 </ul>
 <h2 id="冲量法的碰撞处理">冲量法的碰撞处理</h2>
 <h3 id="冲量法的碰撞处理-1">冲量法的碰撞处理</h3>
 <p><img src="impulse_problem.png" /></p>
 <ul>
-<li>使用冲量法进行刚体碰撞处理时，我们需要修改碰撞顶点的状态包括位置<span
-class="math inline">\(\mathbf x_i\)</span>、速度<span
-class="math inline">\(\mathbf v_i\)</span>和角速度<span
+<li>使用冲量法进行刚体碰撞处理时，我们需要修改碰撞顶点的状态包括位置
+<span class="math inline">\(\mathbf x_i\)</span>、速度 <span
+class="math inline">\(\mathbf v_i\)</span> 和角速度 <span
 class="math inline">\(\mathbf
 \omega_i\)</span>。但刚体为一整体，单独修改顶点的状态是不可行的</li>
 <li>为此，我们需要从局部状态的修改，推导出整体状态的修改，思路类似逆向运动学（IK）</li>
@@ -806,9 +813,9 @@ id="冲量法的碰撞处理-从局部到整体">冲量法的碰撞处理-从局
 <li><p>简单起见，我们先只讨论碰撞点为单个顶点的情况</p></li>
 <li><p>初始时，<span class="math inline">\(\mathbf v_i = \mathbf v +
 \mathbf \omega \times \mathbf R \mathbf r_i\)</span></p></li>
-<li><p>顶点<span class="math inline">\(i\)</span>被施加冲量<span
-class="math inline">\(\mathbf j_i = \mathbf f_i \Delta
-t\)</span>后，有</p>
+<li><p>顶点 <span class="math inline">\(i\)</span> 被施加冲量 <span
+class="math inline">\(\mathbf j_i = \mathbf f_i \Delta t\)</span>
+后，有</p>
 <p><span class="math display">\[
 \begin{cases}
 \mathbf v^{\text{new}} = \mathbf v + M^{-1} \mathbf j_i, \\
@@ -817,8 +824,8 @@ t\)</span>后，有</p>
 \end{cases}
 \]</span></p></li>
 <li><p>此时，<span class="math inline">\(\mathbf
-v_i^{\text{new}}\)</span>与整体<span class="math inline">\(\mathbf
-v^{\text{new}}, \mathbf \omega^{\text{new}}\)</span>的关系为</p>
+v_i^{\text{new}}\)</span> 与整体 <span class="math inline">\(\mathbf
+v^{\text{new}}, \mathbf \omega^{\text{new}}\)</span> 的关系为</p>
 <p><span class="math display">\[
 \mathbf v_i^{\text{new}} = \mathbf v^{\text{new}} + \mathbf
 \omega^{\text{new}} \times \mathbf R \mathbf r_i
@@ -840,9 +847,9 @@ v^{\text{new}}, \mathbf \omega^{\text{new}}\)</span>的关系为</p>
 j_i
     \end{aligned}
 \]</span></p>
-<p>其中<span class="math inline">\(\mathbf F_i\)</span>是一个与<span
-class="math inline">\(\mathbf R, \mathbf r_i, \mathbf
-I\)</span>有关的线性算子。于是</p>
+<p>其中 <span class="math inline">\(\mathbf F_i\)</span> 是一个与 <span
+class="math inline">\(\mathbf R, \mathbf r_i, \mathbf I\)</span>
+有关的线性算子。于是</p>
 <p><span class="math display">\[
 \mathbf j_i = \mathbf K_i^{-1} (\mathbf v_i^{\text{new}} - \mathbf v_i)
 \]</span></p>
@@ -853,11 +860,11 @@ I\)</span>有关的线性算子。于是</p>
 <h3 id="冲量法的碰撞处理---流水线">冲量法的碰撞处理 - 流水线</h3>
 <p>冲量法碰撞处理的一般步骤：</p>
 <ol type="1">
-<li><p>输入状态<span class="math inline">\(\mathbf s = \{ \mathbf c,
+<li><p>输入状态 <span class="math inline">\(\mathbf s = \{ \mathbf c,
 \mathbf v, \mathbf \omega \}\)</span></p></li>
-<li><p>使用SDF检测碰撞，记碰撞点集合为<span
-class="math inline">\(U\)</span>。若<span
-class="math inline">\(U\)</span>为空集，则无需碰撞处理</p></li>
+<li><p>使用 SDF 检测碰撞，记碰撞点集合为 <span
+class="math inline">\(U\)</span>。若 <span
+class="math inline">\(U\)</span> 为空集，则无需碰撞处理</p></li>
 <li><p>否则，计算每个碰撞点更新后的位置和速度</p>
 <p><span class="math display">\[
 \begin{cases}
@@ -866,14 +873,14 @@ class="math inline">\(U\)</span>为空集，则无需碰撞处理</p></li>
 \mathbf v_{N, i} = (\mathbf v_i \cdot \mathbf N) \mathbf N, \\
 \mathbf v_{T, i} = \mathbf v_i - \mathbf v_{N, i}, \\
 a = \max \left (1 - \mu_T(1 + \mu_N)\frac{||\mathbf v_{N,
-i}||}{||\mathbf v_{T, i}||}, 0 \right ), \\   
+i}||}{||\mathbf v_{T, i}||}, 0 \right ), \\
 \mathbf v_{N, i}^{\text{new}} = - \mu_N \mathbf v_{N, i}, \\
 \mathbf v_{T, i}^{\text{new}} = a \mathbf v_{T, i}, \\
 \mathbf v^{\text{new}}_i = \mathbf v_{N, i}^{\text{new}} + \mathbf v_{T,
 i}^{\text{new}}
 \end{cases}
 \]</span></p></li>
-<li><p>对每个碰撞点，计算使得其速度发生如上变化的冲量<span
+<li><p>对每个碰撞点，计算使得其速度发生如上变化的冲量 <span
 class="math inline">\(\mathbf j_i\)</span></p>
 <p><span class="math display">\[
 \begin{cases}
@@ -899,7 +906,7 @@ class="math inline">\(\mathbf j_i\)</span></p>
 I^{-1} (\mathbf R \mathbf r_i \times \mathbf j)
         \end{cases}
 \]</span></p></li>
-<li><p>输出状态<span class="math inline">\(\mathbf s^{\text{new}} = \{
+<li><p>输出状态 <span class="math inline">\(\mathbf s^{\text{new}} = \{
 \mathbf c^{\text{new}}, \mathbf v^{\text{new}}, \mathbf
 \omega^{\text{new}} \}\)</span></p></li>
 </ol>
@@ -909,8 +916,8 @@ I^{-1} (\mathbf R \mathbf r_i \times \mathbf j)
 <h2 id="shape-matching-的碰撞处理">Shape Matching 的碰撞处理</h2>
 <h3 id="shape-matching-的碰撞处理-1">Shape Matching 的碰撞处理</h3>
 <ul>
-<li>Shape
-Matching仿真流程中，只需对每个顶点单独进行碰撞处理即可。这一处理方式与可变形体相同</li>
+<li>Shape Matching
+仿真流程中，只需对每个顶点单独进行碰撞处理即可。这一处理方式与可变形体相同</li>
 <li>若使用冲量法进行碰撞处理，则为了保证无穿透，需要在刚体约束之前、约束之后均再执行一遍碰撞检测和处理</li>
 </ul>
 <p><img src="shape_matching_collision.png" /></p>
