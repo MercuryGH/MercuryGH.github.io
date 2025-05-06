@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是笔者多年以来一直都在完善的实时渲染基础笔记，放出来给大家分享。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实时渲染笔记：从光度学到PBR">
+<meta property="og:url" content="https://zrephel.fun/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="这是笔者多年以来一直都在完善的实时渲染基础笔记，放出来给大家分享。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-06T11:17:37.000Z">
+<meta property="article:modified_time" content="2025-05-06T11:24:11.256Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="渲染">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/","path":"2025/05/06/实时渲染笔记：从光度学到PBR/","title":"实时渲染笔记：从光度学到PBR"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>实时渲染笔记：从光度学到PBR | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E5%BA%A6%E5%AD%A6%E4%B8%8E%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%E5%AD%A6"><span class="nav-number">1.</span> <span class="nav-text">光度学与辐射度量学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%89%E5%BA%A6%E5%AD%A6"><span class="nav-number">1.1.</span> <span class="nav-text">光度学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%E5%AD%A6"><span class="nav-number">1.2.</span> <span class="nav-text">辐射度量学</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E4%B8%8E%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">渲染与渲染方程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E4%B8%AD%E7%9A%84%E8%A7%92%E5%BA%A6%E8%BF%91%E4%BC%BC"><span class="nav-number">2.2.</span> <span class="nav-text">镜面反射中的角度近似</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#brdf-%E4%B8%8E%E6%9D%90%E8%B4%A8"><span class="nav-number">3.</span> <span class="nav-text">BRDF 与材质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E7%9A%84%E5%8D%95%E6%B3%A2%E9%95%BF%E5%85%89%E4%BC%A0%E6%92%AD%E5%87%BD%E6%95%B0%E4%B8%8E-bssrdf"><span class="nav-number">3.1.</span> <span class="nav-text">一般的单波长光传播函数与
+BSSRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#svbxdf-%E4%B8%8E-bxdf"><span class="nav-number">3.2.</span> <span class="nav-text">SVBXDF 与 BXDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#brdf"><span class="nav-number">3.3.</span> <span class="nav-text">BRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%B9%E7%90%86"><span class="nav-number">3.4.</span> <span class="nav-text">纹理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84-brdf"><span class="nav-number">4.</span> <span class="nav-text">解析的 BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#blinn--phong-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">(Blinn-) Phong 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pbralbedo-metallic-%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">4.2.</span> <span class="nav-text">PBR：Albedo-metallic 工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84%E6%BC%AB%E5%8F%8D%E5%B0%84-brdf"><span class="nav-number">4.3.</span> <span class="nav-text">解析的漫反射 BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lambert-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.1.</span> <span class="nav-text">Lambert 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#half-lambert-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.2.</span> <span class="nav-text">Half Lambert 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%BC%AB%E5%8F%8D%E5%B0%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.3.</span> <span class="nav-text">其他漫反射模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84-brdf"><span class="nav-number">4.4.</span> <span class="nav-text">解析的镜面反射 BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.1.</span> <span class="nav-text">完全镜面反射模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phong-%E9%AB%98%E5%85%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.2.</span> <span class="nav-text">Phong 高光模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#blinn-phong-kajiya-kay-%E9%AB%98%E5%85%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.3.</span> <span class="nav-text">Blinn-Phong &#x2F; Kajiya-Kay
+高光模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#marschner-%E9%AB%98%E5%85%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.4.</span> <span class="nav-text">Marschner 高光模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E4%BA%8E%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E7%9A%84%E5%BE%AE%E8%A1%A8%E9%9D%A2%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.5.</span> <span class="nav-text">用于镜面反射的微表面模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%95%E7%BA%BF%E5%88%86%E5%B8%83%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.5.1.</span> <span class="nav-text">法线分布函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8F%B2%E6%B6%85%E5%B0%94%E9%A1%B9"><span class="nav-number">4.4.5.2.</span> <span class="nav-text">菲涅尔项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%A0%E4%BD%95%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.5.3.</span> <span class="nav-text">几何函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E6%AF%8D"><span class="nav-number">4.4.5.4.</span> <span class="nav-text">分母</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="实时渲染笔记：从光度学到PBR | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          实时渲染笔记：从光度学到PBR
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-05-06 19:17:37 / Modified: 19:24:11" itemprop="dateCreated datePublished" datetime="2025-05-06T19:17:37+08:00">2025-05-06</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>这是笔者多年以来一直都在完善的实时渲染基础笔记，放出来给大家分享。</p>
+<span id="more"></span>
+<h2 id="光度学与辐射度量学">光度学与辐射度量学</h2>
+<p>光度学与辐射度量学是研究光与电磁辐射测量的姊妹学科。<strong>光度学</strong>（photometry）基于人眼的视觉响应特性，量化可见光的感知强度；<strong>辐射度量学</strong>（radiometry）则从物理角度客观测量电磁辐射能量，覆盖全波段（含不可见光）。两者在单位体系上存在严格对应关系，差异源于是否考虑人眼的光谱灵敏度。</p>
+<h3 id="光度学">光度学</h3>
+<p><strong>光通量</strong>（luminous flux）<span
+class="math inline">\(\Phi\)</span>
+的国际单位是流明（lumen，lm），但它不是国际单位制的基本单位。光通量是考虑了人眼因素后的光的功率，因此某种意义上，与功率
+<span class="math inline">\(\text{W}\)</span> 的量纲可类比。</p>
+<p>举例而言，1W 的 555nm 的绿光，1W 的 632.8nm 的红光和 1W 的 2000nm
+的红外光，能量相同为 1W，但光通量不同：绿光是 1 流明，红光介于 0 到 1
+流明之间，红外则是 0。具体的换算将涉及到光度函数 <span
+class="math inline">\(V(\lambda)\)</span>，这里不再赘述。</p>
+<p><strong>发光强度</strong>（luminous intensity）<span
+class="math inline">\(I\)</span>
+的国际单位（SI）是坎德拉（candela，cd；旧译烛光），它是国际单位制的基本单位之一，满足</p>
+<p><span class="math display">\[
+\text{cd} = \frac{\text{lm}}{\text{sr}}
+\]</span></p>
+<p>其中 <span class="math inline">\(\text{sr} = \text{rad}^2\)</span>
+为立体角微元</p>
+<p><span class="math display">\[
+\mathrm d \omega = \frac{\mathrm dA}{R^2} = \frac{R^2 \sin \theta
+\mathrm d \theta \mathrm d \varphi}{R^2} = \sin \theta \mathrm d \theta
+\mathrm d \varphi
+\]</span></p>
+<p>的量纲。</p>
+<p><strong>亮度</strong>（luminance）<span
+class="math inline">\(L\)</span> 的国际单位是尼特（nit，nt），满足</p>
+<p><span class="math display">\[
+\text{nt} = \frac{\text{lm}}{\text{sr} \cdot \text{m}^2}
+\]</span></p>
+<p>亮度对点光源是无效的，因为点光源的面积为 <span
+class="math inline">\(0\)</span>，因此该值会是无穷大。</p>
+<p>此外还有<strong>照度</strong>或光照强度（illuminance）<span
+class="math inline">\(E\)</span>，国际单位是勒克斯（lux，lx）</p>
+<p><span class="math display">\[
+\text{lx} = \frac{\text{lm}}{\text{m}^2}
+\]</span></p>
+<p>值得注意的是，照度 <span class="math inline">\(E\)</span>
+是定义在被光照的物体表面的，而非与其他光度学单位一样定义在光源表面。因此，一般不说面光源的强度单位是几勒克斯，而是说<strong>流明每平方米</strong>，尽管它们在量纲上完全一致。如果要用这一说法表达面光源的强度，它的物理量的名称是<strong>光度</strong>（luminosity），尽管有的领域并不把光度（luminosity）当作一个物理量。</p>
+<p>游戏引擎中，方向光的强度单位是
+lx，因为其很难定义功率，只能从被照射物体上间接定义。注意这里的方向光的“每平方米”是被照射物体的面积，而非光源的面积。</p>
+<p>点光源的强度单位一般是 lm（总量）或
+cd（某个方向），两者之间的转换公式（仅对点光源成立）为</p>
+<p><span class="math display">\[
+1 \ \text{lm} = 4 \pi \ \text{cd}.
+\]</span></p>
+<p>面光源的强度单位一般是
+nit，该描述的隐含方向为光源的法线方向：如果一个正方形面光源的亮度为 1
+nit，则无论光源面积多大，其每平方米表面在法线方向上发出的光强度为 1 cd
+或 1
+lm。等价地，有时，面光源的强度单位可能也用流明每平方米（或者直接用流明）描述，注意这里的“每平方米”是光源的面积而非被照射物体的面积。</p>
+<ul>
+<li>如果游戏引擎用点光源模拟面光源（如 UE 的矩形光源），则有可能用 cd
+描述其强度。</li>
+</ul>
+<h3 id="辐射度量学">辐射度量学</h3>
+<p>在辐射度量学中，不考虑光度学这一套人眼因素的映射，直接使用功率体系。</p>
+<ul>
+<li>光通量对应辐射通量（radiance flux）或功率</li>
+<li>发光强度对应辐射强度（radiance intensity）</li>
+<li>亮度对应辐射度或辐射率（radiance）</li>
+<li>照度对应辐照度（irradiance）</li>
+<li>光度对应辐光度（radiocity）
+<ul>
+<li>有时 radiocity 会被翻译成“辐射度”。这不是一个好的翻译，因为容易与
+radiance 混淆。</li>
+</ul></li>
+</ul>
+<p>辐射度（radiance）的量纲为</p>
+<p><span class="math display">\[
+L = \left[ \frac{\text{W}}{\text{sr} \cdot \text{m}^2} \right]
+\]</span></p>
+<p>仅对点光源而言，其能量遵循平方反比定律，即</p>
+<p><span class="math display">\[
+L = \frac{I}{r^2}.
+\]</span></p>
+<h2 id="渲染与渲染方程">渲染与渲染方程</h2>
+<p>渲染的输入是场景（包括空间中的物体、光照等）和摄像机位置和角度，输出是基于该摄像机看向场景的图像。</p>
+<p>大概在 1986 年，David Immel et al. 和 James Kajiya
+基于物理原理，同时独立提出了渲染方程的概念，从此基于物理的渲染问题成为了一个严谨的数学问题。</p>
+<h3 id="方程">方程</h3>
+<p>定义</p>
+<p><span class="math display">\[
+(\boldsymbol x_1 \cdot \boldsymbol x_2)_+ = \max(\boldsymbol x_1 \cdot
+\boldsymbol x_2, 0).
+\]</span></p>
+<p>为正半球点乘。那么 BRDF 下的渲染方程，或反射方程为</p>
+<p><span class="math display">\[
+L_o(\boldsymbol x, \boldsymbol \omega_o) = L_e(\boldsymbol x,
+\boldsymbol \omega_o) + \int_{\Omega} L_i(\boldsymbol x, \boldsymbol
+\omega_i) f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_i)
+(\boldsymbol \omega_i \cdot \boldsymbol n)_{+} \, \mathrm d \boldsymbol
+\omega_i.
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(L_o, L_e, L_i\)</span>
+分别为出射辐射度、表面自发光辐射度和入射辐射度</li>
+<li><span class="math inline">\(f_r\)</span>
+为双向反射分布函数（BRDF），一般物体的实时渲染中通常只考虑纯反射。如果要考虑更一般的渲染方程，则需要使用双向光路分布函数（BXDF）</li>
+<li><span class="math inline">\(\boldsymbol \omega_o, \boldsymbol
+\omega_i\)</span> 分别为表面半球上的出射方向和入射方向</li>
+<li><span class="math inline">\(\boldsymbol \omega_i \cdot \boldsymbol
+n\)</span> 为 Lambert
+余弦修正量。考虑光源方向越垂直，表面能量接收越多，且光均匀地反射，因此与观察者位置无关，故这里不使用
+<span class="math inline">\(\boldsymbol \omega_o \cdot \boldsymbol
+n\)</span></li>
+</ul>
+<h3 id="镜面反射中的角度近似">镜面反射中的角度近似</h3>
+<p>记 <span class="math inline">\(\boldsymbol \omega_h =
+\frac{\boldsymbol \omega_i + \boldsymbol \omega_r}{||\boldsymbol
+\omega_i + \boldsymbol \omega_r||}\)</span> 为 <span
+class="math inline">\(\boldsymbol \omega_i\)</span> 和 <span
+class="math inline">\(\boldsymbol \omega_r\)</span> 决定的半程向量。</p>
+<p>通常地，一定有</p>
+<p><span class="math display">\[
+(\boldsymbol \omega_i \cdot \boldsymbol \omega_h)_+ = (\boldsymbol
+\omega_r \cdot \boldsymbol \omega_h)_+.
+\]</span></p>
+<p>如果认为，在计算时 <span class="math inline">\(\boldsymbol
+\omega_o\)</span> 总是位于镜面反射角附近（可能是因为这个 BRDF
+模型只在镜面反射部分有支撑集），那么 <span
+class="math inline">\(\boldsymbol \omega_h \approx \boldsymbol
+n\)</span>，故</p>
+<p><span class="math display">\[
+(\boldsymbol \omega_i \cdot \boldsymbol \omega_h)_+ = (\boldsymbol
+\omega_r \cdot \boldsymbol \omega_h)_+ \approx (\boldsymbol \omega_i
+\cdot \boldsymbol n)_+ \approx (\boldsymbol \omega_r \cdot \boldsymbol
+n)_+ = \cos \theta
+\]</span></p>
+<p>因此，有时会使用 <span class="math inline">\(\cos \theta\)</span>
+表示这些角度，Fresnel Schlick 近似也通常写成 <span
+class="math inline">\(\cos \theta\)</span>。</p>
+<p>在 IBL 中，通常可以用 <span class="math inline">\((\boldsymbol
+\omega_r \cdot \boldsymbol n)_+ = \cos \theta\)</span> 采样 BRDF LUT
+的横轴。这一 LUT 的其中一种构建方法是：假设法线为 <span
+class="math inline">\(\boldsymbol n = (0,0,1)\)</span>，因此可以用 <span
+class="math inline">\(\cos \theta\)</span> 还原 <span
+class="math inline">\(\boldsymbol \omega_r\)</span>，最后对 BRDF
+进行重要性采样还原 <span class="math inline">\(\boldsymbol
+\omega_h\)</span> 和 <span class="math inline">\(\boldsymbol
+\omega_i\)</span>。</p>
+<h2 id="brdf-与材质">BRDF 与材质</h2>
+<p>在视角固定之下的渲染过程只与光源信息、几何信息和物体的材质信息有关系。显然，渲染方程中的
+<span class="math inline">\(f_r\)</span>
+恰好就是材质信息。如何取得一个近似的，易于计算的 <span
+class="math inline">\(f_r\)</span>，一直以来是实时渲染领域中的难题之一。</p>
+<h3 id="一般的单波长光传播函数与-bssrdf">一般的单波长光传播函数与
+BSSRDF</h3>
+<p>一般的单波长电磁波传播函数 <span class="math inline">\(f(\boldsymbol
+x_i, \boldsymbol x_o, \boldsymbol \omega_i, \boldsymbol
+\omega_o)\)</span> 的参数包括入射点 <span
+class="math inline">\(\boldsymbol x_i\)</span>，出射点 <span
+class="math inline">\(\boldsymbol x_o\)</span>，入射角度 <span
+class="math inline">\(\boldsymbol \omega_i\)</span> 和出射角度 <span
+class="math inline">\(\boldsymbol \omega_o\)</span>，其中 <span
+class="math inline">\(\boldsymbol x\)</span> 是一个在物体表面的 uv
+上变化的二维坐标，<span class="math inline">\(\boldsymbol
+\omega\)</span>
+代表一个半球面上的方向，可用球坐标系的两个分量描述，因此整体可以看作是一个八维函数。</p>
+<p>BSSRDF
+的参数列表与这个函数相同，它们都考虑了完整的模型次表面光路。</p>
+<h3 id="svbxdf-与-bxdf">SVBXDF 与 BXDF</h3>
+<p>显然，八维函数的计算压力是很大的。如果近似认为，光线总是在同一点入射后出射，能量不会传播到其他点，那么
+Spatial-Varying (SV) BXDF <span class="math inline">\(f(\boldsymbol x,
+\boldsymbol \omega_o, \boldsymbol \omega_i)\)</span>
+是一个六维函数，可直接用来描述该物体表面材质的变化信息。</p>
+<p>如果我们不考虑材质在空间中的变化，那么 BXDF
+就只具有两个输入：入射角度和出射角度。这样的 BXDF <span
+class="math inline">\(f(\boldsymbol \omega_o, \boldsymbol
+\omega_i)\)</span> 可以看成是一个四维函数，可能包含多重散射，因此
+BTDF、BSDF、BRDF 都可以是 BXDF 的组成部分（但 BSSRDF
+不是）。它的定义式是</p>
+<p><span class="math display">\[
+f(\boldsymbol \omega_o, \boldsymbol \omega_i) = \frac{\text{Radiance
+outgoing}}{\text{Irradiance incoming}} = \frac{\mathrm d L_o(\boldsymbol
+\omega_r)}{\mathrm d E_i(\boldsymbol \omega_i)} = \frac{\mathrm d
+L_o(\boldsymbol \omega_o)}{L_i(\boldsymbol \omega_i) \cos \boldsymbol
+\omega_i \, \mathrm d \boldsymbol\omega_i}
+\]</span></p>
+<p>BXDF 的量纲是</p>
+<p><span class="math display">\[
+f = \left[ \frac{1}{\text{sr}} \right]
+\]</span></p>
+<p>这可以由 <span class="math inline">\(\mathrm d \boldsymbol
+\omega_i\)</span> 的量纲为 <span
+class="math inline">\(\text{sr}\)</span> 直接推出。它的含义是：BXDF
+是单位立体角上光的传播比例。</p>
+<h3 id="brdf">BRDF</h3>
+<p>在只考虑纯反射的近似下，实时渲染中的 BXDF 都是 BRDF。BRDF 应当具有
+BXDF
+的以上性质，且如果它需要符合物理意义，那它就必须遵守光路可逆性，即</p>
+<p><span class="math display">\[
+f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_i) =
+f_r(\boldsymbol x, \boldsymbol \omega_i, \boldsymbol \omega_o)
+\]</span></p>
+<p>以及能量守恒性，即</p>
+<p><span class="math display">\[
+\int_{\Omega} f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol
+\omega_i) (\boldsymbol \omega_i \cdot \boldsymbol n)_{+} \, \mathrm d
+\boldsymbol \omega_i \leq 1.
+\]</span></p>
+<p>PBR 的 BRDF
+都具有这些性质（使用半程向量代替反射向量计算会破坏性质，但仍近似具有性质），但很多经验光照模型如
+Blinn-Phong，以及 NPR 的 BRDF 并不具有这些性质。</p>
+<h3 id="纹理">纹理</h3>
+<p>最后，我们知道，现实生活中的物体材质其实并不均匀。因此，我们需要考虑同一物体的材质在空间中的变化。我们可以使用二维纹理来存储这一系列的变化，然后在运行时采样这一纹理贴图，获取相应的材质信息。</p>
+<p>在其他领域中，“材质”和“纹理”可能会有一些其他的解释方式：</p>
+<ul>
+<li>纹理可用于材质，也可用于其他光照、深度表达和物理仿真等，如法线纹理、阴影映射、三维空间中的
+SDF。</li>
+<li>图形 API 如 OpenGL
+中的纹理，基本上是一个可采样的高维数组，因此帧缓冲也可以看作是“纹理”。图形
+API 一般不会主动抽象“材质”。</li>
+<li>UE5
+里的材质是一个可编程的，计算光照时会调用的对象，而纹理则是一个图片。材质可以索引纹理，也可以完全由计算节点产生（程序化纹理）。</li>
+</ul>
+<p>最后，我们可以给实时渲染中参与光照计算的材质下个定义：材质信息是物体表面存储的，与渲染有关的信息，包含
+BRDF 模型信息和纹理信息。值得一提的是，法线贴图、flowmap
+等等虽然也是纹理，但并不是本文讨论的“参与光照计算的”纹理。</p>
+<h2 id="解析的-brdf">解析的 BRDF</h2>
+<p>直接使用四维或六维的查找表存放 BRDF
+，在实时渲染中通常不具备可行性。因此，实时渲染中通常使用解析模型进行逼近。此时，我们只需要存储几个有限的参数，参数
+<span class="math inline">\(\boldsymbol \omega_i, \boldsymbol
+\omega_r\)</span> 会直接参与计算，所以这样解析的 BRDF
+是一个存储上“零维”的函数。</p>
+<p>由于解析的 BRDF 是 0D 的，所以只需一系列二维纹理（albedo, matallic,
+normal 等）即可表达物体表面。因此，这样的 SVBRDF 在存储上是 2D 的。</p>
+<h3 id="blinn--phong-模型">(Blinn-) Phong 模型</h3>
+<p>(Blinn-) Phong 模型可以说是最经典非物理的 BRDF
+模型之一，它计算简洁，效果合理，至今仍在硬件性能不高的实时渲染应用中得到广泛应用。</p>
+<p>严谨地说，由于 ambient
+项的存在，这一模型实际上是对渲染方程做了近似，而非对 BRDF 做了近似。</p>
+<p>但如果认为全局的 ambient
+项近似等价于从积分中获取间接光照，可以认为，Blinn-Phong 模型就是 Lambert
+漫反射模型 + Blinn-Phong 高光模型。</p>
+<h3 id="pbralbedo-metallic-工作流">PBR：Albedo-metallic 工作流</h3>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://jason-ma.notion.site/14792a22c0c280f48af6ec2fb974daa1">对于实时渲染中漫反射和镜面反射的普遍误解</a></p>
+</blockquote>
+<p>经过工业界和学术界的共同探索，基于物理的渲染（PBR）成为了十几年来次世代渲染模型的代名词，在无数影视和游戏作品中大放异彩。Albedo-metallic
+工作流是 PBR 的代表模型，即运用微表面模型的光照模型的代表。这一工作流的
+BRDF 为</p>
+<p><span class="math display">\[
+f_r(\boldsymbol \omega_i, \boldsymbol \omega_r) = (1-m) af_d(\boldsymbol
+\omega_i, \boldsymbol \omega_r) + ((1-m)F_0 + ma)f_s(\boldsymbol
+\omega_i, \boldsymbol \omega_r)
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(a \in [0,1]^3\)</span> 为 base
+color。它与 Albedo Specular 工作流中的 diffuse 有细微差别。</li>
+<li><span class="math inline">\(m \in [0,1]\)</span> 为 metallic，<span
+class="math inline">\(k_d = 1 - m\)</span>。</li>
+<li><span class="math inline">\(F_0 \in [0,1]\)</span>
+为法线方向反射度，即 0
+度入射（垂直入射）时的菲涅尔反射率。对电介质，一般取 <span
+class="math inline">\(F_0 = R = 0.04 = \left| \frac{n_1 - n_2}{n_1 +
+n_2} \right |^2\)</span>，其中 <span class="math inline">\(n_1 = 1.5,
+n_2 = 1.0\)</span> 为介质折射率，此时 <span
+class="math inline">\(F_0\)</span>
+为单分量标量。对金属（导体），其折射率为复数，不能用上式计算 <span
+class="math inline">\(F_0\)</span>，一般不使用物理正确的 <span
+class="math inline">\(F_0\)</span>，详见下文“菲涅尔项”。
+<ul>
+<li>有时，美术可能希望控制非金属的 <span
+class="math inline">\(F_0\)</span>，UE 提供了 specular
+用于控制该参数。因此，UE 中可能会同时出现 metallic 和 specular 贴图，但
+specular 贴图只在 <span class="math inline">\(m &lt; 1\)</span>
+时有效，此时 <span class="math inline">\(F_0\)</span> 不再是 <span
+class="math inline">\(0.04\)</span> 或其他单分量标量，而是 specular
+贴图存储的数据（三分量标量）。</li>
+</ul></li>
+<li><span class="math inline">\(k_s = \text{lerp}(F_0, a, m) = (1-m)F_0
++ ma\)</span>。如果 <span class="math inline">\(m &lt; 1\)</span>，一般
+<span class="math inline">\(F_0 = 0.04\)</span> 或由 specular 决定（在
+UE 中，specular = <span
+class="math inline">\(\text{saturate}(\frac{F_0}{0.08})\)</span>，因此默认
+specular = 0.5 对应 <span class="math inline">\(F_0=0.04\)</span>）。
+<ul>
+<li>有时，为了让美术达到效果，在某些材质中，可能会为镜面反射项乘上
+specular tint（高光染色）这个参数，而不是 <span
+class="math inline">\(\text{lerp}(F_0, a,
+m)\)</span>，这类似于仅在镜面反射部分有效的 base color。</li>
+</ul></li>
+<li><span class="math inline">\(f_d\)</span>
+为漫反射（diffuse）分量，通常为 Lambert 模型。</li>
+<li><span class="math inline">\(f_s\)</span>
+为镜面反射（specular）分量，通常为微表面模型。</li>
+</ul>
+<p>PS：</p>
+<ul>
+<li>Albedo Metallic 工作流中的 base color 和 Albedo Specular 工作流中的
+diffuse 都可以叫 albedo。</li>
+<li>Albedo Metallic 工作流中，不止漫反射，镜面反射也与 albedo (base
+color) 有关。Albedo Specular 工作流中，镜面反射与 albedo (diffuse)
+无关。</li>
+<li>Albedo Metallic 工作流中，对混合材质，其 base color
+贴图中会额外存储其 <span class="math inline">\(F_0\)</span>
+贴图（总计四通道，但可以“压缩”到三通道）。Albedo Specular
+工作流中，specular 贴图就是 <span class="math inline">\(F_0\)</span>
+贴图（三通道）。</li>
+<li>在 UE
+中，为节省空间，可能会合并多个单通道贴图至一个多通道贴图。</li>
+</ul>
+<h3 id="解析的漫反射-brdf">解析的漫反射 BRDF</h3>
+<h4 id="lambert-模型">Lambert 模型</h4>
+<p><span class="math display">\[
+f_d(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{1}{\pi},
+\]</span></p>
+<p>由于 Lambert 模型过于简单，与 <span class="math inline">\(\boldsymbol
+\omega_i, \boldsymbol \omega_r\)</span> 均无关，因此也有 Disney
+改进的漫反射模型（并不能量守恒），考虑了表面的粗糙度，其与 <span
+class="math inline">\(\boldsymbol \omega_i, \boldsymbol
+\omega_r\)</span> 的余弦有关。Frostbite 引擎中的漫反射可选用 Disney
+改进的漫反射模型。</p>
+<p>Lambert
+模型中，漫反射与粗糙度（微表面法线偏离宏表面法线的程度）没有关系。这是因为，漫反射的原理是：光进入物体被吸收，光线在内部“随机”地继续向内被吸收或向外反射出去。在
+Lambert
+的假设下，由于经历了多次弹射，这些向外反射的方向宏观上是均匀的，故产生了全向的漫反射，不需要考虑表面的粗糙度。但在现实物理中，漫反射会与表面粗糙度有关，因此可以运用微表面模型进行更复杂的建模（尽管在实时渲染中一般用不到）。</p>
+<p>对于金属 <span class="math inline">\(m = 1\)</span>
+的情形，没有漫反射，可以理解为此时金属全部吸收了非 base color
+的光线，没有在内部经过多次弹射再从其他角度反射出去，而 base color
+的光线则全都镜面反射出去了。</p>
+<h4 id="half-lambert-模型">Half Lambert 模型</h4>
+<p>这是《半条命》的光照模型，让暗面也有亮度的变化。它没有物理依据，但能带来提亮的视觉效果，也常用于
+NPR 中。</p>
+<p><span class="math display">\[
+f_d(\boldsymbol \omega_i, \boldsymbol \omega_r) =
+\frac{\alpha(\boldsymbol \omega_i \cdot \boldsymbol n) + \beta}{\pi
+(\boldsymbol \omega_i \cdot \boldsymbol n)_{+}},
+\]</span></p>
+<p>其中 <span class="math inline">\(\alpha\)</span> 和 <span
+class="math inline">\(\beta\)</span>
+为可调节的参数。注意分子的点积可以为负值。对于背光面，<span
+class="math inline">\(\boldsymbol \omega_i \cdot \boldsymbol n &lt;
+0\)</span>，一般取 <span class="math inline">\(\alpha = \beta =
+1/2\)</span>，如此即可将分子结果映射到 <span
+class="math inline">\([0,1]\)</span>，同时让暗面具有亮度变化。</p>
+<p>分母的 <span class="math inline">\((\boldsymbol \omega_i \cdot
+\boldsymbol n)_{+}\)</span>
+是为了抵消渲染方程积分项中的那一项而存在的。</p>
+<h4 id="其他漫反射模型">其他漫反射模型</h4>
+<p>漫反射也可以用微表面模型建模，但那大概是离线渲染才会考虑的内容，此处不再赘述。</p>
+<h3 id="解析的镜面反射-brdf">解析的镜面反射 BRDF</h3>
+<h4 id="完全镜面反射模型">完全镜面反射模型</h4>
+<p>如果镜面反射仅发生在 <span
+class="math inline">\(\text{reflect}(\boldsymbol \omega_i)\)</span>
+这个方向上，那么 BRDF 形如冲激函数</p>
+<p><span class="math display">\[
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) =
+\frac{\delta(\boldsymbol \omega_r - \text{reflect}(\boldsymbol
+\omega_i))}{K}
+\]</span></p>
+<p>其中 <span class="math inline">\(K\)</span>
+是用于归一化的校正因子，满足 <span class="math inline">\(K =
+(\boldsymbol \omega_i \cdot \boldsymbol
+n)_{+}\)</span>，因为渲染方程积分项里面有这个，但镜面反射不考虑 Lambert
+修正量，所以要抵消它。</p>
+<h4 id="phong-高光模型">Phong 高光模型</h4>
+<p>这是一个古老的 Specular BRDF：</p>
+<p><span class="math display">\[
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{(\boldsymbol
+\omega_r \cdot \text{reflect}(\boldsymbol \omega_i))_{+}^{\alpha}}{K}
+\]</span></p>
+<p>其中</p>
+<ul>
+<li><span class="math inline">\(K\)</span> 的意义同上</li>
+<li><span class="math inline">\(\alpha\)</span>
+为光泽度，值越大高光越明显。但较大的 <span
+class="math inline">\(\alpha\)</span>
+并不会让材质显得光泽，反而会很假</li>
+</ul>
+<h4 id="blinn-phong-kajiya-kay-高光模型">Blinn-Phong / Kajiya-Kay
+高光模型</h4>
+<p>这是一个在 Phong 的基础上改进的，古老的 Specular BRDF：</p>
+<p><span class="math display">\[
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{(\boldsymbol
+\omega_h \cdot \boldsymbol n)_{+}^{\alpha}}{K}
+\]</span></p>
+<p><span class="math inline">\(K\)</span> 和 <span
+class="math inline">\(\alpha\)</span> 的意义同上。</p>
+<p>半程向量常与 <span class="math inline">\(\boldsymbol n\)</span>
+做点积，该结果越大，则此处的微表面呈现高光（镜面反射）越明显。</p>
+<blockquote>
+<p>https://zhuanlan.zhihu.com/p/135910659</p>
+</blockquote>
+<p>(Blinn-) Phong 和 Kajiya-Kay
+其实是同一个光照模型，只不过前者用于一般物体表面（正半球）上，后者用于毛发表面（微圆柱的一个截面）上，因此后者会用圆柱的走向向量
+<span class="math inline">\(\boldsymbol t\)</span> 代替法向量 <span
+class="math inline">\(\boldsymbol n\)</span>
+进行光照计算，实际上是只取了一个影响最大的法线做 Blinn-Phong
+光照计算，得到近似的结果，公式为</p>
+<p><span class="math display">\[
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{\left(\sqrt { 1
+- (\boldsymbol \omega_h \cdot \boldsymbol t)^2}\right)^{\alpha}}{K}
+\]</span></p>
+<h4 id="marschner-高光模型">Marschner 高光模型</h4>
+<p>这是一个关于毛发的散射模型，比较复杂。</p>
+<p><span class="math display">\[
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \text{Gaussian}(\dots)
+\]</span></p>
+<h4 id="用于镜面反射的微表面模型">用于镜面反射的微表面模型</h4>
+<p>这是当下实时渲染引擎统一使用的 Cook-Torrance Specular BRDF
+(microfacet specular BRDF):</p>
+<p><span class="math display">\[
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{D(\boldsymbol
+\omega_h) F(\boldsymbol \omega_r, \boldsymbol \omega_h) G(\boldsymbol
+\omega_i, \boldsymbol \omega_r, \boldsymbol \omega_h)}{4 (\boldsymbol n
+\cdot \boldsymbol \omega_i)_+ ( \boldsymbol n \cdot \boldsymbol
+\omega_r)_{+}},
+\]</span></p>
+<p>其中：</p>
+<h5 id="法线分布函数">法线分布函数</h5>
+<p>法线分布函数（NDF），定义为物体表面微元的微表面面积与宏表面面积之比，再除以单位立体角。其量纲与
+BRDF 相同。一般采用 GGX（ground glass unknown），为</p>
+<p><span class="math display">\[
+D(\boldsymbol \omega_h) = \frac{\alpha^2}{\pi((\boldsymbol \omega_h
+\cdot \boldsymbol n)_{+}^2 (\alpha^2 - 1) + 1)^2}
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(\alpha \in [0,1]\)</span>
+为粗糙度（roughness），为微表面法线偏离宏表面法线的程度。光滑度（glosiness）=
+1 - 粗糙度。</li>
+<li>当 <span class="math inline">\(\alpha\)</span> 较大时，specular
+主要呈现 Diffuse Reflection，高光不明显——有人将这样 <span
+class="math inline">\(\alpha\)</span>
+较大的材质称为“漫反射材质”，实际上这与一般讨论的 Lambert
+漫反射项没有关系，或称“粗糙反射材质”较合适。</li>
+<li>当 <span class="math inline">\((\boldsymbol \omega_h \cdot
+\boldsymbol n)_{+}^2 = 1\)</span> 时，<span class="math inline">\(D =
+\frac{1}{\pi
+\alpha^2}\)</span>，即在镜面反射方向上，粗糙度越低，高光的亮度越高。</li>
+<li>当 <span class="math inline">\((\boldsymbol \omega_h \cdot
+\boldsymbol n)_{+}^2 = 0\)</span> 时，<span class="math inline">\(D =
+\frac{\alpha^2}{\pi}\)</span>，即在镜面反射方向的垂直方向上，粗糙度越高，粗糙反射的亮度越高。</li>
+<li>当 <span class="math inline">\(\alpha = 1\)</span> 时，<span
+class="math inline">\(D =
+\frac{1}{\pi}\)</span>，此时为<strong>完全粗糙反射</strong>，类似
+Lambert 漫反射。</li>
+<li>当 <span class="math inline">\(\alpha \to 0^+\)</span> 时，<span
+class="math inline">\(D \to \frac{0^+}{\pi(1- (\boldsymbol \omega_h
+\cdot \boldsymbol
+n)_{+}^2)}\)</span>，此时越接近镜面反射方向，高光的亮度越高，但需要很完美的镜面反射方向才能采集到高光，即高光与非高光区域的阶跃更明显。当
+<span class="math inline">\(\alpha = 0\)</span> 时，一般 <span
+class="math inline">\(D=0\)</span>，但在镜面反射方向，有 <span
+class="math inline">\(D = \frac{0}{0}\)</span>，常见的处理方式是直接认为
+<span class="math inline">\(D = 0\)</span>，此时不存在高光，<span
+class="math inline">\(f_s =
+0\)</span>。为了避免这种反直觉的情况出现，一般的引擎会 clamp <span
+class="math inline">\(\alpha\)</span> 的值，例如令其最小值为 <span
+class="math inline">\(0.001\)</span>。</li>
+</ul>
+<h5 id="菲涅尔项">菲涅尔项</h5>
+<p>菲涅尔项为 <span
+class="math inline">\(F\)</span>，描述在掠射角（<span
+class="math inline">\((\boldsymbol \omega_r \cdot \boldsymbol
+\omega_h)_{+}\)</span> 接近 <span
+class="math inline">\(0\)</span>）时能观察到更强烈的镜面反射的现象，一般采用
+Schlick 近似</p>
+<p><span class="math display">\[
+F(\boldsymbol \omega_r, \boldsymbol \omega_h) = F_0 + (F_{90} - F_0) (1
+- (\boldsymbol \omega_r \cdot \boldsymbol \omega_h)_{+})^5
+\]</span></p>
+<ul>
+<li>其中 <span class="math inline">\(F_0\)</span>, <span
+class="math inline">\(F_{90}\)</span> 为材料在 $ _r, _h $ 分别为 0
+度（垂直入射）和 90 度（掠射）时的菲涅尔反射率</li>
+<li>由于这是镜面反射部分的菲尼尔项，因此 <span
+class="math inline">\((\boldsymbol \omega_i \cdot \boldsymbol
+\omega_h)_+ = (\boldsymbol \omega_r \cdot \boldsymbol \omega_h)_+
+\approx (\boldsymbol \omega_i \cdot \boldsymbol n)_+ \approx
+(\boldsymbol \omega_r \cdot \boldsymbol n)_+ = \cos
+\theta\)</span>，式中的 <span class="math inline">\((\boldsymbol
+\omega_r \cdot \boldsymbol \omega_h)_{+}\)</span>
+完全可以由不同的方式出现。</li>
+<li><span class="math inline">\(F_0, F_{90}\)</span>
+都有公式解，基于物体表面与光线传播介质的折射率。通常情况下，<span
+class="math inline">\(F_{90}\)</span> 可以用 1.0
+近似，因为在掠射角的镜面反射相当强烈。
+<ul>
+<li>对非金属，一般取 <span class="math inline">\(F_0 = \left| \frac{n_1
+- n_2}{n_1 + n_2} \right |^2 = 0.04\)</span>；如果 specular 生效，<span
+class="math inline">\(F_0\)</span> 由 specular 决定</li>
+<li>对金属，<span class="math inline">\(F_0 =
+a\)</span>（albedo）。然而其实 Schlick
+近似仅对非金属是正确的，对金属并非物理正确，但这样设置的视觉效果整体上是对的</li>
+<li>对 metallic <span class="math inline">\(m \in (0,1)\)</span>
+的材质，可设 $F_0 = (0.04, a, m)
+$。当然这也不是物理正确的，但视觉上是对的。</li>
+<li>一些渲染引擎可能还会有一些 hack，详见 Filament
+的做法，这里不再赘述</li>
+</ul></li>
+</ul>
+<p>在游戏引擎中，菲涅尔项</p>
+<p><span class="math display">\[
+F = \text{saturate}(F_0 + (1-F_0)(1- \boldsymbol n \cdot \boldsymbol
+v)^\gamma)
+\]</span></p>
+<p>往往可以用来做一些非物理的“造假”视觉效果。例如：</p>
+<ul>
+<li>获取物体边缘。可以想象对一个球体而言，物体边缘位于 <span
+class="math inline">\(\boldsymbol n \cdot \boldsymbol v \to 0\)</span>
+的位置，因此 <span class="math inline">\(F \to 1\)</span>，反之 <span
+class="math inline">\(F \to
+0\)</span>，即可获得物体边缘的蒙版。进而可以：
+<ul>
+<li>进行卡通渲染描边。</li>
+<li>勾勒透明物体的视效。观察到日常生活中，玻璃的边缘往往具有较高的不透明度，而中间往往透明度高。</li>
+<li>线性插值折射率，获得玻璃变形效果（UE 的 <code>refraction</code>
+节点）</li>
+<li>对掠射角下的片元做额外着色。一些天鹅绒材质可能应用这种效果（sheen）</li>
+</ul></li>
+</ul>
+<h5 id="几何函数">几何函数</h5>
+<p>几何函数为 <span
+class="math inline">\(G\)</span>，为统计学上的微表面遮挡关系，近似方式多种多样。</p>
+<h5 id="分母">分母</h5>
+<p>分母 <span class="math inline">\(4 (\boldsymbol n \cdot \boldsymbol
+\omega_i)_+ ( \boldsymbol n \cdot \boldsymbol \omega_r)_{+}\)</span>
+为校正因子。当 <span class="math inline">\((\boldsymbol n \cdot
+\boldsymbol \omega_i)_+\)</span> 或 <span class="math inline">\((
+\boldsymbol n \cdot \boldsymbol \omega_r)_{+}\)</span> 接近于 0 时，整个
+<span class="math inline">\(f_s\)</span> 可能很大，产生光晕的
+artifact，这个时候就需要 <span class="math inline">\(G\)</span>
+项来修正：<span class="math inline">\(G\)</span>
+在这种情况总会是一个很小的值。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/" title="实时渲染笔记：从光度学到PBR">https://zrephel.fun/2025/05/06/实时渲染笔记：从光度学到PBR/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E6%B8%B2%E6%9F%93/" rel="tag"># 渲染</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/" rel="prev" title="有向距离场的构建与应用">
+                  <i class="fa fa-angle-left"></i> 有向距离场的构建与应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/05/06/%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E7%AC%94%E8%AE%B0%EF%BC%9A%E4%BB%8E%E5%85%89%E5%BA%A6%E5%AD%A6%E5%88%B0PBR/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
