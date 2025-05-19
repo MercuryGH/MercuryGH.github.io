@@ -54,7 +54,7 @@
 <meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/clothtangle.png">
 <meta property="og:image" content="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E5%8A%A8%E7%94%BB%EF%BC%9A%E5%B8%83%E6%96%99%E4%B8%8E%E8%BD%AF%E4%BD%93%E5%8A%A8%E5%8A%9B%E5%AD%A6/contour.png">
 <meta property="article:published_time" content="2024-12-17T13:54:41.000Z">
-<meta property="article:modified_time" content="2025-02-10T08:18:05.288Z">
+<meta property="article:modified_time" content="2025-05-19T14:13:31.536Z">
 <meta property="article:author" content="Mercury">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="物理仿真">
@@ -160,7 +160,7 @@ III</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">39</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -229,7 +229,7 @@ III</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-10 16:18:05" itemprop="dateModified" datetime="2025-02-10T16:18:05+08:00">2025-02-10</time>
+      <time title="Modified: 2025-05-19 22:13:31" itemprop="dateModified" datetime="2025-05-19T22:13:31+08:00">2025-05-19</time>
     </span>
 
   
@@ -846,7 +846,8 @@ C\)</span>引入仿真流程，改进了PBD中原始的约束求解步骤，并�
 <p>尽管XPBD的运行效率不及PBD，但物理正确性更高，且能稳健地仿真<span
 class="math inline">\(k \to
 \infty\)</span>时的弹簧约束。这种约束可用于骨骼动画中关节的连接。UE5
-Chaos在5.3版本后加入了基于XPBD的布料仿真功能。</p>
+Chaos在5.3版本后加入了基于XPBD的布料仿真功能。UE5 Groom
+仿真发丝使用的也是 XPBD 框架。</p>
 <p>XPBD改进的是PBD中的约束投影这一步：</p>
 <p><span class="math display">\[
     \mathbf x^{\text{new}} = \text{Projection}(\mathbf x)
@@ -951,7 +952,7 @@ O\)</span>可应用于ragdoll动画</li>
 <li>相对PBD需要求解线性方程组，开销较大。因此UE5
 Chaos使用迭代法求解，在一般情况下，具有合理性和高效性。但在<span
 class="math inline">\(\mathbf C \to \mathbf
-O\)</span>时，迭代法给出的结果收敛速率不高，难以得到刚性的结果，直接求解线性方程组会更合适。</li>
+O\)</span>时，迭代法给出的结果收敛速率不高，难以得到刚性的结果，直接求解线性方程组可能会更合适。</li>
 </ul></li>
 </ul>
 <h1 id="碰撞检测与处理">碰撞检测与处理</h1>
