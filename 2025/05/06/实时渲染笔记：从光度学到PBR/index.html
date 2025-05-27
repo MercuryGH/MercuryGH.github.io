@@ -27,7 +27,7 @@
 <meta property="og:description" content="这是笔者多年以来一直都在完善的实时渲染基础笔记，放出来给大家分享。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-05-06T11:17:37.000Z">
-<meta property="article:modified_time" content="2025-05-06T11:24:11.256Z">
+<meta property="article:modified_time" content="2025-05-27T13:23:49.811Z">
 <meta property="article:author" content="Mercury">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="渲染">
@@ -114,7 +114,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E5%BA%A6%E5%AD%A6%E4%B8%8E%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%E5%AD%A6"><span class="nav-number">1.</span> <span class="nav-text">光度学与辐射度量学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%89%E5%BA%A6%E5%AD%A6"><span class="nav-number">1.1.</span> <span class="nav-text">光度学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%E5%AD%A6"><span class="nav-number">1.2.</span> <span class="nav-text">辐射度量学</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E4%B8%8E%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">渲染与渲染方程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E4%B8%AD%E7%9A%84%E8%A7%92%E5%BA%A6%E8%BF%91%E4%BC%BC"><span class="nav-number">2.2.</span> <span class="nav-text">镜面反射中的角度近似</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#brdf-%E4%B8%8E%E6%9D%90%E8%B4%A8"><span class="nav-number">3.</span> <span class="nav-text">BRDF 与材质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E7%9A%84%E5%8D%95%E6%B3%A2%E9%95%BF%E5%85%89%E4%BC%A0%E6%92%AD%E5%87%BD%E6%95%B0%E4%B8%8E-bssrdf"><span class="nav-number">3.1.</span> <span class="nav-text">一般的单波长光传播函数与
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E5%BA%A6%E5%AD%A6%E4%B8%8E%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%E5%AD%A6"><span class="nav-number">1.</span> <span class="nav-text">光度学与辐射度量学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%89%E5%BA%A6%E5%AD%A6"><span class="nav-number">1.1.</span> <span class="nav-text">光度学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%E5%AD%A6"><span class="nav-number">1.2.</span> <span class="nav-text">辐射度量学</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E4%B8%8E%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">渲染与渲染方程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E6%96%B9%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">反射方程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E4%B8%AD%E7%9A%84%E8%A7%92%E5%BA%A6%E8%BF%91%E4%BC%BC"><span class="nav-number">2.2.</span> <span class="nav-text">镜面反射中的角度近似</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#brdf-%E4%B8%8E%E6%9D%90%E8%B4%A8"><span class="nav-number">3.</span> <span class="nav-text">BRDF 与材质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E7%9A%84%E5%8D%95%E6%B3%A2%E9%95%BF%E5%85%89%E4%BC%A0%E6%92%AD%E5%87%BD%E6%95%B0%E4%B8%8E-bssrdf"><span class="nav-number">3.1.</span> <span class="nav-text">一般的单波长光传播函数与
 BSSRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#svbxdf-%E4%B8%8E-bxdf"><span class="nav-number">3.2.</span> <span class="nav-text">SVBXDF 与 BXDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#brdf"><span class="nav-number">3.3.</span> <span class="nav-text">BRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%B9%E7%90%86"><span class="nav-number">3.4.</span> <span class="nav-text">纹理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84-brdf"><span class="nav-number">4.</span> <span class="nav-text">解析的 BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#blinn--phong-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">(Blinn-) Phong 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pbralbedo-metallic-%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">4.2.</span> <span class="nav-text">PBR：Albedo-metallic 工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84%E6%BC%AB%E5%8F%8D%E5%B0%84-brdf"><span class="nav-number">4.3.</span> <span class="nav-text">解析的漫反射 BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#lambert-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.1.</span> <span class="nav-text">Lambert 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#half-lambert-%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.2.</span> <span class="nav-text">Half Lambert 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%BC%AB%E5%8F%8D%E5%B0%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.3.3.</span> <span class="nav-text">其他漫反射模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E7%9A%84%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84-brdf"><span class="nav-number">4.4.</span> <span class="nav-text">解析的镜面反射 BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.1.</span> <span class="nav-text">完全镜面反射模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phong-%E9%AB%98%E5%85%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.2.</span> <span class="nav-text">Phong 高光模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#blinn-phong-kajiya-kay-%E9%AB%98%E5%85%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.3.</span> <span class="nav-text">Blinn-Phong &#x2F; Kajiya-Kay
 高光模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#marschner-%E9%AB%98%E5%85%89%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.4.</span> <span class="nav-text">Marschner 高光模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E4%BA%8E%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84%E7%9A%84%E5%BE%AE%E8%A1%A8%E9%9D%A2%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.4.5.</span> <span class="nav-text">用于镜面反射的微表面模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%95%E7%BA%BF%E5%88%86%E5%B8%83%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.5.1.</span> <span class="nav-text">法线分布函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8F%B2%E6%B6%85%E5%B0%94%E9%A1%B9"><span class="nav-number">4.4.5.2.</span> <span class="nav-text">菲涅尔项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%A0%E4%BD%95%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.5.3.</span> <span class="nav-text">几何函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E6%AF%8D"><span class="nav-number">4.4.5.4.</span> <span class="nav-text">分母</span></a></li></ol></li></ol></li></ol></li></ol></div>
         </div>
@@ -129,7 +129,7 @@ BSSRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href=
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -190,9 +190,15 @@ BSSRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href=
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-05-06 19:17:37 / Modified: 19:24:11" itemprop="dateCreated datePublished" datetime="2025-05-06T19:17:37+08:00">2025-05-06</time>
+      <time title="Created: 2025-05-06 19:17:37" itemprop="dateCreated datePublished" datetime="2025-05-06T19:17:37+08:00">2025-05-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-05-27 21:23:49" itemprop="dateModified" datetime="2025-05-27T21:23:49+08:00">2025-05-27</time>
     </span>
 
   
@@ -299,8 +305,8 @@ L = \frac{I}{r^2}.
 <h2 id="渲染与渲染方程">渲染与渲染方程</h2>
 <p>渲染的输入是场景（包括空间中的物体、光照等）和摄像机位置和角度，输出是基于该摄像机看向场景的图像。</p>
 <p>大概在 1986 年，David Immel et al. 和 James Kajiya
-基于物理原理，同时独立提出了渲染方程的概念，从此基于物理的渲染问题成为了一个严谨的数学问题。</p>
-<h3 id="方程">方程</h3>
+基于物理原理，分别独立提出了渲染方程的概念，从此基于物理的渲染问题成为了一个严谨的数学问题。</p>
+<h3 id="反射方程">反射方程</h3>
 <p>定义</p>
 <p><span class="math display">\[
 (\boldsymbol x_1 \cdot \boldsymbol x_2)_+ = \max(\boldsymbol x_1 \cdot
@@ -308,24 +314,24 @@ L = \frac{I}{r^2}.
 \]</span></p>
 <p>为正半球点乘。那么 BRDF 下的渲染方程，或反射方程为</p>
 <p><span class="math display">\[
-L_o(\boldsymbol x, \boldsymbol \omega_o) = L_e(\boldsymbol x,
-\boldsymbol \omega_o) + \int_{\Omega} L_i(\boldsymbol x, \boldsymbol
-\omega_i) f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_i)
+L_r(\boldsymbol x, \boldsymbol \omega_r) = L_e(\boldsymbol x,
+\boldsymbol \omega_r) + \int_{\Omega} L_i(\boldsymbol x, \boldsymbol
+\omega_i) f_r(\boldsymbol x, \boldsymbol \omega_r, \boldsymbol \omega_i)
 (\boldsymbol \omega_i \cdot \boldsymbol n)_{+} \, \mathrm d \boldsymbol
 \omega_i.
 \]</span></p>
 <p>其中：</p>
 <ul>
-<li><span class="math inline">\(L_o, L_e, L_i\)</span>
-分别为出射辐射度、表面自发光辐射度和入射辐射度</li>
+<li><span class="math inline">\(L_r, L_e, L_i\)</span>
+分别为反射出射辐射度、表面自发光辐射度和入射辐射度</li>
 <li><span class="math inline">\(f_r\)</span>
 为双向反射分布函数（BRDF），一般物体的实时渲染中通常只考虑纯反射。如果要考虑更一般的渲染方程，则需要使用双向光路分布函数（BXDF）</li>
-<li><span class="math inline">\(\boldsymbol \omega_o, \boldsymbol
-\omega_i\)</span> 分别为表面半球上的出射方向和入射方向</li>
+<li><span class="math inline">\(\boldsymbol \omega_r, \boldsymbol
+\omega_i\)</span> 分别为表面半球上的反射出射方向和入射方向</li>
 <li><span class="math inline">\(\boldsymbol \omega_i \cdot \boldsymbol
 n\)</span> 为 Lambert
 余弦修正量。考虑光源方向越垂直，表面能量接收越多，且光均匀地反射，因此与观察者位置无关，故这里不使用
-<span class="math inline">\(\boldsymbol \omega_o \cdot \boldsymbol
+<span class="math inline">\(\boldsymbol \omega_r \cdot \boldsymbol
 n\)</span></li>
 </ul>
 <h3 id="镜面反射中的角度近似">镜面反射中的角度近似</h3>
@@ -333,28 +339,42 @@ n\)</span></li>
 \frac{\boldsymbol \omega_i + \boldsymbol \omega_r}{||\boldsymbol
 \omega_i + \boldsymbol \omega_r||}\)</span> 为 <span
 class="math inline">\(\boldsymbol \omega_i\)</span> 和 <span
-class="math inline">\(\boldsymbol \omega_r\)</span> 决定的半程向量。</p>
+class="math inline">\(\boldsymbol \omega_r\)</span> 决定的半程向量。如果
+<span class="math inline">\(\boldsymbol \omega_r, \boldsymbol
+\omega_i\)</span> 是微表面模型的镜面反射对，那么 <span
+class="math inline">\(\boldsymbol \omega_h\)</span>
+就是“微表面法线”，即这是在微表面上的正确镜面反射法线。</p>
 <p>通常地，一定有</p>
 <p><span class="math display">\[
 (\boldsymbol \omega_i \cdot \boldsymbol \omega_h)_+ = (\boldsymbol
 \omega_r \cdot \boldsymbol \omega_h)_+.
 \]</span></p>
 <p>如果认为，在计算时 <span class="math inline">\(\boldsymbol
-\omega_o\)</span> 总是位于镜面反射角附近（可能是因为这个 BRDF
-模型只在镜面反射部分有支撑集），那么 <span
-class="math inline">\(\boldsymbol \omega_h \approx \boldsymbol
-n\)</span>，故</p>
+\omega_r\)</span>
+总是位于镜面反射角附近，例如使用了只在镜面反射部分有显著支撑集的 BRDF
+模型，或低粗糙度物体，那么 <span class="math inline">\(\boldsymbol
+\omega_h \approx \boldsymbol n\)</span>，故</p>
 <p><span class="math display">\[
 (\boldsymbol \omega_i \cdot \boldsymbol \omega_h)_+ = (\boldsymbol
 \omega_r \cdot \boldsymbol \omega_h)_+ \approx (\boldsymbol \omega_i
 \cdot \boldsymbol n)_+ \approx (\boldsymbol \omega_r \cdot \boldsymbol
 n)_+ = \cos \theta
 \]</span></p>
+<p>如果并没有这一假设，例如仅使用了 Lambert
+反射计算，或高粗糙度物体，上述近似通常将不再成立，需要明确一种表达方式。但若使用法线分布函数
+<span class="math inline">\(D\)</span> 如 GGX 对所有 <span
+class="math inline">\(\boldsymbol \omega_h\)</span>
+加权平均，仍会等价地得到 <span class="math inline">\(\boldsymbol
+\omega_h\)</span> 的平均值位于 <span class="math inline">\(\boldsymbol
+n\)</span> 附近的结论。也就是说，尽管 <span
+class="math inline">\(F\)</span> 本身的以上近似不能成立，但综合考虑
+<span class="math inline">\(\int_{\Omega} DF \, \mathrm d \boldsymbol
+\omega_h\)</span>，以上近似仍能成立。</p>
 <p>因此，有时会使用 <span class="math inline">\(\cos \theta\)</span>
 表示这些角度，Fresnel Schlick 近似也通常写成 <span
 class="math inline">\(\cos \theta\)</span>。</p>
-<p>在 IBL 中，通常可以用 <span class="math inline">\((\boldsymbol
-\omega_r \cdot \boldsymbol n)_+ = \cos \theta\)</span> 采样 BRDF LUT
+<p>在 IBL 中，通常用 <span class="math inline">\((\boldsymbol \omega_r
+\cdot \boldsymbol n)_+ = \cos \theta\)</span> 采样 specular BRDF LUT
 的横轴。这一 LUT 的其中一种构建方法是：假设法线为 <span
 class="math inline">\(\boldsymbol n = (0,0,1)\)</span>，因此可以用 <span
 class="math inline">\(\cos \theta\)</span> 还原 <span
@@ -380,12 +400,13 @@ class="math inline">\(\boldsymbol x\)</span> 是一个在物体表面的 uv
 上变化的二维坐标，<span class="math inline">\(\boldsymbol
 \omega\)</span>
 代表一个半球面上的方向，可用球坐标系的两个分量描述，因此整体可以看作是一个八维函数。</p>
-<p>BSSRDF
-的参数列表与这个函数相同，它们都考虑了完整的模型次表面光路。</p>
+<p>BSSRDF (bidirectional scattering surface reflectance distribution
+function)
+的参数列表与这个函数相同，它们都考虑了完整的模型次表面光路，可完整描述次表面散射。</p>
 <h3 id="svbxdf-与-bxdf">SVBXDF 与 BXDF</h3>
 <p>显然，八维函数的计算压力是很大的。如果近似认为，光线总是在同一点入射后出射，能量不会传播到其他点，那么
 Spatial-Varying (SV) BXDF <span class="math inline">\(f(\boldsymbol x,
-\boldsymbol \omega_o, \boldsymbol \omega_i)\)</span>
+\boldsymbol \omega_r, \boldsymbol \omega_i)\)</span>
 是一个六维函数，可直接用来描述该物体表面材质的变化信息。</p>
 <p>如果我们不考虑材质在空间中的变化，那么 BXDF
 就只具有两个输入：入射角度和出射角度。这样的 BXDF <span
@@ -396,9 +417,9 @@ BTDF、BSDF、BRDF 都可以是 BXDF 的组成部分（但 BSSRDF
 <p><span class="math display">\[
 f(\boldsymbol \omega_o, \boldsymbol \omega_i) = \frac{\text{Radiance
 outgoing}}{\text{Irradiance incoming}} = \frac{\mathrm d L_o(\boldsymbol
-\omega_r)}{\mathrm d E_i(\boldsymbol \omega_i)} = \frac{\mathrm d
-L_o(\boldsymbol \omega_o)}{L_i(\boldsymbol \omega_i) \cos \boldsymbol
-\omega_i \, \mathrm d \boldsymbol\omega_i}
+\omega_o)}{\mathrm d E_i(\boldsymbol \omega_i)} = \frac{\mathrm d
+L_o(\boldsymbol \omega_o)}{L_i(\boldsymbol \omega_i) \cos \theta_i \,
+\mathrm d \boldsymbol \omega_i}
 \]</span></p>
 <p>BXDF 的量纲是</p>
 <p><span class="math display">\[
@@ -409,16 +430,18 @@ f = \left[ \frac{1}{\text{sr}} \right]
 class="math inline">\(\text{sr}\)</span> 直接推出。它的含义是：BXDF
 是单位立体角上光的传播比例。</p>
 <h3 id="brdf">BRDF</h3>
-<p>在只考虑纯反射的近似下，实时渲染中的 BXDF 都是 BRDF。BRDF 应当具有
-BXDF
+<p>在只考虑纯反射的近似下，实时渲染中的 BXDF 都是 BRDF (bidirectional
+reflectance distribution function)。我们将 BRDF 的出射向量从 <span
+class="math inline">\(\boldsymbol \omega_o\)</span> 改写成 <span
+class="math inline">\(\boldsymbol \omega_r\)</span>。BRDF 应当具有 BXDF
 的以上性质，且如果它需要符合物理意义，那它就必须遵守光路可逆性，即</p>
 <p><span class="math display">\[
-f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_i) =
-f_r(\boldsymbol x, \boldsymbol \omega_i, \boldsymbol \omega_o)
+f_r(\boldsymbol x, \boldsymbol \omega_r, \boldsymbol \omega_i) =
+f_r(\boldsymbol x, \boldsymbol \omega_i, \boldsymbol \omega_r)
 \]</span></p>
 <p>以及能量守恒性，即</p>
 <p><span class="math display">\[
-\int_{\Omega} f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol
+\int_{\Omega} f_r(\boldsymbol x, \boldsymbol \omega_r, \boldsymbol
 \omega_i) (\boldsymbol \omega_i \cdot \boldsymbol n)_{+} \, \mathrm d
 \boldsymbol \omega_i \leq 1.
 \]</span></p>
@@ -437,8 +460,8 @@ API 一般不会主动抽象“材质”。</li>
 <li>UE5
 里的材质是一个可编程的，计算光照时会调用的对象，而纹理则是一个图片。材质可以索引纹理，也可以完全由计算节点产生（程序化纹理）。</li>
 </ul>
-<p>最后，我们可以给实时渲染中参与光照计算的材质下个定义：材质信息是物体表面存储的，与渲染有关的信息，包含
-BRDF 模型信息和纹理信息。值得一提的是，法线贴图、flowmap
+<p>最后，我们可以给实时渲染中参与光照计算的材质下个定义：材质信息是物体表面存储的，与渲染有关的信息，包含纹理信息，并隐式地包含
+BRDF 模型信息。值得一提的是，法线贴图、flowmap
 等等虽然也是纹理，但并不是本文讨论的“参与光照计算的”纹理。</p>
 <h2 id="解析的-brdf">解析的 BRDF</h2>
 <p>直接使用四维或六维的查找表存放 BRDF
@@ -567,13 +590,18 @@ class="math inline">\([0,1]\)</span>，同时让暗面具有亮度变化。</p>
 <p>漫反射也可以用微表面模型建模，但那大概是离线渲染才会考虑的内容，此处不再赘述。</p>
 <h3 id="解析的镜面反射-brdf">解析的镜面反射 BRDF</h3>
 <h4 id="完全镜面反射模型">完全镜面反射模型</h4>
-<p>如果镜面反射仅发生在 <span
-class="math inline">\(\text{reflect}(\boldsymbol \omega_i)\)</span>
-这个方向上，那么 BRDF 形如冲激函数</p>
+<p>已知入射向量和法线，那么镜面反射向量的计算</p>
+<p><span class="math display">\[
+\text{reflect}(\boldsymbol \omega_i, \boldsymbol n) = 2(\boldsymbol
+\omega_i \cdot \boldsymbol n) \boldsymbol n - \boldsymbol \omega_i.
+\]</span></p>
+<p>如果反射仅发生在 <span
+class="math inline">\(\text{reflect}(\boldsymbol \omega_i, \boldsymbol
+n)\)</span> 这个镜面反射的方向上，那么 BRDF 形如冲激函数</p>
 <p><span class="math display">\[
 f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) =
-\frac{\delta(\boldsymbol \omega_r - \text{reflect}(\boldsymbol
-\omega_i))}{K}
+\frac{\delta(\boldsymbol \omega_r - \text{reflect}(\boldsymbol \omega_i,
+\boldsymbol n))}{K}
 \]</span></p>
 <p>其中 <span class="math inline">\(K\)</span>
 是用于归一化的校正因子，满足 <span class="math inline">\(K =
@@ -584,7 +612,8 @@ n)_{+}\)</span>，因为渲染方程积分项里面有这个，但镜面反射�
 <p>这是一个古老的 Specular BRDF：</p>
 <p><span class="math display">\[
 f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{(\boldsymbol
-\omega_r \cdot \text{reflect}(\boldsymbol \omega_i))_{+}^{\alpha}}{K}
+\omega_r \cdot \text{reflect}(\boldsymbol \omega_i, \boldsymbol
+n))_{+}^{\alpha}}{K}
 \]</span></p>
 <p>其中</p>
 <ul>
@@ -609,7 +638,7 @@ class="math inline">\(\alpha\)</span> 的意义同上。</p>
 <p>https://zhuanlan.zhihu.com/p/135910659</p>
 </blockquote>
 <p>(Blinn-) Phong 和 Kajiya-Kay
-其实是同一个光照模型，只不过前者用于一般物体表面（正半球）上，后者用于毛发表面（微圆柱的一个截面）上，因此后者会用圆柱的走向向量
+其实是同一个光照模型，只不过前者用于一般物体表面（正半球）上，后者用于毛发表面（微圆柱的一个截面）上，因此后者会用圆柱的切向量
 <span class="math inline">\(\boldsymbol t\)</span> 代替法向量 <span
 class="math inline">\(\boldsymbol n\)</span>
 进行光照计算，实际上是只取了一个影响最大的法线做 Blinn-Phong
@@ -651,11 +680,11 @@ class="math inline">\(\alpha\)</span>
 较大的材质称为“漫反射材质”，实际上这与一般讨论的 Lambert
 漫反射项没有关系，或称“粗糙反射材质”较合适。</li>
 <li>当 <span class="math inline">\((\boldsymbol \omega_h \cdot
-\boldsymbol n)_{+}^2 = 1\)</span> 时，<span class="math inline">\(D =
+\boldsymbol n)_{+} = 1\)</span> 时，<span class="math inline">\(D =
 \frac{1}{\pi
 \alpha^2}\)</span>，即在镜面反射方向上，粗糙度越低，高光的亮度越高。</li>
 <li>当 <span class="math inline">\((\boldsymbol \omega_h \cdot
-\boldsymbol n)_{+}^2 = 0\)</span> 时，<span class="math inline">\(D =
+\boldsymbol n)_{+} = 0\)</span> 时，<span class="math inline">\(D =
 \frac{\alpha^2}{\pi}\)</span>，即在镜面反射方向的垂直方向上，粗糙度越高，粗糙反射的亮度越高。</li>
 <li>当 <span class="math inline">\(\alpha = 1\)</span> 时，<span
 class="math inline">\(D =
@@ -696,7 +725,7 @@ class="math inline">\((\boldsymbol \omega_i \cdot \boldsymbol
 (\boldsymbol \omega_r \cdot \boldsymbol n)_+ = \cos
 \theta\)</span>，式中的 <span class="math inline">\((\boldsymbol
 \omega_r \cdot \boldsymbol \omega_h)_{+}\)</span>
-完全可以由不同的方式出现。</li>
+完全可以由不同的方式出现。如果物体的粗糙度过高，那么以上近似可能不成立，但粗糙度高时</li>
 <li><span class="math inline">\(F_0, F_{90}\)</span>
 都有公式解，基于物体表面与光线传播介质的折射率。通常情况下，<span
 class="math inline">\(F_{90}\)</span> 可以用 1.0
@@ -737,17 +766,17 @@ class="math inline">\(F \to
 </ul>
 <h5 id="几何函数">几何函数</h5>
 <p>几何函数为 <span
-class="math inline">\(G\)</span>，为统计学上的微表面遮挡关系，近似方式多种多样。</p>
+class="math inline">\(G\)</span>，为统计学上的微表面自遮挡关系，近似方式多种多样。这一项可以在掠射角时，避免结果过亮。详见下文。</p>
 <h5 id="分母">分母</h5>
 <p>分母 <span class="math inline">\(4 (\boldsymbol n \cdot \boldsymbol
 \omega_i)_+ ( \boldsymbol n \cdot \boldsymbol \omega_r)_{+}\)</span>
 为校正因子。当 <span class="math inline">\((\boldsymbol n \cdot
 \boldsymbol \omega_i)_+\)</span> 或 <span class="math inline">\((
-\boldsymbol n \cdot \boldsymbol \omega_r)_{+}\)</span> 接近于 0 时，整个
-<span class="math inline">\(f_s\)</span> 可能很大，产生光晕的
-artifact，这个时候就需要 <span class="math inline">\(G\)</span>
-项来修正：<span class="math inline">\(G\)</span>
-在这种情况总会是一个很小的值。</p>
+\boldsymbol n \cdot \boldsymbol \omega_r)_{+}\)</span> 接近于 0
+时，即掠射角时，整个 <span class="math inline">\(f_s\)</span>
+可能很大，产生光晕的 artifact，这个时候就需要几何函数 <span
+class="math inline">\(G\)</span> 项来修正：<span
+class="math inline">\(G\)</span> 在掠射角时总会是一个很小的值。</p>
 
     </div>
 

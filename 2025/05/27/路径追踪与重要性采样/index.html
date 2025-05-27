@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="重要性采样和多重重要性采样在路径追踪中的应用 - 知乎  本文是作者对路径追踪中的重要性采样原理和实践的笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="路径追踪与重要性采样">
+<meta property="og:url" content="https://zrephel.fun/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="重要性采样和多重重要性采样在路径追踪中的应用 - 知乎  本文是作者对路径追踪中的重要性采样原理和实践的笔记。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-05-27T13:29:35.000Z">
+<meta property="article:modified_time" content="2025-05-27T13:40:40.552Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="渲染">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/","path":"2025/05/27/路径追踪与重要性采样/","title":"路径追踪与重要性采样"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>路径追踪与重要性采样 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-number">1.</span> <span class="nav-text">重要性采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%87%E5%8C%80%E5%8D%8A%E7%90%83%E9%87%87%E6%A0%B7"><span class="nav-number">2.</span> <span class="nav-text">均匀半球采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E6%BA%90%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-number">3.</span> <span class="nav-text">光源的重要性采样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%89%E6%BA%90%E7%9A%84%E5%88%86%E5%B1%82%E9%87%87%E6%A0%B7"><span class="nav-number">3.1.</span> <span class="nav-text">光源的分层采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9D%87%E5%8C%80%E9%87%87%E6%A0%B7%E9%9D%A2%E5%85%89%E6%BA%90"><span class="nav-number">3.2.</span> <span class="nav-text">均匀采样面光源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#brdf-%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7"><span class="nav-number">4.</span> <span class="nav-text">BRDF 的重要性采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E5%90%88%E5%85%89%E6%BA%90%E9%87%87%E6%A0%B7%E5%92%8C-brdf-%E9%87%87%E6%A0%B7%E5%A4%9A%E9%87%8D%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7mis"><span class="nav-number">5.</span> <span class="nav-text">结合光源采样和 BRDF
+采样——多重重要性采样（MIS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%91%E5%AD%A6%E5%9C%B0%E4%B8%AD%E6%96%AD%E9%80%92%E5%BD%92"><span class="nav-number">6.</span> <span class="nav-text">科学地中断递归</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%951"><span class="nav-number">6.1.</span> <span class="nav-text">方法1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%952"><span class="nav-number">6.2.</span> <span class="nav-text">方法2</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="路径追踪与重要性采样 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          路径追踪与重要性采样
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-05-27 21:29:35 / Modified: 21:40:40" itemprop="dateCreated datePublished" datetime="2025-05-27T21:29:35+08:00">2025-05-27</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/360420413">重要性采样和多重重要性采样在路径追踪中的应用
+- 知乎</a></p>
+</blockquote>
+<p>本文是作者对路径追踪中的重要性采样原理和实践的笔记。</p>
+<span id="more"></span>
+<h2 id="重要性采样">重要性采样</h2>
+<p>设积分</p>
+<p><span class="math display">\[
+L_o(\boldsymbol x, \boldsymbol \omega_o) =\int_{\Omega} L_i(\boldsymbol
+x, \boldsymbol \omega_i) f_r(\boldsymbol x, \boldsymbol \omega_o,
+\boldsymbol \omega_i) (\boldsymbol \omega_i \cdot \boldsymbol n)_{+} \,
+\mathrm d \boldsymbol \omega_i.
+\]</span></p>
+<p>我们有蒙特卡洛方法计算和分（离散蒙特卡洛积分）的一般公式</p>
+<p><span class="math display">\[
+\int_I f(x) \, \mathrm dx \approx \frac{1}{N} \sum_{i=1}^N
+\frac{f(X_i)}{p(X_i)},
+\]</span></p>
+<p>其中 <span class="math inline">\(X_i \sim p(x)\)</span>。</p>
+<p>那么，我们令</p>
+<p><span class="math display">\[
+f = L_i(\boldsymbol x, \boldsymbol \omega_i) f_r(\boldsymbol x,
+\boldsymbol \omega_o, \boldsymbol \omega_i) (\boldsymbol \omega_i \cdot
+\boldsymbol n)_{+}
+\]</span></p>
+<p>然后找到一个 PDF <span
+class="math inline">\(p(x)\)</span>，即可对给定的反射点 <span
+class="math inline">\(\boldsymbol x\)</span> 和出射光线 <span
+class="math inline">\(\boldsymbol \omega_o\)</span>，在变量 <span
+class="math inline">\(\boldsymbol \omega_i\)</span>
+上进行蒙特卡洛积分</p>
+<p><span class="math display">\[
+L_o(\boldsymbol x, \boldsymbol \omega_o) \approx \frac{1}{N}
+\sum_{i=1}^N \frac{L_i(\boldsymbol x, \boldsymbol \omega_i)
+f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_i)
+(\boldsymbol \omega_i \cdot \boldsymbol n)_{+}}{p(\boldsymbol
+\omega_i)}.
+\]</span></p>
+<p>在 MCPT 中，一般 <span class="math inline">\(N =
+1\)</span>，即在一个像素采样过程中，对当前表面仅发射一个光线。通过在同一像素点发射多根光线的方式进行平均，可以达到
+<span class="math inline">\(N\)</span>
+较大时类似的效果，且也能解决锯齿问题。对分布式光线追踪，<span
+class="math inline">\(N\)</span> 可能不为 1。</p>
+<h2 id="均匀半球采样">均匀半球采样</h2>
+<p>由于半球的面积为 <span class="math inline">\(2
+\pi\)</span>，而采样相当于在这个面积中均匀取一个点，故均匀采样的 PDF
+为</p>
+<p><span class="math display">\[
+p(\boldsymbol \omega_i) = \frac{1}{2 \pi}.
+\]</span></p>
+<h2 id="光源的重要性采样">光源的重要性采样</h2>
+<p>我们可以直接采样光源，以避免无头苍蝇般地均匀采样，获取显著的效率提升。</p>
+<p>设当前反射点为 <span class="math inline">\(\boldsymbol
+x\)</span>，面光源的采样点为 <span class="math inline">\(\boldsymbol
+x&#39;\)</span>，根据单位立体角的定义，有</p>
+<p><span class="math display">\[
+\mathrm d \boldsymbol \omega = \frac{\mathrm dA}{||\boldsymbol x -
+\boldsymbol x&#39;||^2}
+\]</span></p>
+<p>其中 <span class="math inline">\(\mathrm d A\)</span>
+为单位立体面的面积。若面光源为矩形面光源，则我们还需要将其投影到矩形面上。记光源的法向为
+<span class="math inline">\(\boldsymbol n&#39;\)</span>，则</p>
+<p><span class="math display">\[
+\mathrm d A = \mathrm d S \cdot (\boldsymbol n&#39; \cdot - \boldsymbol
+\omega_i)_+
+\]</span></p>
+<p>其中 <span class="math inline">\(\mathrm d S\)</span>
+为单位矩形面的面积。整合得到</p>
+<p><span class="math display">\[
+L_o(\boldsymbol x, \boldsymbol \omega_o) = \int_{\Omega} L_i(\boldsymbol
+x, \boldsymbol \omega_i) f_r(\boldsymbol x, \boldsymbol \omega_o,
+\boldsymbol \omega_i) \frac{(\boldsymbol \omega_i \cdot \boldsymbol
+n)_{+} \cdot (-\boldsymbol \omega_i \cdot \boldsymbol
+n&#39;)_{+}}{||\boldsymbol x - \boldsymbol x&#39;||^2} \, \mathrm d A
+\]</span></p>
+<p>那么，我们在用蒙特卡洛积分时，就可以在均匀面光源上采样，即 PDF 为</p>
+<p><span class="math display">\[
+p(\boldsymbol \omega_i) = \frac{1}{A},
+\]</span></p>
+<p>其中 <span class="math inline">\(A\)</span> 为该面光源的面积。</p>
+<p>或等价地，使用原式</p>
+<p><span class="math display">\[
+L_o(\boldsymbol x, \boldsymbol \omega_o) \approx \frac{1}{N}
+\sum_{i=1}^N \frac{L_i(\boldsymbol x, \boldsymbol \omega_i)
+f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_i)
+(\boldsymbol \omega_i \cdot \boldsymbol n)_{+}}{p(\boldsymbol
+\omega_i)},
+\]</span></p>
+<p>令 PDF 为</p>
+<p><span class="math display">\[
+p(\boldsymbol \omega_i) = \frac{||\boldsymbol x - \boldsymbol
+x&#39;||^2}{(-\boldsymbol \omega_i \cdot \boldsymbol n&#39;)_{+}} \cdot
+\frac{1}{A}
+\]</span></p>
+<p>亦可。</p>
+<p>如果有多个面光源，简单的方法是均匀随机地取一个面光源采样即可。也可以进一步地，在光源这方面做分层采样（stratified
+sampling）。</p>
+<p>最后，我们可以累加光源采样部分的 <span
+class="math inline">\(L_o\)</span> 和间接光照采样部分的 <span
+class="math inline">\(L_o\)</span>，获得最终的 <span
+class="math inline">\(L_o\)</span>。</p>
+<h3 id="光源的分层采样">光源的分层采样</h3>
+<p>设场景中有若干个面光源，它们的功率、位置与面积不同。简单地每次均匀随机地取一个面光源采样显然是有偏的，会引入较大的方差。</p>
+<p>因此，我们可以考虑根据光源功率与面积的乘积加权进行采样，这样高贡献的光源就更容易被选中。在实践上，这也更接近无偏的结果。</p>
+<h3 id="均匀采样面光源">均匀采样面光源</h3>
+<p>选中了面光源之后，我们还需要从该面光源中随机选择一点，作为光线来源的采样点。通常的算法都需要在该面光源中获取均匀随机一点，以避免引入偏差。</p>
+<p>因此，需要注意实现对三角形、圆面和球面等的均匀随机采样算法。一些很朴素的采样算法得到的结果并不是均匀的，需要仔细设计。</p>
+<h2 id="brdf-的重要性采样">BRDF 的重要性采样</h2>
+<p>对 BRDF 的重要性采样的一般思路是，让 PDF <span
+class="math inline">\(p(\boldsymbol \omega_i)\)</span> 正比于 <span
+class="math inline">\(f_r(\boldsymbol x, \boldsymbol \omega_o,
+\boldsymbol \omega_i) (\boldsymbol \omega_i \cdot \boldsymbol
+n)_{+}\)</span>。</p>
+<p>在理想情况下，让 PDF 直接解析地正比于 <span
+class="math inline">\(f_r(\boldsymbol x, \boldsymbol \omega_o,
+\boldsymbol \omega_i) (\boldsymbol \omega_i \cdot \boldsymbol
+n)_{+}\)</span>，可以取得完全正确的结果，即蒙特卡洛积分与求和之间取等号。但一般情况下，无法做到完全正比，只能做到大致走向一致。</p>
+<p>例如，在 PBR 模型中，包含 diffuse 和 specular
+两项，两者可以分别采样。</p>
+<ul>
+<li>对于 diffuse，只需让 PDF 正比于 <span
+class="math inline">\((\boldsymbol \omega_i \cdot \boldsymbol
+n)_{+}\)</span> 即可，这不难。</li>
+<li>对于 specular，其中有 DFG 三项，只能让 PDF
+正比于法线分布函数（NDF）<span class="math inline">\(D\)</span>。</li>
+</ul>
+<p>推导出相应的 PDF <span class="math inline">\(p_d, p_s\)</span>
+后，需要将它们用系数整合成完整的 PDF</p>
+<p><span class="math display">\[
+p = k_d p_d + k_sp_s,
+\]</span></p>
+<p>其中 <span class="math inline">\(k_d + k_s = 1\)</span>。具体使用哪个
+PDF 采样，可以使用运行时随机数 <span class="math inline">\(u \sim
+U(0,1)\)</span> 决定。</p>
+<p>当使用一些会计算 metallic <span class="math inline">\(m\)</span> 和
+<span class="math inline">\(F_0\)</span> 的 PBR 模型时，可以重新考虑
+BRDF 的采样系数，即 <span class="math inline">\(k_s\)</span> 可能与
+<span class="math inline">\(F_0, m\)</span> 等系数均有关。</p>
+<p>在重要性采样中，采样 GGX 等 NDF 的计算量很大。只有 Blinn-Phong 的
+NDF（经过了某种归一化）</p>
+<p><span class="math display">\[
+D(\boldsymbol \omega_h) = \frac{\alpha + 2}{2 \pi} (\boldsymbol \omega_h
+\cdot \boldsymbol n)_{+}^{\alpha}
+\]</span></p>
+<p>在采样上有比较解析的方法，因此计算量最小，也是<a
+target="_blank" rel="noopener" href="https://github.com/MercuryGH/gl-projects">作者的 Path Tracer</a>
+实现的唯一材质类型。</p>
+<h2 id="结合光源采样和-brdf-采样多重重要性采样mis">结合光源采样和 BRDF
+采样——多重重要性采样（MIS）</h2>
+<p>可能出现这种情况：</p>
+<ul>
+<li>在某些光滑金属区域，采样光源位置函数的结果很难贡献到近似冲激函数的
+BRDF 上，因此产生噪点状的结果。</li>
+<li>在某些粗糙区域，采样正比于 BRDF
+函数的结果很难命中极小的光源，因此产生噪点状的结果。</li>
+</ul>
+<p>因此，可以用某个权重函数把两种重要性采样的 PDF 结合起来，形成新的
+PDF</p>
+<p><span class="math display">\[
+\begin{aligned}
+L_o(\boldsymbol x, \boldsymbol \omega_o) &amp;
+\approx  \frac{L_i(\boldsymbol x, \boldsymbol \omega_i) f_r(\boldsymbol
+x, \boldsymbol \omega_o, \boldsymbol \omega_i) (\boldsymbol \omega_i
+\cdot \boldsymbol n)_{+}}{p(\boldsymbol \omega_i)} \\
+&amp;= w_1(\boldsymbol \omega_1) \frac{L_i(\boldsymbol x, \boldsymbol
+\omega_1) f_r(\boldsymbol x, \boldsymbol \omega_o, \boldsymbol \omega_1)
+(\boldsymbol \omega_1 \cdot \boldsymbol n)_{+}}{p_1(\boldsymbol
+\omega_1)} + w_2(\boldsymbol \omega_2) \frac{L_i(\boldsymbol x,
+\boldsymbol \omega_2) f_r(\boldsymbol x, \boldsymbol \omega_o,
+\boldsymbol \omega_2) (\boldsymbol \omega_2 \cdot \boldsymbol
+n)_{+}}{p_2(\boldsymbol \omega_2)}
+\end{aligned}
+\]</span></p>
+<p>常用的权重函数为 power-heuristic：</p>
+<p><span class="math display">\[
+w_s(\boldsymbol \omega_i) = \frac{p_s^{\beta}(\boldsymbol
+\omega_i)}{\sum_{j=1}^2 p_j^{\beta}(\boldsymbol \omega_i)}.
+\]</span></p>
+<p>其中 <span class="math inline">\(\beta\)</span> 为自定义参数，一般
+<span class="math inline">\(\beta = 2\)</span>
+效果较好。这样的结果是有偏的，但可以取得较低的方差，快速降噪。</p>
+<p>如果希望取得无偏的结果，可以设 <span
+class="math inline">\(\beta=1\)</span>，但方差较大。</p>
+<h2 id="科学地中断递归">科学地中断递归</h2>
+<p>在 path tracing
+的过程中，单纯地限定最大递归深度会使图像整体损失能量（亮度偏低）。因此，建议使用俄罗斯轮盘赌的方法，取得期望正确的能量结果。</p>
+<h3 id="方法1">方法1</h3>
+<p>俄罗斯轮盘赌。即事先规定一个概率 <span
+class="math inline">\(p\)</span>，它将成为在当前表面，是否要采样 <span
+class="math inline">\(\boldsymbol \omega_i\)</span> 计算 <span
+class="math inline">\(L_o(\boldsymbol x, \boldsymbol \omega_o)\)</span>
+的凭据。</p>
+<p>即，每次计算 <span class="math inline">\(L_o(\boldsymbol x,
+\boldsymbol \omega_o)\)</span> 前，生成 <span class="math inline">\(u
+\sim U(0,1)\)</span>：</p>
+<ol type="1">
+<li>若 <span class="math inline">\(u &lt; p\)</span>，则跟随光线 <span
+class="math inline">\(\boldsymbol \omega_i\)</span>，计算本次 <span
+class="math inline">\(L_o(\boldsymbol x, \boldsymbol
+\omega_o)\)</span>，且可能还要继续跟随光线 <span
+class="math inline">\(\boldsymbol \omega_i\)</span> 的表面，计算 <span
+class="math inline">\(L_o(\boldsymbol x, \boldsymbol
+\omega_i)\)</span>。但最终函数返回，赋值时使用 <span
+class="math inline">\(L_o(\boldsymbol x, \boldsymbol \omega_o)=
+L_o(\boldsymbol x, \boldsymbol \omega_o) / p\)</span>。</li>
+<li>若 <span class="math inline">\(u \geq p\)</span>，则终止递归，并令
+<span class="math inline">\(L_o(\boldsymbol x, \boldsymbol \omega_o) =
+0\)</span>。</li>
+</ol>
+<p>综合考虑，每个 <span class="math inline">\(L_o(\boldsymbol x,
+\boldsymbol \omega_o)\)</span> 的计算期望为</p>
+<p><span class="math display">\[
+p \cdot L_o(\boldsymbol x, \boldsymbol \omega_o) / p + (1-p) \cdot 0 =
+L_o(\boldsymbol x, \boldsymbol \omega_o).
+\]</span></p>
+<p>因此不会损失能量。</p>
+<p>缺点：<span class="math inline">\(p\)</span>
+较大时，期望递归数较多，且不可控制。</p>
+<h3 id="方法2">方法2</h3>
+<p>使用 throughput，考虑衰减的同时，让递归终止条件更科学。</p>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://computergraphics.stackexchange.com/questions/2316/is-russian-roulette-really-the-answer">monte
+carlo - Is Russian Roulette really the answer? - Computer Graphics Stack
+Exchange</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/" title="路径追踪与重要性采样">https://zrephel.fun/2025/05/27/路径追踪与重要性采样/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E6%B8%B2%E6%9F%93/" rel="tag"># 渲染</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/05/19/%E5%AE%8C%E6%95%B4%E6%8E%A8%E5%AF%BCXPBD%E7%9A%84%E7%BA%A6%E6%9D%9F%E6%8A%95%E5%BD%B1%E8%BF%87%E7%A8%8B/" rel="prev" title="完整推导 XPBD 的约束投影过程">
+                  <i class="fa fa-angle-left"></i> 完整推导 XPBD 的约束投影过程
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/05/27/%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA%E4%B8%8E%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
