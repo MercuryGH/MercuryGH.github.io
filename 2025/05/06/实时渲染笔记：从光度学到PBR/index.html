@@ -27,7 +27,7 @@
 <meta property="og:description" content="这是笔者多年以来一直都在完善的实时渲染基础笔记，放出来给大家分享。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-05-06T11:17:37.000Z">
-<meta property="article:modified_time" content="2025-05-27T13:23:49.811Z">
+<meta property="article:modified_time" content="2025-05-29T07:06:42.179Z">
 <meta property="article:author" content="Mercury">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="渲染">
@@ -198,7 +198,7 @@ BSSRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href=
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-05-27 21:23:49" itemprop="dateModified" datetime="2025-05-27T21:23:49+08:00">2025-05-27</time>
+      <time title="Modified: 2025-05-29 15:06:42" itemprop="dateModified" datetime="2025-05-29T15:06:42+08:00">2025-05-29</time>
     </span>
 
   
@@ -375,13 +375,8 @@ class="math inline">\(F\)</span> 本身的以上近似不能成立，但综合�
 class="math inline">\(\cos \theta\)</span>。</p>
 <p>在 IBL 中，通常用 <span class="math inline">\((\boldsymbol \omega_r
 \cdot \boldsymbol n)_+ = \cos \theta\)</span> 采样 specular BRDF LUT
-的横轴。这一 LUT 的其中一种构建方法是：假设法线为 <span
-class="math inline">\(\boldsymbol n = (0,0,1)\)</span>，因此可以用 <span
-class="math inline">\(\cos \theta\)</span> 还原 <span
-class="math inline">\(\boldsymbol \omega_r\)</span>，最后对 BRDF
-进行重要性采样还原 <span class="math inline">\(\boldsymbol
-\omega_h\)</span> 和 <span class="math inline">\(\boldsymbol
-\omega_i\)</span>。</p>
+的横轴。这个 <span class="math inline">\(\cos \theta\)</span> 是 IBL
+推导过程中的精确结果，不能写成其他形式的近似。</p>
 <h2 id="brdf-与材质">BRDF 与材质</h2>
 <p>在视角固定之下的渲染过程只与光源信息、几何信息和物体的材质信息有关系。显然，渲染方程中的
 <span class="math inline">\(f_r\)</span>
@@ -474,8 +469,8 @@ normal 等）即可表达物体表面。因此，这样的 SVBRDF 在存储上�
 <h3 id="blinn--phong-模型">(Blinn-) Phong 模型</h3>
 <p>(Blinn-) Phong 模型可以说是最经典非物理的 BRDF
 模型之一，它计算简洁，效果合理，至今仍在硬件性能不高的实时渲染应用中得到广泛应用。</p>
-<p>严谨地说，由于 ambient
-项的存在，这一模型实际上是对渲染方程做了近似，而非对 BRDF 做了近似。</p>
+<p>严格而言，由于 ambient 项的存在，Blinn-Phong
+模型实际上是对渲染方程做了近似，而非对 BRDF 做了近似。</p>
 <p>但如果认为全局的 ambient
 项近似等价于从积分中获取间接光照，可以认为，Blinn-Phong 模型就是 Lambert
 漫反射模型 + Blinn-Phong 高光模型。</p>
@@ -486,68 +481,70 @@ target="_blank" rel="noopener" href="https://jason-ma.notion.site/14792a22c0c280
 </blockquote>
 <p>经过工业界和学术界的共同探索，基于物理的渲染（PBR）成为了十几年来次世代渲染模型的代名词，在无数影视和游戏作品中大放异彩。Albedo-metallic
 工作流是 PBR 的代表模型，即运用微表面模型的光照模型的代表。这一工作流的
-BRDF 为</p>
+BRDF 的通式为</p>
 <p><span class="math display">\[
-f_r(\boldsymbol \omega_i, \boldsymbol \omega_r) = (1-m) af_d(\boldsymbol
-\omega_i, \boldsymbol \omega_r) + ((1-m)F_0 + ma)f_s(\boldsymbol
-\omega_i, \boldsymbol \omega_r)
+f_r(\boldsymbol \omega_i, \boldsymbol \omega_r) = k_d
+\cdot  af_d(\boldsymbol \omega_i, \boldsymbol \omega_r) + k_s \cdot
+f_s(\boldsymbol \omega_i, \boldsymbol \omega_r)
 \]</span></p>
 <p>其中：</p>
 <ul>
-<li><span class="math inline">\(a \in [0,1]^3\)</span> 为 base
-color。它与 Albedo Specular 工作流中的 diffuse 有细微差别。</li>
-<li><span class="math inline">\(m \in [0,1]\)</span> 为 metallic，<span
-class="math inline">\(k_d = 1 - m\)</span>。</li>
-<li><span class="math inline">\(F_0 \in [0,1]\)</span>
-为法线方向反射度，即 0
-度入射（垂直入射）时的菲涅尔反射率。对电介质，一般取 <span
-class="math inline">\(F_0 = R = 0.04 = \left| \frac{n_1 - n_2}{n_1 +
-n_2} \right |^2\)</span>，其中 <span class="math inline">\(n_1 = 1.5,
-n_2 = 1.0\)</span> 为介质折射率，此时 <span
-class="math inline">\(F_0\)</span>
-为单分量标量。对金属（导体），其折射率为复数，不能用上式计算 <span
-class="math inline">\(F_0\)</span>，一般不使用物理正确的 <span
-class="math inline">\(F_0\)</span>，详见下文“菲涅尔项”。
-<ul>
-<li>有时，美术可能希望控制非金属的 <span
-class="math inline">\(F_0\)</span>，UE 提供了 specular
-用于控制该参数。因此，UE 中可能会同时出现 metallic 和 specular 贴图，但
-specular 贴图只在 <span class="math inline">\(m &lt; 1\)</span>
-时有效，此时 <span class="math inline">\(F_0\)</span> 不再是 <span
-class="math inline">\(0.04\)</span> 或其他单分量标量，而是 specular
-贴图存储的数据（三分量标量）。</li>
-</ul></li>
-<li><span class="math inline">\(k_s = \text{lerp}(F_0, a, m) = (1-m)F_0
-+ ma\)</span>。如果 <span class="math inline">\(m &lt; 1\)</span>，一般
-<span class="math inline">\(F_0 = 0.04\)</span> 或由 specular 决定（在
-UE 中，specular = <span
-class="math inline">\(\text{saturate}(\frac{F_0}{0.08})\)</span>，因此默认
-specular = 0.5 对应 <span class="math inline">\(F_0=0.04\)</span>）。
-<ul>
-<li>有时，为了让美术达到效果，在某些材质中，可能会为镜面反射项乘上
-specular tint（高光染色）这个参数，而不是 <span
-class="math inline">\(\text{lerp}(F_0, a,
-m)\)</span>，这类似于仅在镜面反射部分有效的 base color。</li>
-</ul></li>
+<li><span class="math inline">\(a \in [0,1]^3\)</span> 为 albedo 或 base
+color，它与 Albedo Specular 工作流中的 diffuse 有细微差别。</li>
 <li><span class="math inline">\(f_d\)</span>
 为漫反射（diffuse）分量，通常为 Lambert 模型。</li>
 <li><span class="math inline">\(f_s\)</span>
 为镜面反射（specular）分量，通常为微表面模型。</li>
 </ul>
+<p>一个典型的 BRDF 代表取 <span class="math inline">\(k_d = (1 -
+F_{\text{avg}}) (1-m), k_s = 1\)</span>，即</p>
+<p><span class="math display">\[
+f_r(\boldsymbol \omega_i, \boldsymbol \omega_r) = (1 - F_{\text{avg}})
+(1-m) af_d(\boldsymbol \omega_i, \boldsymbol \omega_r) + f_s(\boldsymbol
+\omega_i, \boldsymbol \omega_r)
+\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(m \in [0,1]\)</span> 为 metallic。</li>
+<li><span class="math inline">\(F_{\text{avg}}\)</span>
+为近似计算的菲涅尔项，可用 <span class="math inline">\(F_0\)</span> 或
+<span class="math inline">\(F_0 + (\max(1 - \alpha, F_0) - F_0)(1 -
+(\boldsymbol \omega_r \cdot \boldsymbol n)_+)^5\)</span>
+近似。条件允许时，也可以精确计算 <span
+class="math inline">\(F\)</span>。<span class="math inline">\(1 -
+F_{\text{avg}}\)</span> 这一项的加入是为了考虑一点能量守恒。</li>
+</ul>
+<p>有一些 BRDF 的实现并没有考虑为 <span
+class="math inline">\(k_d\)</span> 加入 <span class="math inline">\(1 -
+F_{\text{avg}}\)</span> 这一项，取 <span class="math inline">\(k_d =
+1-m, k_s = 1\)</span>，不过视觉上其实很难看出差异。</p>
+<p>还有一些 BRDF 会取 <span class="math inline">\(k_d = 1-m, k_s =
+F_{\text{avg}} \approx F_0\)</span>，即</p>
+<p><span class="math display">\[
+f_r(\boldsymbol \omega_i, \boldsymbol \omega_r) = (1-m) af_d(\boldsymbol
+\omega_i, \boldsymbol \omega_r) + ((1-m)\tilde F_0 + ma)f_s(\boldsymbol
+\omega_i, \boldsymbol \omega_r)
+\]</span></p>
+<p>这种 BRDF 的效果看上去也是合理的，不过 specular
+部分的权重相对会被略微缩小。不过，这个式子在 PBR 中很可能有问题，因为
+<span class="math inline">\(f_s\)</span> 里面还有一个菲涅耳项 <span
+class="math inline">\(F\)</span>，但外部又乘了一个，导致 <span
+class="math inline">\(F\)</span> 实际以二次的形式作用于高光部分。但若
+<span class="math inline">\(f_s\)</span> 中不含菲涅耳项 <span
+class="math inline">\(F\)</span>（如使用 Blinn-Phong 模型），<span
+class="math inline">\(k_s\)</span>
+这么设置是有道理的，可以控制高光的颜色。</p>
 <p>PS：</p>
 <ul>
 <li>Albedo Metallic 工作流中的 base color 和 Albedo Specular 工作流中的
 diffuse 都可以叫 albedo。</li>
 <li>Albedo Metallic 工作流中，不止漫反射，镜面反射也与 albedo (base
-color) 有关。Albedo Specular 工作流中，镜面反射与 albedo (diffuse)
-无关。</li>
-<li>Albedo Metallic 工作流中，对混合材质，其 base color
-贴图中会额外存储其 <span class="math inline">\(F_0\)</span>
-贴图（总计四通道，但可以“压缩”到三通道）。Albedo Specular
-工作流中，specular 贴图就是 <span class="math inline">\(F_0\)</span>
-贴图（三通道）。</li>
-<li>在 UE
-中，为节省空间，可能会合并多个单通道贴图至一个多通道贴图。</li>
+color) 有关，这会体现在 specular BRDF 的菲涅耳项 <span
+class="math inline">\(F\)</span> 中。</li>
+<li>有时，为了让美术达到效果，在某些材质中，可能会为 <span
+class="math inline">\(k_s\)</span> 乘上 specular
+tint（高光染色）这个参数，这类似于仅在镜面反射部分有效的 base
+color。</li>
 </ul>
 <h3 id="解析的漫反射-brdf">解析的漫反射 BRDF</h3>
 <h4 id="lambert-模型">Lambert 模型</h4>
@@ -638,7 +635,7 @@ class="math inline">\(\alpha\)</span> 的意义同上。</p>
 <p>https://zhuanlan.zhihu.com/p/135910659</p>
 </blockquote>
 <p>(Blinn-) Phong 和 Kajiya-Kay
-其实是同一个光照模型，只不过前者用于一般物体表面（正半球）上，后者用于毛发表面（微圆柱的一个截面）上，因此后者会用圆柱的切向量
+其实是同一个光照模型，只不过前者用于一般物体表面（正半球）上，后者用于毛发表面（微圆柱的一个截面）上，因此后者会用圆柱的走向向量
 <span class="math inline">\(\boldsymbol t\)</span> 代替法向量 <span
 class="math inline">\(\boldsymbol n\)</span>
 进行光照计算，实际上是只取了一个影响最大的法线做 Blinn-Phong
@@ -657,23 +654,32 @@ f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \text{Gaussian}(\dots)
 (microfacet specular BRDF):</p>
 <p><span class="math display">\[
 f_s(\boldsymbol \omega_i, \boldsymbol \omega_r) = \frac{D(\boldsymbol
-\omega_h) F(\boldsymbol \omega_r, \boldsymbol \omega_h) G(\boldsymbol
-\omega_i, \boldsymbol \omega_r, \boldsymbol \omega_h)}{4 (\boldsymbol n
-\cdot \boldsymbol \omega_i)_+ ( \boldsymbol n \cdot \boldsymbol
-\omega_r)_{+}},
-\]</span></p>
-<p>其中：</p>
-<h5 id="法线分布函数">法线分布函数</h5>
-<p>法线分布函数（NDF），定义为物体表面微元的微表面面积与宏表面面积之比，再除以单位立体角。其量纲与
-BRDF 相同。一般采用 GGX（ground glass unknown），为</p>
-<p><span class="math display">\[
-D(\boldsymbol \omega_h) = \frac{\alpha^2}{\pi((\boldsymbol \omega_h
-\cdot \boldsymbol n)_{+}^2 (\alpha^2 - 1) + 1)^2}
+\omega_h, \boldsymbol n, \alpha) F(\boldsymbol \omega_r, \boldsymbol
+\omega_h) G(\boldsymbol \omega_i, \boldsymbol \omega_r, \alpha)}{4
+(\boldsymbol n \cdot \boldsymbol \omega_i)_+ ( \boldsymbol n \cdot
+\boldsymbol \omega_r)_{+}},
 \]</span></p>
 <ul>
 <li>其中 <span class="math inline">\(\alpha \in [0,1]\)</span>
 为粗糙度（roughness），为微表面法线偏离宏表面法线的程度。光滑度（glosiness）=
 1 - 粗糙度。</li>
+</ul>
+<p>下列依次介绍 <span class="math inline">\(D, F, G\)</span>。</p>
+<h5 id="法线分布函数">法线分布函数</h5>
+<p>法线分布函数（NDF），定义为物体表面微元的微表面面积与宏表面面积之比，再除以单位立体角，其量纲与
+BRDF 相同。它描述微表面法线 <span class="math inline">\(\boldsymbol
+\omega_h\)</span> 在宏观表面上的统计分布，故得名“法线分布函数”。<span
+class="math inline">\(D(\boldsymbol \omega_h, \boldsymbol n, \alpha)
+\cdot (\boldsymbol \omega_h \cdot \boldsymbol n)_+\)</span> 是关于 <span
+class="math inline">\(\boldsymbol \omega_h\)</span>
+的概率密度函数。游戏引擎中，NDF 一般采用 GGX（ground glass
+unknown），为</p>
+<p><span class="math display">\[
+D(\boldsymbol \omega_h, \boldsymbol n, \alpha) =
+\frac{\alpha^2}{\pi((\boldsymbol \omega_h \cdot \boldsymbol n)_{+}^2
+(\alpha^2 - 1) + 1)^2}
+\]</span></p>
+<ul>
 <li>当 <span class="math inline">\(\alpha\)</span> 较大时，specular
 主要呈现 Diffuse Reflection，高光不明显——有人将这样 <span
 class="math inline">\(\alpha\)</span>
@@ -717,7 +723,7 @@ F(\boldsymbol \omega_r, \boldsymbol \omega_h) = F_0 + (F_{90} - F_0) (1
 <ul>
 <li>其中 <span class="math inline">\(F_0\)</span>, <span
 class="math inline">\(F_{90}\)</span> 为材料在 $ _r, _h $ 分别为 0
-度（垂直入射）和 90 度（掠射）时的菲涅尔反射率</li>
+度（垂直入射）和 90 度（掠射）时的菲涅尔反射率。</li>
 <li>由于这是镜面反射部分的菲尼尔项，因此 <span
 class="math inline">\((\boldsymbol \omega_i \cdot \boldsymbol
 \omega_h)_+ = (\boldsymbol \omega_r \cdot \boldsymbol \omega_h)_+
@@ -725,28 +731,37 @@ class="math inline">\((\boldsymbol \omega_i \cdot \boldsymbol
 (\boldsymbol \omega_r \cdot \boldsymbol n)_+ = \cos
 \theta\)</span>，式中的 <span class="math inline">\((\boldsymbol
 \omega_r \cdot \boldsymbol \omega_h)_{+}\)</span>
-完全可以由不同的方式出现。如果物体的粗糙度过高，那么以上近似可能不成立，但粗糙度高时</li>
+可能以由不同的方式出现。</li>
 <li><span class="math inline">\(F_0, F_{90}\)</span>
 都有公式解，基于物体表面与光线传播介质的折射率。通常情况下，<span
 class="math inline">\(F_{90}\)</span> 可以用 1.0
 近似，因为在掠射角的镜面反射相当强烈。
 <ul>
-<li>对非金属，一般取 <span class="math inline">\(F_0 = \left| \frac{n_1
-- n_2}{n_1 + n_2} \right |^2 = 0.04\)</span>；如果 specular 生效，<span
-class="math inline">\(F_0\)</span> 由 specular 决定</li>
-<li>对金属，<span class="math inline">\(F_0 =
-a\)</span>（albedo）。然而其实 Schlick
-近似仅对非金属是正确的，对金属并非物理正确，但这样设置的视觉效果整体上是对的</li>
+<li>对电介质（非金属），一般取 <span class="math inline">\(F_0 = \tilde
+F_0 = \left| \frac{n_1 - n_2}{n_1 + n_2} \right |^2 =
+0.04\)</span>，其中 <span class="math inline">\(n_1 = 1.5, n_2 =
+1.0\)</span> 为介质折射率，此时 <span class="math inline">\(F_0\)</span>
+为单分量标量；如果 specular 生效，<span class="math inline">\(\tilde
+F_0\)</span> 由 specular 决定：在 UE 中，specular = <span
+class="math inline">\(\text{saturate}(\frac{\tilde
+F_0}{0.08})\)</span>，因此默认 specular = 0.5 对应 <span
+class="math inline">\(\tilde F_0=0.04\)</span>。</li>
+<li>对金属（导体），其折射率为复数，不能用上式计算 <span
+class="math inline">\(F_0\)</span>，一般不使用物理正确的 <span
+class="math inline">\(F_0\)</span>，而是取 $ F_0 =
+a$（albedo）。尽管不物理，但这样设置的视觉效果整体上是对的。</li>
 <li>对 metallic <span class="math inline">\(m \in (0,1)\)</span>
-的材质，可设 $F_0 = (0.04, a, m)
-$。当然这也不是物理正确的，但视觉上是对的。</li>
+的材质，可设 $F_0 = (F_0, a, m) $。这样计算是因为 <span
+class="math inline">\(m \in (0,1)\)</span> 的情况下 <span
+class="math inline">\(F_0\)</span>
+应当介于电介质和金属之间。尽管不物理，但这样设置的视觉效果整体上是对的。</li>
 <li>一些渲染引擎可能还会有一些 hack，详见 Filament
-的做法，这里不再赘述</li>
+的做法，这里不再赘述。</li>
 </ul></li>
 </ul>
 <p>在游戏引擎中，菲涅尔项</p>
 <p><span class="math display">\[
-F = \text{saturate}(F_0 + (1-F_0)(1- \boldsymbol n \cdot \boldsymbol
+F = \text{saturate}( F_0 + (1- F_0)(1- \boldsymbol n \cdot \boldsymbol
 v)^\gamma)
 \]</span></p>
 <p>往往可以用来做一些非物理的“造假”视觉效果。例如：</p>
@@ -766,7 +781,21 @@ class="math inline">\(F \to
 </ul>
 <h5 id="几何函数">几何函数</h5>
 <p>几何函数为 <span
-class="math inline">\(G\)</span>，为统计学上的微表面自遮挡关系，近似方式多种多样。这一项可以在掠射角时，避免结果过亮。详见下文。</p>
+class="math inline">\(G\)</span>，为统计学上的微表面自遮挡关系，近似方式多种多样。常用的几何函数有
+Smith-GGX：</p>
+<p><span class="math display">\[
+G(\boldsymbol \omega_i, \boldsymbol \omega_r, \alpha) = G_1(\boldsymbol
+\omega_i, \alpha) G_1(\boldsymbol \omega_r, \alpha)
+\]</span></p>
+<p>其中</p>
+<p><span class="math display">\[
+G_1(\boldsymbol \omega, \alpha) = \frac{2 (\boldsymbol n \cdot
+\boldsymbol \omega)_+}{(\boldsymbol n \cdot \boldsymbol \omega)_+ +
+\sqrt{\alpha^2 + (1 - \alpha^2)(\boldsymbol n \cdot \boldsymbol
+\omega)^2}}.
+\]</span></p>
+<p><span class="math inline">\(G\)</span>
+这一项可以在掠射角时，避免结果过亮。详见下文。</p>
 <h5 id="分母">分母</h5>
 <p>分母 <span class="math inline">\(4 (\boldsymbol n \cdot \boldsymbol
 \omega_i)_+ ( \boldsymbol n \cdot \boldsymbol \omega_r)_{+}\)</span>
