@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="《祇园：东渡》是一个开放世界场景，以 PCG 为展示重点，当前也有一定的剧本和部分可玩性。本作品主要用于体现作者对 UE5 和资产管线的应用能力。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE5 PCG 项目 Demo——祇园：东渡">
+<meta property="og:url" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="《祇园：东渡》是一个开放世界场景，以 PCG 为展示重点，当前也有一定的剧本和部分可玩性。本作品主要用于体现作者对 UE5 和资产管线的应用能力。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/showb.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/showc.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/showd.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/show1.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/show2.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/show3.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/show4.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/Gaea-draw.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/Gaea-sea.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/Gaea-volcano.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/empty-material.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/phy-mat.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/full-pcg.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pcg-graph-init.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pcg-rottentree.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/grass-pcg.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pcg-2.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pcg-3.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/road-pcg.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/path.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pcg-1.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pcg-road.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/spline-area-demo.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/interact.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/title.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/pause-ui.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/day-night.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/day-night2.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/waypoint.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/cr-lookat.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/abp-animation.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/npc.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/air-wall1.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/air-wall2.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/fake-light.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/volcano-vdb.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/rvt.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/temple.png">
+<meta property="og:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/overview.png">
+<meta property="article:published_time" content="2025-06-19T03:56:04.000Z">
+<meta property="article:modified_time" content="2025-06-19T01:37:39.799Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="UE">
+<meta property="article:tag" content="Demo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/showb.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/","path":"2025/06/19/UE5-PCG-项目-Demo——祇园：东渡/","title":"UE5 PCG 项目 Demo——祇园：东渡"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>UE5 PCG 项目 Demo——祇园：东渡 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">制作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="nav-number">1.1.</span> <span class="nav-text">开发环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E8%AF%B4%E6%98%8E"><span class="nav-number">2.</span> <span class="nav-text">技术说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pcg"><span class="nav-number">2.1.</span> <span class="nav-text">PCG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pcg-%E5%9C%B0%E5%BD%A2%E5%87%A0%E4%BD%95"><span class="nav-number">2.1.1.</span> <span class="nav-text">PCG 地形几何</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pcg-%E5%9C%B0%E5%BD%A2%E6%9D%90%E8%B4%A8"><span class="nav-number">2.1.2.</span> <span class="nav-text">PCG 地形材质</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E6%9D%90%E8%B4%A8%E9%81%AE%E7%BD%A9"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">物理材质遮罩</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pcg-%E8%B5%84%E4%BA%A7%E6%91%86%E6%94%BE"><span class="nav-number">2.1.3.</span> <span class="nav-text">PCG 资产摆放</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#pcg-graph"><span class="nav-number">2.1.3.1.</span> <span class="nav-text">PCG Graph</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%81%93%E8%B7%AF%E6%9B%B2%E7%BA%BF%E6%94%BE%E6%A0%B7"><span class="nav-number">2.1.3.2.</span> <span class="nav-text">道路曲线放样</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pcg-%E6%8E%92%E9%99%A4%E4%BD%93%E7%A7%AF"><span class="nav-number">2.1.3.3.</span> <span class="nav-text">PCG 排除体积</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gameplay"><span class="nav-number">2.2.</span> <span class="nav-text">Gameplay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E4%BA%A4%E4%BA%92%E9%80%BB%E8%BE%91"><span class="nav-number">2.2.1.</span> <span class="nav-text">可交互逻辑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E6%9C%BA%E8%BF%87%E6%B8%A1"><span class="nav-number">2.2.2.</span> <span class="nav-text">相机过渡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ui"><span class="nav-number">2.2.3.</span> <span class="nav-text">UI</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A0%87%E9%A2%98%E7%94%BB%E9%9D%A2%E4%B8%8E%E6%9A%82%E5%81%9C%E7%94%BB%E9%9D%A2"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">标题画面与暂停画面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AF%8C%E6%96%87%E6%9C%AC%E4%BA%A4%E4%BA%92%E6%8F%90%E7%A4%BA"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">富文本交互提示</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E5%B9%95%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.2.4.</span> <span class="nav-text">字幕系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BC%E5%A4%9C%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.2.5.</span> <span class="nav-text">昼夜循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A2%B0%E6%92%9E%E4%BD%93"><span class="nav-number">2.2.6.</span> <span class="nav-text">碰撞体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E8%B7%AF%E5%BE%84%E7%82%B9"><span class="nav-number">2.2.7.</span> <span class="nav-text">线性路径点</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%B7%AF%E5%BE%84%E7%82%B9"><span class="nav-number">2.2.7.1.</span> <span class="nav-text">管理路径点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E8%B7%AF%E5%BE%84%E7%82%B9"><span class="nav-number">2.2.7.2.</span> <span class="nav-text">显示路径点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#npc-%E6%B3%A8%E8%A7%86%E7%8E%A9%E5%AE%B6"><span class="nav-number">2.2.8.</span> <span class="nav-text">NPC 注视玩家</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%90%E8%B4%A8%E4%B8%8E%E8%A7%86%E6%95%88"><span class="nav-number">2.3.</span> <span class="nav-text">材质与视效</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A9%BA%E6%B0%94%E5%A2%99%E6%9D%90%E8%B4%A8"><span class="nav-number">2.3.1.</span> <span class="nav-text">空气墙材质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%89%E7%85%A7%E8%B7%AF%E7%81%AF%E8%A7%86%E8%A7%89%E6%AC%BA%E9%AA%97"><span class="nav-number">2.3.2.</span> <span class="nav-text">光照路灯视觉欺骗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vdb-%E4%BD%93%E7%A7%AF%E7%89%B9%E6%95%88"><span class="nav-number">2.3.3.</span> <span class="nav-text">VDB 体积特效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E8%99%9A%E6%8B%9F%E7%BA%B9%E7%90%86%E8%BF%87%E6%B8%A1"><span class="nav-number">2.3.4.</span> <span class="nav-text">运行时虚拟纹理过渡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E5%A4%84%E7%90%86"><span class="nav-number">2.3.5.</span> <span class="nav-text">后处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E8%80%83%E8%99%91"><span class="nav-number">2.4.</span> <span class="nav-text">优化考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nanite"><span class="nav-number">2.4.1.</span> <span class="nav-text">Nanite</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%B0%E5%BD%A2%E6%B5%81%E9%80%81%E8%99%9A%E6%8B%9F%E7%BA%B9%E7%90%86"><span class="nav-number">2.4.2.</span> <span class="nav-text">地形流送虚拟纹理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E5%85%B3%E5%8D%A1"><span class="nav-number">2.4.3.</span> <span class="nav-text">子关卡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%96%E7%95%8C%E5%88%86%E5%8C%BA"><span class="nav-number">2.4.4.</span> <span class="nav-text">世界分区</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91"><span class="nav-number">2.5.</span> <span class="nav-text">工具开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%9C%B0%E5%BD%A2%E6%97%B6%E7%A6%81%E7%94%A8-pcg-%E7%94%9F%E6%88%90"><span class="nav-number">2.5.1.</span> <span class="nav-text">编辑地形时禁用 PCG 生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B7%E6%9D%A1%E7%BA%BF%E5%A4%8D%E5%88%B6%E5%B7%A5%E5%85%B7"><span class="nav-number">2.5.2.</span> <span class="nav-text">样条线复制工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%93%9D%E5%9B%BE%E6%8E%92%E5%BA%8F%E5%8A%9F%E8%83%BD"><span class="nav-number">2.5.3.</span> <span class="nav-text">蓝图排序功能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%9F%E7%89%A9%E8%A1%A8"><span class="nav-number">3.</span> <span class="nav-text">借物表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%A7%E6%9C%AC%E8%AE%BE%E8%AE%A1%E4%B8%8E%E7%BE%8E%E6%9C%AF%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">剧本设计与美术设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%BC%80%E5%8F%91%E8%AE%A1%E5%88%92"><span class="nav-number">5.</span> <span class="nav-text">进一步开发计划</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pcg-1"><span class="nav-number">5.1.</span> <span class="nav-text">PCG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.2.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="UE5 PCG 项目 Demo——祇园：东渡 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE5 PCG 项目 Demo——祇园：东渡
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-06-19 11:56:04 / Modified: 09:37:39" itemprop="dateCreated datePublished" datetime="2025-06-19T11:56:04+08:00">2025-06-19</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>《祇园：东渡》是一个开放世界场景，以 PCG
+为展示重点，当前也有一定的剧本和部分可玩性。本作品主要用于体现作者对 UE5
+和资产管线的应用能力。</p>
+<span id="more"></span>
+<p>下面的视频演示了目前为止完成的一个线性流程，并不涵盖场景中的全部内容。</p>
+<video src="http://43.156.115.56:8039/jetavana-prototype-preview.mp4" controls="controls" style="max-width: 100%; display: block; margin-left: auto; margin-right: auto;">
+your browser does not support the video tag
+</video>
+<p>下面展示了一些场景中的影像。</p>
+<figure>
+<img src="./showb.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<figure>
+<img src="./showc.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<figure>
+<img src="./showd.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<figure>
+<img src="./show1.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<figure>
+<img src="./show2.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<figure>
+<img src="./show3.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<figure>
+<img src="./show4.png" alt="showcase" />
+<figcaption aria-hidden="true">showcase</figcaption>
+</figure>
+<h2 id="制作流程">制作流程</h2>
+<ol type="1">
+<li>程序化地形几何：使用 Gaea 软件连接几何节点，从高度图中生成一个
+Landscape。</li>
+<li>程序化地形材质：调参修改后的第三方自动地形材质（MW Landscape Auto
+Material）。</li>
+<li>程序化地图资产：利用 UE5 PCG Grpah 制作场景，摆放第三方资产。</li>
+<li>微调地图资产：手工摆放一些资产。场景中除建筑物是手工摆放之外，其他资产均用
+PCG 技术摆放。</li>
+<li>第三人称角色 locomotion：来自 UE5 Motion Matching 示例项目。</li>
+<li>Gameplay 和材质、视效开发。</li>
+</ol>
+<h3 id="开发环境">开发环境</h3>
+<ul>
+<li>Unreal 5.54</li>
+<li>Gaea 2.1.2.0</li>
+<li>CPU: Intel(R) Core(TM) i7-14700KF</li>
+<li>GPU: NVIDIA GeForce RTX 4060</li>
+</ul>
+<p>场景在编辑器下的平均运行帧率约为 60 FPS。</p>
+<h2 id="技术说明">技术说明</h2>
+<h3 id="pcg">PCG</h3>
+<p>本场景很大程度上依赖 PCG
+工作流，因此具有非破坏性和灵活性。创建一个开放世界的 PCG
+工作流可分为三个步骤：PCG 地形几何、PCG 地形材质和 PCG
+资产摆放，下面逐一介绍它们在本场景中的实现。</p>
+<h4 id="pcg-地形几何">PCG 地形几何</h4>
+<p>使用 PCG
+技术可以模仿真实世界的地质物理流程，从无到有地构建一个贴近现实的程序化地形。这极大程度上降低了艺术家在无关紧要的地形背景处的工作量，提供了一个良好的模板供精雕细琢。Gaea、World
+Builder 都是著名的程序化地形生成软件，使用节点式工作流，语义清晰。UE5
+Landmass
+也提供了类似的功能，但其支持相对于老牌节点式工作流软件并不完善，可能更多地适用于将前者生成的地形导入后做调整。本场景仅使用了
+Gaea 完成场景的地形几何生成。</p>
+<p>本场景是一个群岛，其中有一个醒目的火山。作者想让这个群岛的俯瞰图特殊一些，于是想到用“示字旁”（礻）作为其外轮廓。使用
+Gaea 的 Draw 节点，画一个“示字旁”，就会自动生成一个高度图蒙版了：</p>
+<figure>
+<img src="./Gaea-draw.png" alt="群岛的俯瞰图轮廓是“示字旁”" />
+<figcaption aria-hidden="true">群岛的俯瞰图轮廓是“示字旁”</figcaption>
+</figure>
+<p>然后使用一系列 Perlin noise、Erosion
+节点模拟真实世界的不规则地貌、侵蚀效果等，结合 Volcano
+节点生成火山，并与岛屿主体地形取 max
+做混合。所有的节点都可调参，以获得更好的效果。最后使用海平面节点确定这是一个群岛：</p>
+<figure>
+<img src="./Gaea-sea.png" alt="确定海平面的高度" />
+<figcaption aria-hidden="true">确定海平面的高度</figcaption>
+</figure>
+<p>然而，在使用过程中作者发现 Gaea
+程序抽风，本来想把火山和岛屿主体混合后导出，结果火山在预览中还存在，导出成
+heightmap
+就一直消失，不知道什么原因。所以最终分别导出了一个岛屿主体地形，以及一个火山地形，在引擎里面再合并它们。</p>
+<figure>
+<img src="./Gaea-volcano.png" alt="单独导出火山地形" />
+<figcaption aria-hidden="true">单独导出火山地形</figcaption>
+</figure>
+<p>使用 Gaea 官方插件 <a
+target="_blank" rel="noopener" href="https://docs.gaea.app/plugins/gaea2unreal/installing-gaea2unreal">Gaea2Unreal</a>
+将导出的高度图导入 UE5
+Landscape。这样我们就获得了空荡荡的两个地形：岛屿主体和火山。</p>
+<figure>
+<img src="./empty-material.png" alt="默认材质的地形" />
+<figcaption aria-hidden="true">默认材质的地形</figcaption>
+</figure>
+<p>在 UE5
+中，可自由调整地形的缩放和位置，也可以使用笔刷对地形几何做微调。图中神庙附近的地形即为用
+UE5 地形笔刷后调整的。</p>
+<h4 id="pcg-地形材质">PCG 地形材质</h4>
+<p>有了地形之后，我们还需要赋予其程序化材质，让材质根据此处的高度、坡度和其他混合信息自动指定哪些地方应该长草、裸露岩石或被积雪覆盖。实现自动地形材质一般有两种方法：</p>
+<ul>
+<li>Gaea、World Builder
+等软件支持在程序化生成地形几何时，应用相应规则自动生成材质遮罩，进而可以在
+UE5 中直接利用该遮罩指定草地、山地和雪地等地形材质。</li>
+<li>在 UE5 中编写材质，通过 shader
+逻辑为不同的地块生成相应的遮罩，赋予相应的地形材质。</li>
+</ul>
+<p>作者采用了后者方案，在 UE5
+中使用材质节点，设计规则生成了程序化地形材质。计算材质节点生成遮罩后，采样相应纹理资产即可得到最终地形材质呈现的结果。</p>
+<p>本场景的程序化地形材质基于 MW Landscape Auto
+Material。这个材质蓝图看起来相当复杂，实际上核心算法大致可以拆分成以下几个模块：</p>
+<ul>
+<li><strong>高度（height）混合</strong>。通过此处的世界坐标的高度（<span
+class="math inline">\(z\)</span>
+值），结合参考高度参数，得到一个高度蒙版，可用于插值混合高海拔的雪地纹理和低海拔的草地、泥土纹理。</li>
+<li><strong>坡度（slope）混合</strong>。通过此处的法向与 <span
+class="math inline">\((0,0,1)\)</span>
+点乘计算坡度，得到一个坡度蒙版，用来混合平坦区域的草地、泥土和陡峭区域的岩石纹理。</li>
+<li><strong>纹理平铺（tiling）</strong>。峭壁的 uv
+可能会被拉伸，平坦的区域纹理可能会呈现重复。前者可使用三平面投影（tri-planar
+projection）算法处理，后者可通过混合 uv 平铺参数和随机扰度处理。</li>
+<li><strong>简单的程序化资产摆放</strong>。UE
+有一个耦合材质和其上方的草地植被资产的功能，称<a
+target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/grass-quick-start-in-unreal-engine">地形草地工具</a>（Landscape
+Grass），可以在地形材质中设定为某种类型的材质遮罩自动摆放 PCG
+草地。由于场景的 PCG
+资产摆放需要支持更灵活的的逻辑，因此没有使用这一工具摆放 PCG
+植被资产。</li>
+</ul>
+<p>此外，还有用户可控的自定义材质笔刷功能等，用于人工修改 PCG
+材质的生成结果。由此，我们就可以实现诸如“低海拔平坦区域为沙滩”，“中海拔平坦区域长草”，“中海拔陡峭区域裸露岩石”和“高海拔区域被积雪覆盖”等材质逻辑，并在不同材质交界处进行混合。各混合参数均可在材质实例中调整。经过一系列调整，结合高质量的纹理资产后，我们就可以得到一个看上去比较美观的地形了。</p>
+<p>地形材质设置完成后，就可以给场景添加海水了。海水可以使用 UE5 的 Water
+插件中自带的 WaterBodyOcean 创建。</p>
+<h5 id="物理材质遮罩">物理材质遮罩</h5>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1F94y1e7cd/?spm_id_from=333.337.search-card.all.click&amp;vd_source=ab0586f168423aaa74273f6174610471">UE5.2
+PCG插件撒点在自动地形材质上的办法 - Sampling Landscape Auto
+Materials_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<p>为了后续 PCG
+资产摆放操作的便利性，我们还需要为地形材质指定物理材质标签遮罩，这样后续在
+PCG
+时就可以采样该点的物理材质标签，知道该点属于草地、泥土、峭壁还是雪地，进而可以设计相应的过滤器，仅在选定的地形材质上进行
+PCG。</p>
+<figure>
+<img src="./phy-mat.png" alt="在相应材质遮罩中生成物理材质遮罩" />
+<figcaption
+aria-hidden="true">在相应材质遮罩中生成物理材质遮罩</figcaption>
+</figure>
+<h4 id="pcg-资产摆放">PCG 资产摆放</h4>
+<p>将地形几何和地形材质准备好后，我们就可以在其上摆放植被、树木、岩石和建筑等资产了。本场景使用的是
+UE5 最新的 PCG Graph 功能完成资产摆放。</p>
+<p>UE5 在更新 PCG Graph 前，就有一套不完备的 PCG 功能，即<a
+target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/grass-quick-start-in-unreal-engine">地形草地工具</a>和<a
+target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/procedural-foliage-tool-in-unreal-engine">程序化植被工具</a>（Procedural
+Foliage）。这套工具操作简单，只需配置网格体、密度数据表，程序就会自动在指定的区域自动生成静态网格体。但它不支持逻辑式的生成，因此无法调控模型之间的聚合、分散等逻辑，若模型之间发生穿插将无法修改，且不支持在指定区域遮罩上的自动混合、剔除等功能，也不支持非植被
+Actor 的生成。</p>
+<p>自 UE 5.2 推出 PCG Graph 后，PCG
+资产摆放工作理论上就可以在引擎内部完成，不必借助 Houdini 等 DCC
+软件。Epic Games 提供了一个基于 Houdini 城市引擎的<a
+target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/city-sample-project-unreal-engine-demonstration">城市示例项目演示</a>（黑客帝国觉醒），以及一个基于
+UE5 PCG Graph 的 <a
+target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/zh-cn/unreal-engine/electric-dreams-environment-in-unreal-engine">Electric
+Dreams 场景</a>，前者为城市场景，后者为森林场景，两者的核心内容均为 PCG
+静态资产摆放。</p>
+<p>PCG Graph
+不仅支持摆放已有的资产，还支持多种资产的组合逻辑摆放，例如树干模型上的青苔模型或贴花，道路模型上的护栏模型等。</p>
+<p>PCG Graph 是编辑时的 PCG 生成工具，对静态网格体和静态 Actor
+生成有很好的支持，但对于人群、车流等运行时动态 Actor 的生成，还需要使用
+Mass AI 等其他工具。</p>
+<h5 id="pcg-graph">PCG Graph</h5>
+<p>本场景的 PCG 资产摆放主要使用一个 PCG
+Graph，它的节点连接经过多次迭代已经变得相当复杂（尽管复杂程度可能还比不上
+Epic Games 提供的 Electric Dreams）：</p>
+<figure>
+<img src="./full-pcg.png" alt="场景的完整 PCG Graph 总览" />
+<figcaption aria-hidden="true">场景的完整 PCG Graph 总览</figcaption>
+</figure>
+<p>当然，PCG Graph
+的核心逻辑不外乎采样、反复的过滤/变换、生成这一套流水线。以树木为例：</p>
+<ul>
+<li>采样：树木在地形上生长，因此需要采样地形。</li>
+<li>过滤：树木长在中海拔的平草地上，在陡坡上出现的密度随坡度增大而降低。因此需要根据地形物理材质、世界位置高度和坡度做过滤。</li>
+<li>变换：树木的形态大小各异，分散不均，因此可以进行随机的等比例缩放，随机的绕
+<span class="math inline">\(z\)</span> 轴的旋转，以及随机的 <span
+class="math inline">\(x, y\)</span> 方向的位移。</li>
+<li>过滤：树木之间不能互相穿插，也不能与其他草、石头穿插，也不能生成在道路遮罩上，因此需要做相交检测和剔除。</li>
+<li>生成：树木对应的静态网格体资产各异，每种资产可能具有不同的生成权重、材质变体。</li>
+</ul>
+<p>在这一过程中，我们可以可视化 PCG 采样点结果，以更好地微调 PCG
+节点流程，如下图所示：</p>
+<figure>
+<img src="./pcg-graph-init.png" alt="树木 PCG 的可视化结果" />
+<figcaption aria-hidden="true">树木 PCG 的可视化结果</figcaption>
+</figure>
+<p>再如，由于修路需要砍伐树木，道路旁往往会出现树桩。以这些树桩为例：</p>
+<ul>
+<li>采样与变换：树桩位于道路两侧，因此需要采样道路样条线，设道路前进方向为
+<span class="math inline">\(x\)</span> 轴，则需要根据道路宽度做随机的
+<span class="math inline">\(y\)</span> 方向位移。</li>
+<li>投影：之前采样的道路样条线不一定位于地形上，因此需要将采样点投影到地形上。</li>
+<li>变换：树桩的形态大小各异，分散不均，因此可以进行随机的等比例缩放，随机的绕
+<span class="math inline">\(z\)</span> 轴的旋转，以及随机的 <span
+class="math inline">\(x, y\)</span> 方向的位移。</li>
+<li>过滤：树桩之间不能互相穿插，也不能与其他树木、草、石头穿插，也不能生成在道路遮罩上，因此需要做相交检测和剔除。</li>
+<li>生成：同树木的生成。</li>
+</ul>
+<figure>
+<img src="./pcg-rottentree.png" alt="树桩 PCG 的可视化结果与生成结果" />
+<figcaption aria-hidden="true">树桩 PCG
+的可视化结果与生成结果</figcaption>
+</figure>
+<p>下面是草地 PCG Graph 的局部，该部分包含一个网格均匀采样（Create
+Points Grid），将地形采样点进行细分。</p>
+<figure>
+<img src="./grass-pcg.png" alt="PCG Graph 局部：草地生成" />
+<figcaption aria-hidden="true">PCG Graph 局部：草地生成</figcaption>
+</figure>
+<p>具体地，Copy Points 节点的 Source
+输入为局部网格均匀采样，设采样点为数目为 <span
+class="math inline">\(m\)</span>；Copy Points 的 Target
+输入为过滤后的地形均匀采样，设采样点数目为 <span
+class="math inline">\(n\)</span>。那么，由于此 Copy Points 节点设置了
+copy each source on every target，其将输出 <span class="math inline">\(m
+\times n\)</span> 个采样点，相当于为每个 Target 采样点进行了均匀的 <span
+class="math inline">\(m\)</span> 级细分。密度参数诸如 Grass Clump
+Size、Grass Spacing 和其他变换参数可暴露于编辑器供调参。</p>
+<figure>
+<img src="./pcg-2.gif" alt="PCG Graph 暴露的草地密度参数" />
+<figcaption aria-hidden="true">PCG Graph 暴露的草地密度参数</figcaption>
+</figure>
+<figure>
+<img src="./pcg-3.gif" alt="PCG Graph 暴露的剔除距离参数" />
+<figcaption aria-hidden="true">PCG Graph 暴露的剔除距离参数</figcaption>
+</figure>
+<p>下面是道路两端生成树桩和路灯的 PCG Graph
+的局部。其中，树桩为静态网格体，而路灯为静态
+Actor，需执行昼夜循环逻辑。二者均进行了相交检测和剔除，剔除逻辑基于包围盒之间的相交检测（通过
+Bounds Modifier 控制包围盒大小），以及道路样条线放样得到的蒙版 Road
+Mask。</p>
+<figure>
+<img src="./road-pcg.png" alt="PCG Graph 局部：道路生成" />
+<figcaption aria-hidden="true">PCG Graph 局部：道路生成</figcaption>
+</figure>
+<h5 id="道路曲线放样">道路曲线放样</h5>
+<p>PCG Graph
+可以方便地从样条线生成有体积的道路资产，这一过程可称为“曲线放样”。下面的道路都是
+PCG 基于样条线生成的：</p>
+<figure>
+<img src="./path.gif" alt="PCG 道路巡游" />
+<figcaption aria-hidden="true">PCG 道路巡游</figcaption>
+</figure>
+<figure>
+<img src="./pcg-1.gif" alt="PCG 道路编辑 1" />
+<figcaption aria-hidden="true">PCG 道路编辑 1</figcaption>
+</figure>
+<figure>
+<img src="./pcg-road.gif" alt="PCG 道路编辑 2" />
+<figcaption aria-hidden="true">PCG 道路编辑 2</figcaption>
+</figure>
+<p>道路资产可以使用子关卡预先制作，该子关卡包含多个标签的资产，如“道路主干”“路沿石”“路灯”等。在
+PCG Graph
+中，沿着样条线实例化子关卡，并分别取这些标签，指定它们的生成逻辑，赋予各自的变换、过滤逻辑。</p>
+<p>指定样条线和道路宽度，即可自动剔除道路部分生成的植被，这大大方便了场景美术对地图资产的编辑工作。</p>
+<h5 id="pcg-排除体积">PCG 排除体积</h5>
+<p>在使用 PCG Graph
+的过程中，可以使用带标签的闭合曲线或等价的盒体碰撞体，设置排除体积蒙版，指定某些区域禁止生成
+PCG
+资产，这样就可以创建道路出口逻辑，或让艺术家自定义这一区域的内容，实现程序化生成与人工干涉的结合。</p>
+<figure>
+<img src="./spline-area-demo.png" alt="PCG 排除体积示例" />
+<figcaption aria-hidden="true">PCG 排除体积示例</figcaption>
+</figure>
+<p>上左图的白线为道路样条线，黄色盒体为道路边缘的排除体积，可阻止道路资产在此生成，即形成道路“出口”。上右图中的火山、村庄区域均有一个闭合样条线，其在高度上扫掠得到的体积可阻止植被资产的生成。</p>
+<h3 id="gameplay">Gameplay</h3>
+<h4 id="可交互逻辑">可交互逻辑</h4>
+<p>游戏中，角色可以与场景中的一些可交互物件互动，如门、灯、NPC
+等。出于性能和解耦考虑，项目没有在可交互物件中检测角色，而是使用了从角色出发，查询附近的可交互物件的蓝图逻辑，避免对每个可交互物件做
+tick 或碰撞检测的开销。</p>
+<p>为此，所有的可交互物件都需要继承蓝图接口
+<code>BPI_Interactable</code>，该接口包含以下事件：交互
+<code>Interact</code>（按 E 键触发）、重叠
+<code>Overlap</code>（用于路径点）、显示交互文字提示
+<code>ShowPrompt</code>、不显示交互文字提示
+<code>UnshowPrompt</code>。</p>
+<p>当角色附近检测到可交互物件时，即进入可交互范围，通知该物件
+<code>ShowPrompt</code> 事件，显示自身的交互文字提示，如“按 E
+键开启”。玩家在按下 E 键后，该可交互物件接收 <code>Interact</code>
+事件，执行相应逻辑。玩家离开可交互范围后，通知 <code>UnshowPrompt</code>
+即可。对于路径点，其不具备交互和交互提示，只需在玩家与其重叠时通知其
+<code>Overlap</code> 即可。</p>
+<p>这一流程也可方便处理当玩家附近有多个可交互物件时，按下交互键该如何处理的问题。简单的实现方式是根据各个物体到玩家的距离，取距离最近者单独交互。</p>
+<figure>
+<img src="./interact.gif" alt="与可交互灯具互动示例" />
+<figcaption aria-hidden="true">与可交互灯具互动示例</figcaption>
+</figure>
+<h4 id="相机过渡">相机过渡</h4>
+<p>游戏的标题画面相机，使用的是一个蓝图编程的看向指定物体，同时自身绕某个圆心旋转，并具有一定抖动的相机。在玩家点击“新游戏”后，该相机会逐渐过渡到操纵游戏角色的相机。</p>
+<figure>
+<img src="./title.gif" alt="开始游戏时的相机过渡" />
+<figcaption aria-hidden="true">开始游戏时的相机过渡</figcaption>
+</figure>
+<p>Sequencer 是 UE5
+的过场动画系统，功能十分强大，堪比专业的电影制作软件。在玩家到达指定位置后，游戏播放一个
+Sequencer 对场景做了总览。同样地，这一 Sequencer
+在淡入、淡出时，将角色相机与过场动画相机进行了混合。</p>
+<h4 id="ui">UI</h4>
+<p>UE5 中的游戏 UI 基本上就是 UMG。UMG 是基于底层的 Slate 框架的，而
+<code>Widget</code> 是 UMG 中所有 UI 元素的基类，<code>UserWidget</code>
+是 UI 界面组合的容器类。</p>
+<h5 id="标题画面与暂停画面">标题画面与暂停画面</h5>
+<p>标题画面 UserWidget 由关卡蓝图创建，在玩家开始游戏后即移除。暂停画面
+UserWidget 绑定到角色上，按下 Tab 键即可触发。</p>
+<figure>
+<img src="./pause-ui.png" alt="暂停画面有一层透明模糊效果" />
+<figcaption aria-hidden="true">暂停画面有一层透明模糊效果</figcaption>
+</figure>
+<h5 id="富文本交互提示">富文本交互提示</h5>
+<p>在交互提示中，需要为按键文本如“E 键”的“E”指定醒目的颜色，为此使用 UE5
+提供的富文本标签功能，在同一文本框中实现不同样式的文字。</p>
+<h4 id="字幕系统">字幕系统</h4>
+<p>本项目的字幕系统包括：</p>
+<ol type="1">
+<li>绑定于角色的字幕 Widget。</li>
+<li>字幕数据表
+<code>SubtitleData</code>，包含若干行字幕数据，包括文本数据、样式数据。</li>
+<li>每个继承了蓝图接口 <code>BPI_Subtitle</code> 的 Actor 均可调用的函数
+<code>ReadSubtitle</code>，输入参数为起始行 <span
+class="math inline">\(s\)</span> 和终止行 <span
+class="math inline">\(e\)</span>，Widget 将自动串行播放第 <span
+class="math inline">\(s\)</span> 行，第 <span
+class="math inline">\(s+1\)</span> 行……直到第 <span
+class="math inline">\(e\)</span> 行字幕。</li>
+</ol>
+<h4 id="昼夜循环">昼夜循环</h4>
+<p>场景使用的 Ultra Dyanmic Sky 天空盒昼夜循环系统已经提供了完善的 TOD
+系统，暴露了许多时间查询
+API。我们的场景在关卡蓝图中，查询当前时间是否为白天-黑夜交接，然后通知场景中所有的灯具
+<code>SwitchLight</code> 事件即可。</p>
+<p><code>SwitchLight</code>
+做了一个动画效果，让灯具的亮度在时间上有平滑过渡。</p>
+<figure>
+<img src="./day-night.gif" alt="昼夜交接 1" />
+<figcaption aria-hidden="true">昼夜交接 1</figcaption>
+</figure>
+<figure>
+<img src="./day-night2.gif" alt="昼夜交接 2" />
+<figcaption aria-hidden="true">昼夜交接 2</figcaption>
+</figure>
+<h4 id="碰撞体">碰撞体</h4>
+<p>场景中的许多物体直接使用简单盒体碰撞即可。对于台阶，需要手动摆放不可视的斜坡碰撞体取代原模型的碰撞，以避免走台阶时出现顿挫。IK
+会自动将角色的脚修正到真实的台阶模型上。不过，真正自然的角色走台阶动画可能是个不小的难题。</p>
+<h4 id="线性路径点">线性路径点</h4>
+<p>场景中实现了线性的路径点，以提示玩家下一步的目的地。</p>
+<h5 id="管理路径点">管理路径点</h5>
+<p>路径点在编辑器中创建，<code>WaypointManager</code>
+将会对编辑器中的所有线性路径点做检索、排序和存储。例如，在编辑器中有
+<span class="math inline">\(n\)</span> 个路径点，每个路径点的名称为
+<code>SequentialWaypoint&#123;i&#125;</code>，其中 <code>&#123;i&#125;</code> 为正整数，那么
+<code>WaypointManager</code> 将在 Construction Script
+中遍历它们，并根据名称字典序进行排序，存放于自身的数组变量中。</p>
+<p>在运行时，所有路径点默认处于非激活状态，由游戏逻辑驱动
+<code>WaypointManager</code> 顺序调用 <code>NextWaypoint</code>
+来生成下一个路径点，或称将该路径点“激活”。这样就可以按顺序生成
+<code>SequentialWaypoint1</code>，<code>SequentialWaypoint2</code>
+等路径点了。</p>
+<p>当然，这只是最简单的线性路径点的管理方式，更复杂的任务逻辑，可能需要将它们组织成一个有向无环图的结构。</p>
+<h5 id="显示路径点">显示路径点</h5>
+<p>2D 的路径点在 UI 上有两种显示逻辑：</p>
+<ul>
+<li>若路径点从世界空间投影到屏幕上位于合理的屏幕范围内，则直接在屏幕中显示即可。</li>
+<li>否则，需要根据屏幕范围，<code>clamp</code>
+路径点投影位置到屏幕边缘，同时将 2D
+的显示图变成箭头样式，提示玩家当前路径点不在屏幕可见范围内。</li>
+</ul>
+<figure>
+<img src="./waypoint.gif" alt="路径点 UI 显示逻辑" />
+<figcaption aria-hidden="true">路径点 UI 显示逻辑</figcaption>
+</figure>
+<h4 id="npc-注视玩家">NPC 注视玩家</h4>
+<p>当玩家移动到 NPC 面前时，NPC
+动画应当叠加一个“注视玩家”的成分，即让头部和上半身朝向玩家的位置。我们采用一个
+Control Rig 来修正动画：</p>
+<figure>
+<img src="./cr-lookat.png" alt="注视目标点的 Control Rig" />
+<figcaption aria-hidden="true">注视目标点的 Control Rig</figcaption>
+</figure>
+<p>以上的逻辑是，对 head（头部）和 spine3（上半身）骨骼进行 IK
+解算，在世界空间中，将骨骼局部坐标向量与输入的向量参数对齐。这里对齐的向量是骨骼局部的
+<span class="math inline">\(y\)</span>
+轴，表示角色的朝向（可通过骨骼实际坐标系验证）。在我们的逻辑中，输入的向量自然就是玩家角色模型位置与
+NPC 角色模型位置之差。</p>
+<p>假设我们的 NPC 始终播放 Idle 动画，在 Animation Graph 中应用此
+Control Rig 如下：</p>
+<figure>
+<img src="./abp-animation.png" alt="Animation Graph 应用 Control Rig" />
+<figcaption aria-hidden="true">Animation Graph 应用 Control
+Rig</figcaption>
+</figure>
+<p>其中的所有参数均通过动画蓝图 Event Graph tick
+输入。<code>LookAt</code> 是 NPC 角色蓝图 tick
+的结果，<code>IsLookingAt</code>
+控制该注视逻辑是否生效，<code>IsInRange</code>
+控制该注释逻辑不适用于角色处于 NPC
+背后的情况（否则将导致脖子转角非正常）。</p>
+<p>结合 NPC 角色蓝图运行时可交互逻辑，我们让角色通知该 NPC
+是否该“被激活”（可通过 <code>ShowPrompt</code> 事件执行），然后 NPC
+即可计算注视向量，传递给动画蓝图，进而实现注视逻辑。</p>
+<figure>
+<img src="./npc.gif" alt="NPC 注视玩家" />
+<figcaption aria-hidden="true">NPC 注视玩家</figcaption>
+</figure>
+<p>类似地，也可以实现玩家注视 NPC 的逻辑，这里不再赘述。</p>
+<h3 id="材质与视效">材质与视效</h3>
+<h4 id="空气墙材质">空气墙材质</h4>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1m34y1P7KS/">UE5怎样制作角色触碰空气墙效果_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<p>作者认为，游戏中的空气墙不应该是完全透明的，应该给玩家应该“你已触碰到边界”的提示。我们可以在玩家到达空气墙附近时，让透明空气墙具有发光纹理，该纹理可产生随机扰动，以制造“科技能量场”或“魔法屏障”的视觉观感。</p>
+<p>发光空气墙材质的实现思路如下：</p>
+<ul>
+<li>采样空气墙表面坐标 <span class="math inline">\(\mathbf
+p\)</span>，获取角色当前世界坐标 <span class="math inline">\(\mathbf
+x\)</span>。</li>
+<li>若两者距离 <span class="math inline">\(||\mathbf p - \mathbf
+x||\)</span> 小于阈值 <span
+class="math inline">\(R\)</span>，则对该空气墙表面应用一个发光材质（可用
+<code>SphereMask</code> 节点计算该过程，其可控制
+hardness，过渡圆形边缘）。</li>
+<li>否则，说明角色距离空气墙仍有一定的距离，使用全透明空气墙即可。</li>
+</ul>
+<p>实现效果如下：</p>
+<figure>
+<img src="./air-wall1.gif" alt="空气墙-无扰动" />
+<figcaption aria-hidden="true">空气墙-无扰动</figcaption>
+</figure>
+<p>可以进一步使用引擎自带的 <code>Motion_4WayChaos</code>，在时域上采样
+Perlin noise
+生成四向的噪声扰动，进而产生空气墙材质动画，如下图所示：</p>
+<figure>
+<img src="./air-wall2.gif" alt="空气墙-有扰动" />
+<figcaption aria-hidden="true">空气墙-有扰动</figcaption>
+</figure>
+<p>当然，这种效果可能还不是很美观。</p>
+<h4 id="光照路灯视觉欺骗">光照路灯视觉欺骗</h4>
+<p>出于性能考虑，尽管场景中所有的光照路灯模型看上去是面光源，但它们实际上都使用点光源。但放置于模型内部的点光源对路灯模型本身的照明效果并不好，让路灯看上去有一种漏光效果，很不真实。</p>
+<p>为此，作者想了一个很奇怪的方法来优化路灯的视觉效果。这个方法是：</p>
+<ul>
+<li>为每个灯具创建一个只影响自身的点光源，其只能照亮灯具模型本身，并投射灯具模型的阴影，但对场景无光照影响。</li>
+<li>每个灯具的真正的点光源可影响场景，但不能照亮灯具模型，也不投射灯具模型的阴影，只投射其他模型的阴影。</li>
+</ul>
+<p>可以通过光照通道（channel）实现以上效果，这样就能得到虚假但看上去还行的路灯照明了。图中左侧灯具是使用本方法后的效果，右侧是直接使用一个点光源的效果。如果希望路灯看起来更亮一点，只需修改只影响自身的点光源的亮度即可。当然，这种方法有很多问题，比如性能上的浪费，以及两个路灯不能互相照明彼此，等等。</p>
+<figure>
+<img src="./fake-light.png" alt="点光源光照路灯 hack" />
+<figcaption aria-hidden="true">点光源光照路灯 hack</figcaption>
+</figure>
+<h4 id="vdb-体积特效">VDB 体积特效</h4>
+<p>VDB（Volumetric Dynamic
+Bounding）是一种预烘焙的体积纹理，采用稀疏体素存储，可用于制作动画特效。相对粒子系统，其可具有更细节的视觉效果，但并不具备引擎编辑器内编程与修改的灵活性。本项目应用了第三方篝火
+VDB 特效和火山烟雾 VDB 特效。</p>
+<figure>
+<img src="./volcano-vdb.png" alt="火山烟雾 VDB 特效" />
+<figcaption aria-hidden="true">火山烟雾 VDB 特效</figcaption>
+</figure>
+<p>为了避免火山烟雾特效被距离剔除，使用控制台命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r.HeterogeneousVolumes.MaxTraceDistance 200000</span><br></pre></td></tr></table></figure>
+<p>将剔除距离调到一个更高的值即可。</p>
+<h4 id="运行时虚拟纹理过渡">运行时虚拟纹理过渡</h4>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1RM4m117Ur/">【UE5教程】虚拟纹理使用技巧【附RVT材质函数下载】_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<p>使用运行时虚拟纹理（RVT）可以在运行时传递纹理参数，混合地形材质与地形之上的模型材质，实现两者之间的平滑过渡。它的实现思路如下：</p>
+<ol type="1">
+<li>为地形材质创建 RVT 的写入对象。</li>
+<li>使用 RVT 体积，体积内部的 RVT 可被实时写入。</li>
+<li>在模型中采样 RVT，根据地形 heightmap 混合自身材质参数与地形材质 RVT
+参数，实现平滑过渡。</li>
+</ol>
+<figure>
+<img src="./rvt.gif" alt="使用运行时虚拟纹理过渡篝火与地形材质" />
+<figcaption
+aria-hidden="true">使用运行时虚拟纹理过渡篝火与地形材质</figcaption>
+</figure>
+<h4 id="后处理">后处理</h4>
+<p>当前项目基本使用 Ultra Dynamic Sky
+的默认后处理配置，没有为项目添加多余的后处理效果，如使用 LUT 调色。</p>
+<p>我很好奇实际项目中，是否会为昼夜不同时间段配置不同的后处理参数，如
+LUT。如果是这样的话，可能调色工作会更麻烦一些。</p>
+<h3 id="优化考虑">优化考虑</h3>
+<h4 id="nanite">Nanite</h4>
+<p>除骨骼网格体外，包括地形，场景中的所有模型均开启了
+Nanite。这样就不需要担心模型的 LOD 资产是否完备了。</p>
+<p>使用 Nanite
+地形可以方便地对地形做细分，应用凹凸纹理，不过目前并没有这样的 bump map
+资产。</p>
+<h4 id="地形流送虚拟纹理">地形流送虚拟纹理</h4>
+<p>场景中地形纹理采样的贴图是高清的，可能占用许多显存，因此使用流送虚拟纹理（SVT）是一项不错的优化。</p>
+<h4 id="子关卡">子关卡</h4>
+<p>子关卡可以方便地管理关卡中的某些资产群组，也可以选择性地作为流送单元，避免不必要的加载，以提高性能。本项目当前只用了子关卡来管理神庙的各项资产——如果仅希望修改神庙内的内容，如游戏逻辑、资产放置，则不必在大世界关卡中修改，只需修改神庙关卡中的内容即可。</p>
+<figure>
+<img src="./temple.png" alt="展示神庙子关卡" />
+<figcaption aria-hidden="true">展示神庙子关卡</figcaption>
+</figure>
+<h4 id="世界分区">世界分区</h4>
+<p>世界分区是 UE5
+在大世界场景的基于均匀网格的关卡流送机制。目前这个场景的规模还不足以需要开启世界分区优化。</p>
+<h3 id="工具开发">工具开发</h3>
+<h4 id="编辑地形时禁用-pcg-生成">编辑地形时禁用 PCG 生成</h4>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/Megurine/UnrealPCGVolume">Megurine/UnrealPCGVolume:
+Custom PCGVolume disabled during landscape edit to avoid OutOfMemory
+crash</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://forums.unrealengine.com/t/how-to-stop-pause-pcg-generation-when-editing-landscape/1185254/9">How
+to stop/pause PCG generation when editing landscape ? - Programming
+&amp; Scripting / Blueprint - Epic Developer Community Forums</a></p>
+</blockquote>
+<p>现有的 UE5 没有提供一个接口，让开发者在编辑地形时自动禁用实时 PCG
+生成。这导致我们每画一笔地形，PCG
+就重新生成一次，可能导致持续性的卡顿，严重影响开发。如果禁用所有 PCG
+Graph
+的自动生成，那么每次进入地形编辑都需要手动禁用一次，每次退出地形编辑都需要手动开启一次，仍会带来很大的麻烦。</p>
+<p>本项目参考了 Epic Developer 论坛的帖子，编写一个 C++ 类
+<code>DLM_PCGVolume</code>，继承并替换 <code>PCGVolume</code>
+类实现这一效果。在 <code>DLM_PCGVolume</code> 类下的 PCG Volume
+会在检测到编辑器处于 Landscape 编辑模式下时，禁用 PCG
+自动更新。可进一步将其拓展为多个开关选项：</p>
+<ul>
+<li>在任何情况下都禁用 PCG 自动更新</li>
+<li>在 Landscape 编辑模式下才禁用自动更新</li>
+<li>不禁用自动更新（<code>PCGVolume</code> 类的默认行为）</li>
+</ul>
+<h4 id="样条线复制工具">样条线复制工具</h4>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1fT421677w/">UE样条线克隆：一键复制样条点_哔哩哔哩_bilibili</a></p>
+</blockquote>
+<p>在 PCG
+工作流中，经常会有复制样条线的需求，例如复制道路样条线进行修改对比，或是复制
+bounding 样条线指定 PCG 生成区域。</p>
+<p>然而，UE5 居然没有复制样条线的功能：复制 Spline component
+只能复制该样条线的一个顶点，无法复制整个样条线（分段样条）。类似地，参考
+B 站社区提供的教程来实现这一点。</p>
+<h4 id="蓝图排序功能">蓝图排序功能</h4>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.fab.com/zh-cn/listings/0aadd41b-c02d-4f63-9009-bffad0070ebc">LE
+Extended Standard Library | Fab</a></p>
+</blockquote>
+<p>UE C++ 有 <code>TArray</code>
+的排序方法，但蓝图中却没有提供，这给线性路径点管理的实现带来了麻烦。本项目没有自己造轮子，而是使用了
+LE Extended Standard Library 插件提供的排序方法。</p>
+<h2 id="借物表">借物表</h2>
+<p>本项目的学习过程中包含或参考了如下第三方产品，包括资产、功能开发等，它们可能在
+Blender 或/和 UE5
+中经历了更符合项目需求的修改。为此向相应作者致以谢意。</p>
+<p>来自 Epic Games：</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/ef920974-4e1d-4ca9-afe2-277f5adcfe53">Slay
+Animation Sample |
+Fab</a>，提供了大量的日式建筑资产，并且构成了场景中的神庙部分。</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/880e319a-a59e-4ed2-b268-b32dac7fa016">Game
+Animation Sample | Fab</a>，提供了角色动画 Motion Matching 模板。</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/d79688f5-29be-4fb2-a650-2d4a813f5306">Electric
+Dreams Env | Fab</a>，提供了 PCG Graph 参考。</li>
+</ul>
+<p>来自其他第三方：</p>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/84fda27a-c79f-49c9-8458-82401fb37cfb">Ultra
+Dynamic Sky | Fab</a>，提供了天空盒昼夜循环系统。</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/6602874e-ef24-48c9-9055-a7ac07384696">MW
+Landscape Auto Material | Fab</a>，提供了 PCG 地形材质模板。</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/8206b7c3-e4fa-4c36-bde3-98c03b0de8ac">MW
+Broadleaf Forest Trees Biome |
+Fab</a>，提供了树木、植被和小石子资产。</li>
+<li><a
+target="_blank" rel="noopener" href="https://yos3d.com/asset/environment-asian-forest-town/">Asian
+Forest Town - Yos3D</a>，提供了亚洲风格建筑资产。</li>
+<li><a
+target="_blank" rel="noopener" href="https://jangafx.com/software/embergen/download/free-vdb-animations">Free
+VDB Volumes Created With EmberGen</a>，提供了火焰和烟雾 VDB 特效。</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/ab3455ce-ff4c-4362-ba14-dcb83f5f1302">Campfire
+| Fab</a>，提供了篝火模型资产。</li>
+<li><a
+target="_blank" rel="noopener" href="https://www.fab.com/listings/0aadd41b-c02d-4f63-9009-bffad0070ebc">LE
+Extended Standard Library | Fab</a>，提供了蓝图排序节点。</li>
+</ul>
+<h2 id="剧本设计与美术设计">剧本设计与美术设计</h2>
+<p>这部分内容与技术无关，可以理解为作者的自嗨。</p>
+<p>《祇园：东渡》与《祇园》的许多剧本一样，来源于现实世界中的宗教事件。本剧本的原型是“鉴真东渡”。历史上的鉴真东渡是一次艰难的旅程，在第六次东渡时才得以成功。鉴真东渡。公元
+753
+年，鉴真和尚的第六次东渡从苏州出发，横渡东海，经琉球群岛抵九州岛，终于踏上了日本的土地。</p>
+<p>在《祇园》的世界观下，这次东渡是沙门反抗组织扩张的重要举措。沙门（原型为佛教）到震旦（原型为中国）站稳脚跟，取得民心，转化反动势力之后，自然需要有计划地扩张组织的影响范围，而这次的目的地是极东之地——“扶桑”（原型为日本）。然而，高高在上的天神视沙门为眼中钉，不可能让他们轻而易举实现文明交流，遂有意制造风暴灾难阻止船队前进。于是，主角被吹到原型为琉球的岛屿上，进行新的冒险之旅。这座岛上的居民称他们的神社为“御岳”，神名为“奄美”，原型为琉球神话的阿摩美久神。</p>
+<p>本开放世界场景中的岛屿，原型是琉球群岛中的火山岛。然而，受能获取到的资产所限，很难针对当地生态环境设置植被，因此场景的生态其实并不能禁得起推敲。作者参考了现实中同一地带的火山岛，如诹访之濑岛火山、口永良部岛的图片，发现它们并不能称得上十分美观。所以，场景中的火山积雪，大概只是某种缝合了富士山的美术畅想，也就是胡乱发挥。</p>
+<p>岛屿本身呈现示字旁，即“神”的偏旁部首，暗示这座岛屿的归属。不过，似乎也有另一种解读偏旁部首的方式……</p>
+<figure>
+<img src="./overview.png" alt="overview" />
+<figcaption aria-hidden="true">overview</figcaption>
+</figure>
+<h2 id="进一步开发计划">进一步开发计划</h2>
+<h3 id="pcg-1">PCG</h3>
+<ul>
+<li>城镇 PCG。村庄和城市都是可以用 PCG
+逻辑生成的，可指定的参数包括城镇内部的道路样条线、区块类型（不同的区块生成不同的建筑类型）。</li>
+</ul>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/using-pcg-with-gpu-processing-in-unreal-engine">Using
+PCG with GPU Processing in Unreal Engine | Unreal Engine 5.6
+Documentation | Epic Developer Community</a></p>
+</blockquote>
+<ul>
+<li>GPU 上的 PCG。以采样点为基本单元执行 PCG 流程，这很适合在 GPU
+上并行，提高编辑时的 PCG 效率，但要处理许多计算图中的依赖问题。UE
+5.6是只试验性地开放了部分 PCG Graph 节点的 GPU
+执行，不过这个功能绝对未来可期。</li>
+</ul>
+<h3 id="其他">其他</h3>
+<ul>
+<li>完善剧本</li>
+<li>开发游泳功能、潜水功能，绘制海底地形</li>
+<li>探索更多开放世界游戏可玩性</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/" title="UE5 PCG 项目 Demo——祇园：东渡">https://zrephel.fun/2025/06/19/UE5-PCG-项目-Demo——祇园：东渡/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/UE/" rel="tag"># UE</a>
+              <a href="/tags/Demo/" rel="tag"># Demo</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/18/Shadow-Mapping-%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" rel="prev" title="Shadow Mapping 算法总结">
+                  <i class="fa fa-angle-left"></i> Shadow Mapping 算法总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/06/19/UE5-PCG-%E9%A1%B9%E7%9B%AE-Demo%E2%80%94%E2%80%94%E7%A5%87%E5%9B%AD%EF%BC%9A%E4%B8%9C%E6%B8%A1/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
