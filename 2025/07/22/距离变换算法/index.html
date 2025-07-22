@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="https:&#x2F;&#x2F;perso.telecom-paristech.fr&#x2F;bloch&#x2F;ANIM&#x2F;Danielsson.pdf  给定二维数组 \(a_{i,j}\)，其中所有的元素为 \(0\) 或 \(1\)，且 \(i \in [1,n], j \in [1,m]\)。 定义所有元素为 \(1\) 的点集为 \(S&#x3D; \{(i,j): a_{i,j} &#x3D; 1\}\)，其补 $S &#x3D; {(i,j)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="距离变换算法">
+<meta property="og:url" content="https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;perso.telecom-paristech.fr&#x2F;bloch&#x2F;ANIM&#x2F;Danielsson.pdf  给定二维数组 \(a_{i,j}\)，其中所有的元素为 \(0\) 或 \(1\)，且 \(i \in [1,n], j \in [1,m]\)。 定义所有元素为 \(1\) 的点集为 \(S&#x3D; \{(i,j): a_{i,j} &#x3D; 1\}\)，其补 $S &#x3D; {(i,j)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/error.png">
+<meta property="article:published_time" content="2025-07-22T09:57:20.000Z">
+<meta property="article:modified_time" content="2025-07-22T09:59:46.647Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/error.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/","path":"2025/07/22/距离变换算法/","title":"距离变换算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>距离变换算法 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">距离变换算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%BC%E5%93%88%E9%A1%BF%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.1.</span> <span class="nav-text">曼哈顿距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AC%A7%E6%B0%8F%E8%B7%9D%E7%A6%BB"><span class="nav-number">2.2.</span> <span class="nav-text">欧氏距离</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sdf-%E7%9A%84%E6%B1%82%E8%A7%A3"><span class="nav-number">3.</span> <span class="nav-text">SDF 的求解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">更多距离变换算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E5%B9%BF%E5%88%B0%E9%AB%98%E7%BB%B4"><span class="nav-number">4.</span> <span class="nav-text">推广到高维</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="距离变换算法 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          距离变换算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-22 17:57:20 / Modified: 17:59:46" itemprop="dateCreated datePublished" datetime="2025-07-22T17:57:20+08:00">2025-07-22</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>https://perso.telecom-paristech.fr/bloch/ANIM/Danielsson.pdf</p>
+</blockquote>
+<p>给定二维数组 <span
+class="math inline">\(a_{i,j}\)</span>，其中所有的元素为 <span
+class="math inline">\(0\)</span> 或 <span
+class="math inline">\(1\)</span>，且 <span class="math inline">\(i \in
+[1,n], j \in [1,m]\)</span>。</p>
+<p>定义所有元素为 <span class="math inline">\(1\)</span> 的点集为 <span
+class="math inline">\(S= \{(i,j): a_{i,j} = 1\}\)</span>，其补 $S =
+{(i,j): a_{i,j} = 0} $。</p>
+<p>定义距离度量函数</p>
+<p><span class="math display">\[
+||(i,j)||_p = \left( |i|^p + |j|^p \right)^{1/p}
+\]</span></p>
+<p>设计算法，输出一个二维数组 <span
+class="math inline">\(d_{i,j}\)</span>，满足</p>
+<p><span class="math display">\[
+d_{i,j} = \min_{(h,k) \in S} ||(i-h,j-k)||_p
+\]</span></p>
+<span id="more"></span>
+<p>你的算法应当处理：</p>
+<ul>
+<li><span class="math inline">\(p=1\)</span> 时的情况（曼哈顿距离）</li>
+<li><span class="math inline">\(p=2\)</span> 时的情况（欧氏距离）</li>
+</ul>
+<h2 id="分析">分析</h2>
+<p>如果我们视 <span class="math inline">\(a_{i,j}\)</span> 中的元素为
+<span class="math inline">\(1\)</span> 的点为物体占据的空间，元素为
+<span class="math inline">\(0\)</span> 的点为外部空间，那么 <span
+class="math inline">\(d_{i,j}\)</span> 就是 <span
+class="math inline">\(a_{i,j}\)</span>
+的距离场。因此，这个问题是一个二维的距离场生成问题。</p>
+<p>显然有一个 <span class="math inline">\(O(n^2m^2)\)</span>
+的暴力算法，可以处理任意的 <span
+class="math inline">\(p\)</span>：遍历每个 <span
+class="math inline">\((i,j)\)</span>，BFS 寻找最近的 <span
+class="math inline">\((h,k) \in
+S\)</span>。这个算法可以用多线程优化，开启 <span
+class="math inline">\(nm\)</span> 个线程，每个线程只需 <span
+class="math inline">\(O(nm)\)</span>
+工作量。那么，有没有办法优化这个暴力算法呢？</p>
+<h2 id="距离变换算法">距离变换算法</h2>
+<h3 id="曼哈顿距离">曼哈顿距离</h3>
+<p>我们先考虑 <span class="math inline">\(p=1\)</span> 时的情况。</p>
+<p>我们对每个 <span class="math inline">\((i,j)\)</span>，保存其最近的
+<span class="math inline">\((h^*,k^*) \in S\)</span> 的信息。如果 <span
+class="math inline">\((i,j)\)</span> 周围的 4 个点都已经计算了最近的
+<span class="math inline">\((h,k)\)</span>，只需考虑从这些 <span
+class="math inline">\((h,k)\)</span>
+中选一个曼哈顿距离最小的，然后将该结果加 1 即可得到 <span
+class="math inline">\(d_{i,j}\)</span>。这是一种动态规划的思想。</p>
+<p>形式化地，记</p>
+<p><span class="math display">\[
+(h^*,k^*) = \arg \min_{(h,k) \in S} ||(i-h,j-k)||_p,
+\]</span></p>
+<p>定义</p>
+<p><span class="math display">\[
+f_{i,j} = (i-h^*,j-k^*),
+\]</span></p>
+<p>则其状态转移方程为</p>
+<p><span class="math display">\[
+f_{i,j} = \min \begin{cases}
+f_{i-1,j} + (1,0), \\
+f_{i,j-1} + (0,1), \\
+f_{i+1,j} + (-1,0), \\
+f_{i,j+1} + (0,-1),
+\end{cases}
+\]</span></p>
+<p>其中，<span class="math inline">\(\min ((i_1,j_1), \dots, (i_n,
+j_n))\)</span> 的定义为</p>
+<p><span class="math display">\[
+\min ((i_1,j_1), \dots, (i_n, j_n))= \arg \min_{(i,j)} ||(i,j)||_p.
+\]</span></p>
+<p>最终结果在</p>
+<p><span class="math display">\[
+d_{i,j} = ||f_{i,j}||_p.
+\]</span></p>
+<p>初值条件为</p>
+<p><span class="math display">\[
+f_{i,j} = \begin{cases}
+(+\infty, +\infty) , (i,j) \in \bar S, \\
+(0,0) , (i,j) \in S.
+\end{cases}
+\]</span></p>
+<p>可以证明，如此递推对曼哈顿距离是正确的。但我们需要两趟遍历才能处理这个状态转移方程。具体地：</p>
+<ol type="1">
+<li><p>第一次遍历：正序遍历（<span class="math inline">\(i\)</span>
+递增，<span class="math inline">\(j\)</span> 递增），更新每个 <span
+class="math inline">\(f_{i,j}\)</span>：</p>
+<p><span class="math display">\[
+f_{i,j} = \min \begin{cases}
+    f_{i,j}, \\
+    f_{i-1,j} + (1,0), \\
+    f_{i,j-1} + (0,1),
+    \end{cases}
+\]</span></p></li>
+<li><p>第二次遍历：倒序遍历（<span class="math inline">\(i\)</span>
+递减，<span class="math inline">\(j\)</span> 递减），更新每个 <span
+class="math inline">\(f_{i,j}\)</span>：</p>
+<p><span class="math display">\[
+f_{i,j} = \min \begin{cases}
+     f_{i,j}, \\
+     f_{i+1,j} + (-1,0), \\
+     f_{i,j+1} + (0,-1),
+\end{cases}
+\]</span></p></li>
+</ol>
+<p>这样即可在 <span class="math inline">\(O(nm)\)</span>
+的时间复杂度下计算 <span
+class="math inline">\(d_{i,j}\)</span>，但需要额外的 <span
+class="math inline">\(O(nm)\)</span> 空间。</p>
+<h3 id="欧氏距离">欧氏距离</h3>
+<p>我们考虑 <span class="math inline">\(p=2\)</span>
+的情况。我们可以将上述曼哈顿距离的做法故技重施，只需修改距离度量的 <span
+class="math inline">\(p\)</span> 为 <span
+class="math inline">\(2\)</span> 即可，这就是 4SEDT (4-point Sequential
+Weighted Distance Transform)
+算法。但可以证明，这种算法可能存在误差，某些 <span
+class="math inline">\(d_{i,j}\)</span>
+可能会高估实际欧氏距离。误差分析如下：</p>
+<figure>
+<img src="error.png" alt="极端条件的误差分析" />
+<figcaption aria-hidden="true">极端条件的误差分析</figcaption>
+</figure>
+<p>考虑点 A <span class="math inline">\((i,j)\)</span> 的邻近点 B <span
+class="math inline">\((i+1,j)\)</span> 和 C <span
+class="math inline">\((i,j+1)\)</span>。如果 B 和 C
+恰好分别记录了一个距离为 <span class="math inline">\(r\)</span> 的点 D
+<span class="math inline">\((i + 1 + r, j)\)</span> 和 E <span
+class="math inline">\((i, j+1+r)\)</span> 为最近点，没有记录等距的点 F
+为最近点，那么 A 的最近点，依据动态规划算法，将会是 D 和 E
+之中的一个，并且距离为 <span class="math inline">\(d_{i,j} =
+r+1\)</span>。但实际上 A 到 F 的距离 <span
+class="math inline">\(d\)</span> 会更小。若 AF、AD 成 45
+度角，则成立几何关系</p>
+<p><span class="math display">\[
+r^2 = \left( \frac{d}{\sqrt 2}  \right)^2 + \left( \frac{d}{\sqrt 2} - 1
+\right)^2.
+\]</span></p>
+<p>解得</p>
+<p><span class="math display">\[
+r = \sqrt{ d^2 - \sqrt 2 d + 1 }.
+\]</span></p>
+<p>那么，误差将是</p>
+<p><span class="math display">\[
+e(d) = (r+1) - d = \sqrt{ d^2 - \sqrt 2 d + 1 } - d + 1.
+\]</span></p>
+<p>其中 <span class="math inline">\(d\)</span> 位于斜 45
+度角方向上，因此满足 <span class="math inline">\(d = \sqrt 2
+n\)</span>，<span class="math inline">\(n\)</span> 为正整数。</p>
+<p><span class="math inline">\(e(d)\)</span>
+是一个单调递减的函数，最大值为 <span class="math inline">\(e(\sqrt 2) =
+2 - \sqrt 2 \approx
+0.58\)</span>，但该值因网格的离散性而实际不可能取到。</p>
+<p>另一方面：</p>
+<p><span class="math display">\[
+\begin{aligned}
+e(d) - 1 &amp;=
+\sqrt{ d^2 - \sqrt 2 d + 1 } - d \\
+&amp;= \frac{(\sqrt{ d^2 - \sqrt 2 d + 1 } - d)(\sqrt{ d^2 - \sqrt 2 d +
+1 } + d)}{\sqrt{ d^2 - \sqrt 2 d + 1 } + d} \\
+&amp;= \frac{- \sqrt 2d + 1}{\sqrt{ d^2 - \sqrt 2 d + 1 } + d} \\
+&amp;= \frac{- \sqrt 2 + \frac{1}{d}}{\sqrt {1 + \frac{\sqrt 2}{d} +
+\frac{1}{d^2}} + 1}
+\end{aligned}
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+\lim_{d \to +\infty} e(d) = 1-\frac{\sqrt 2}{2} \approx 0.29
+\]</span></p>
+<p>由于网格的离散性，这可用于估计实际产生的最大误差。这个误差很小，意味着距离场的计算基本上是正确的，适合对精确度要求不太高的应用。</p>
+<p>如果同时考虑每个 <span class="math inline">\((i,j)\)</span> 的周围 8
+个而非仅 4 个邻近点取 min，就得到了 8SEDT
+算法，这个算法的最大误差更小，仅为 <span
+class="math inline">\(0.09\)</span>，因此广泛用于求解 2D 距离场。</p>
+<h2 id="sdf-的求解">SDF 的求解</h2>
+<blockquote>
+<p>https://zhuanlan.zhihu.com/p/258069156</p>
+</blockquote>
+<p>上述的算法都是在求解物体外部空间的距离场，如果要求解有向距离场（SDF），只需额外进行一步操作：反转
+<span class="math inline">\(S\)</span> 和 <span
+class="math inline">\(\bar S\)</span>，再求解一次 <span
+class="math inline">\(d_{i,j}\)</span>，然后为求解的所有 <span
+class="math inline">\(d_{i,j}\)</span> 添上负号，最后合并两步操作的非零
+<span class="math inline">\(d_{i,j}\)</span>
+即可。改造后的算法的命名将从 SEDT 变更为 SSEDT (Signed SEDT)。</p>
+<h3 id="更多距离变换算法">更多距离变换算法</h3>
+<p>针对不同的距离度量函数 <span
+class="math inline">\(||(i,j)||\)</span>，有各种距离变换算法求解距离场，误差极小，或针对部分任务进行了优化，详见</p>
+<blockquote>
+<p>https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=14c6e1507d9db51c4f6706dab836f3f866dd2a7c</p>
+</blockquote>
+<h2 id="推广到高维">推广到高维</h2>
+<p>以上算法也可以推广到三维空间。考虑每个三维体素周围有 26
+个体素，因此算法将变成
+26SSEDT。然而，在网上没看到有人实践过这一算法。</p>
+<p>使用 26SSEDT
+时，相对二维情况，需要六次遍历而非只需两次遍历，因此时间开销、空间开销将常数级增大。此外，26SSEDT
+的误差也将有所增大，这可能是它并不实用的原因。</p>
+<p>对于三维的 SDF 生成算法，业界一般使用 BVH 优化的多线程暴力算法（UE4
+的做法），或者 JFA 算法，后者会存在一些可忽略不计的误差。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/" title="距离变换算法">https://zrephel.fun/2025/07/22/距离变换算法/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/06/20/%E8%AE%B0%E4%B8%80%E4%B8%AA%E8%8D%89%E5%8F%B0%E7%8F%AD%E5%AD%90%E6%98%AF%E5%A6%82%E4%BD%95%E6%AF%81%E6%8E%89%E4%B8%80%E6%AC%A1-cosplay-%E4%BD%93%E9%AA%8C%E7%9A%84/" rel="prev" title="记一个草台班子是如何毁掉一次 cosplay 体验的">
+                  <i class="fa fa-angle-left"></i> 记一个草台班子是如何毁掉一次 cosplay 体验的
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
