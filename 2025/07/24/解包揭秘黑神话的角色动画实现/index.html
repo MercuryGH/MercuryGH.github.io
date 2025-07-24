@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="黑神话也在用的新一代游戏动画技术：MotionMatching讲解实践一条龙_哔哩哔哩_bilibili 基于UE官方MotionMatching还原《黑神话悟空》Locomotion - 哔哩哔哩  前一阵子看到游科在 2021 年分享过他们在黑神话项目中在 UE 里使用 Motion Matching 做角色动画，就很好奇正式发布的游戏里是怎么实现的。 然而，经过一系列逆向分析，我发现了一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解包揭秘黑神话的角色动画实现">
+<meta property="og:url" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="黑神话也在用的新一代游戏动画技术：MotionMatching讲解实践一条龙_哔哩哔哩_bilibili 基于UE官方MotionMatching还原《黑神话悟空》Locomotion - 哔哩哔哩  前一阵子看到游科在 2021 年分享过他们在黑神话项目中在 UE 里使用 Motion Matching 做角色动画，就很好奇正式发布的游戏里是怎么实现的。 然而，经过一系列逆向分析，我发现了一个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/bad-naming.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/wukong-sprint.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/wukong-run.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/zhefanpaoting.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/mizibu.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/demo-mizibu.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/mesh-jiruhuo.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/jiruhuo.gif">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/demo-filmstorm.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/animation-humanoid.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/reverse-player.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/reverse.png">
+<meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/b1-mm.png">
+<meta property="article:published_time" content="2025-07-24T02:39:59.000Z">
+<meta property="article:modified_time" content="2025-07-24T03:28:10.345Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="动画">
+<meta property="article:tag" content="游戏">
+<meta property="article:tag" content="逆向">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/bad-naming.png">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/","path":"2025/07/24/解包揭秘黑神话的角色动画实现/","title":"解包揭秘黑神话的角色动画实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解包揭秘黑神话的角色动画实现 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8D%E8%AF%8D%E7%BA%A6%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">名词约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fmodel-%E8%A7%A3%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">FModel 解包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E4%BA%A7%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">资产分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E4%BA%A7%E5%AE%9A%E4%BD%8D"><span class="nav-number">3.1.</span> <span class="nav-text">资产定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A9%E5%91%BD%E4%BA%BA%E5%8A%A8%E7%94%BB%E8%B5%84%E4%BA%A7%E5%88%86%E6%9E%90"><span class="nav-number">3.2.</span> <span class="nav-text">天命人动画资产分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%8C%E4%BA%BA%E5%8A%A8%E7%94%BB%E8%B5%84%E4%BA%A7%E5%88%86%E6%9E%90"><span class="nav-number">3.3.</span> <span class="nav-text">敌人动画资产分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%BA%E5%BD%A2%E6%95%8C%E4%BA%BA"><span class="nav-number">3.3.1.</span> <span class="nav-text">人形敌人</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%95%8C%E4%BA%BA"><span class="nav-number">3.3.2.</span> <span class="nav-text">其他敌人</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#motion-matching-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%86%E6%9E%90"><span class="nav-number">3.4.</span> <span class="nav-text">Motion Matching 数据库分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E8%84%9A%E6%9C%AC%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">C# 脚本静态分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%B8%E7%A7%91%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%80%E5%90%8E%E5%9C%A8%E4%B8%BB%E8%A7%92%E5%8A%A8%E7%94%BB%E4%B8%8A%E6%B2%A1%E7%94%A8-motion-matching"><span class="nav-number">5.</span> <span class="nav-text">游科为什么最后在主角动画上没用
+Motion Matching</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解包揭秘黑神话的角色动画实现 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解包揭秘黑神话的角色动画实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-24 10:39:59 / Modified: 11:28:10" itemprop="dateCreated datePublished" datetime="2025-07-24T10:39:59+08:00">2025-07-24</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1vYqHYnEN6/?spm_id_from=333.1387.list.card_archive.click&amp;vd_source=ab0586f168423aaa74273f6174610471">黑神话也在用的新一代游戏动画技术：MotionMatching讲解实践一条龙_哔哩哔哩_bilibili</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/opus/1004021632798294049?spm_id_from=333.1387.0.0">基于UE官方MotionMatching还原《黑神话悟空》Locomotion
+- 哔哩哔哩</a></p>
+</blockquote>
+<p>前一阵子看到游科在 2021 年分享过他们在黑神话项目中在 UE 里使用 Motion
+Matching 做角色动画，就很好奇正式发布的游戏里是怎么实现的。</p>
+<p>然而，经过一系列逆向分析，我发现了一个事实：黑神话项目中的 Motion
+Matching 并不典型，主角的角色动画就很可能完全没用到 Motion
+Matching，仍是传统的动画状态机技术，倒是部分敌人的 locomotion
+动画应该是用了 Motion Matching。</p>
+<p>先说结论：经过资产分析、代码静态分析并结合游戏实机表现，《黑神话：悟空》的</p>
+<ul>
+<li>主角（天命人、孙悟空）的所有角色动画都基于动画状态机（可能性高），或者行走、跑步动画中使用了
+Motion
+Matching，其余如攻击、跳跃、技能等则使用了动画状态机（可能性低）。</li>
+<li>部分敌人在行走、跑步动画中使用了 Motion
+Matching，其余如攻击、跳跃、技能等则使用了动画状态机。部分敌人则完全使用了动画状态机。</li>
+</ul>
+<span id="more"></span>
+<h2 id="名词约定">名词约定</h2>
+<ul>
+<li><strong>角色</strong>：一个骨骼网格体就是一个角色。</li>
+<li><strong>角色动画</strong>：控制一个骨骼网格体的 idle
+和位移的一系列动画和动画切换逻辑，不限于
+locomotion，包括空闲、行走、跑步、冲刺、攻击、跳跃、技能等。</li>
+<li><strong>主角</strong>：众所周知，黑神话有两个主角，<strong>天命人</strong>和<strong>孙悟空</strong>，后者仅于一开始在花果山对战二郎神时可控，其他时间玩家都在扮演天命人。值得一提的是，这两个角色的动画资产在游戏包体中都是分开存储的，没有公用，尽管它们的数据可能非常相似。</li>
+<li><strong>敌人</strong>：怪物，包括人形（双足）怪物和其他虫形、球形等怪物。</li>
+</ul>
+<h2 id="fmodel-解包">FModel 解包</h2>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://paw5zx.github.io/UE-fmodel-blackmyth-wukong/">使用FModel提取《黑神话:悟空》的资产
+| Paw5zx</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.bearchild.top/2024/08/30/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E9%80%86%E5%90%91/%5BUE%5DFModel%E8%B5%84%E6%BA%90%E8%A7%A3%E5%8C%85%E6%B5%81%E7%A8%8B/">[UE]FModel资源解包流程
+| BearChild's Blog</a></p>
+</blockquote>
+<p>首先，我们先从资产解包入手，看看游戏中的动画资产是否满足 Motion
+Matching 的要求，并找到相应的 Motion Matching 数据库。</p>
+<p>我们使用 FModel
+解包，解包教程网上很多，这里不再赘述。整体步骤为：</p>
+<ol type="1">
+<li>在游戏运行时获取项目的符号映射文件 usmap，以正确索引资产（可使用 <a
+target="_blank" rel="noopener" href="https://github.com/TheNaeem/UnrealMappingsDumper">Unreal Mapping
+Dumper</a> + <a
+target="_blank" rel="noopener" href="https://wearedevs.net/d/DLL%20Injector#google_vignette">DLL
+Injector</a>）</li>
+<li>获取解密游戏资产的 AES Key（一般可以直接去 <a
+target="_blank" rel="noopener" href="https://cs.rin.ru/forum/viewtopic.php?f=10&amp;t=100672">CS.RIN.RU论坛</a>
+找已经 dump 出来的密钥，或者用其他 AES dumper 工具如 <a
+target="_blank" rel="noopener" href="https://github.com/GHFear/AESDumpster">AESDumpster</a>）</li>
+<li>使用 FModel 配置以上两个数据，获取游戏资产</li>
+</ol>
+<h2 id="资产分析">资产分析</h2>
+<h3 id="资产定位">资产定位</h3>
+<blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://docs.qq.com/doc/DSmJja0dRdGdoc0dx">黑神话资产包内容索引目录</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://docs.qq.com/sheet/DSnRFZGFiZlFmYXNR?tab=3rjhda">黑神话悟空角色物品codename与中文名对照表</a></p>
+</blockquote>
+<p>解包之后，经过一系列翻找，可以定位如下资产：</p>
+<p>天命人的角色动画位于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1/Content/00Main/Animation/Player/Wukong</span><br></pre></td></tr></table></figure>
+<p>而跳跃和置于空中的循环动画则位于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1/Content/WanghaoLoc</span><br></pre></td></tr></table></figure>
+<p>孙悟空角色动画位于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1/Content/00Main/Animation/Player/Sunwukong</span><br></pre></td></tr></table></figure>
+<p>敌人 Lang_04（广智）的动画路径位于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1/Content/00Main/Animation/GYCY/GYCY_Lang_04</span><br></pre></td></tr></table></figure>
+<p>人形二郎神（杨戬 BOSS）的动画路径位于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1/Content/00Main/Animation/MGD/MGD_yangjian_01</span><br></pre></td></tr></table></figure>
+<p>急如火（火焰山双人 BOSS 急如火&amp;快如风
+中的一员，是一个人头形状的怪物）的动画路径位于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b1/Content/00MainHZ/Characters/Enemy/HYS/HYS_JiRuHuo</span><br></pre></td></tr></table></figure>
+<p>下图是天命人的角色动画目录，其中 MotionMatching 文件夹保存了 Motion
+Matching 相关数据库和动捕动画。可见，命名和结构还是很混乱的……</p>
+<figure>
+<img src="bad-naming.png" alt="天命人的角色动画目录" />
+<figcaption aria-hidden="true">天命人的角色动画目录</figcaption>
+</figure>
+<h3 id="天命人动画资产分析">天命人动画资产分析</h3>
+<p>我们先观察天命人的角色动画。</p>
+<ul>
+<li>短序列的纯 locomotion 动画，不带 root
+motion，例如循环的向前奔跑动画，以及大量的技能动画。不带 root motion
+的动画显然不能直接用于 Motion
+Matching，所以是动画状态机的切换对象。</li>
+</ul>
+<figure>
+<img src="wukong-sprint.gif" alt="循环冲刺动画" />
+<figcaption aria-hidden="true">循环冲刺动画</figcaption>
+</figure>
+<figure>
+<img src="wukong-run.gif" alt="循环跑步动画" />
+<figcaption aria-hidden="true">循环跑步动画</figcaption>
+</figure>
+<ul>
+<li>长序列的纯动捕动画，比如绕着转圈、往返跑、米字步，显然是给 Motion
+Matching 准备的。这里并没有发现与攻击、跳跃、技能有关的动捕动画。</li>
+</ul>
+<figure>
+<img src="zhefanpaoting.gif" alt="折返跑动捕动画" />
+<figcaption aria-hidden="true">折返跑动捕动画</figcaption>
+</figure>
+<p>为什么会为两种截然不同动画方案都准备动画资产呢？推测是这样的：一开始，游科打算用
+Motion Matching 直接解决所有主角角色动画，但发现主角技能组太多，Motion
+Matching
+性能消耗可能太高，或者动捕数据比较昂贵，所以后来又转向了传统的动画状态机方案。</p>
+<p>孙悟空的动画资产结构完全类似，同样包含以上两种类型的动画，这里不再赘述。</p>
+<h3 id="敌人动画资产分析">敌人动画资产分析</h3>
+<h4 id="人形敌人">人形敌人</h4>
+<p>这里以
+GYCY_Lang_04（广智）为例分析动画资产。MGD_yangjian_01（杨戬）的资产也是类似的，但技能组更丰富，因此动画资产的种类会更复杂。</p>
+<p>在 GYCY_Lang_04
+关联的动画资产中，所有的动画序列都带有动捕特点（自然、流畅程度高），并且有一些明显用于
+Motion Matching 的动捕动画，例如下面的“米字步”动捕动画：</p>
+<figure>
+<img src="mizibu.gif"
+alt="用于为 Motion Matching 提供 locomotion 数据的米字步动画" />
+<figcaption aria-hidden="true">用于为 Motion Matching 提供 locomotion
+数据的米字步动画</figcaption>
+</figure>
+<p>它恰好与游科在 2021 年 Motion Matching
+分享时提到的动画序列完全相同：</p>
+<figure>
+<img src="demo-mizibu.png"
+alt="分享 PPT，注意到动画序列的名字都是 AS_GYCY_Lang_04_MMS_mizi" />
+<figcaption aria-hidden="true">分享 PPT，注意到动画序列的名字都是
+AS_GYCY_Lang_04_MMS_mizi</figcaption>
+</figure>
+<p>而且，没有发现不带 root motion 的纯 locomotion
+动画，这种现象在多个敌人中均有出现。包括因此，可以推测，许多人形敌人在行走、跑步动画中使用了
+Motion
+Matching，而在使用技能时，则使用动画状态机混合到相应的技能动画。这种
+Motion Matching
+方案不需要考虑玩家输入，或是未来的位置预测，因此性能可能会更好。</p>
+<h4 id="其他敌人">其他敌人</h4>
+<p>这里以 HYS_JiRuHuo（急如火）这种“人头怪”为例分析。</p>
+<figure>
+<img src="mesh-jiruhuo.png" alt="“急如火”的模型" />
+<figcaption aria-hidden="true">“急如火”的模型</figcaption>
+</figure>
+<p>显然，这种圆滑的骨骼网格体不太可能通过动捕采集动画了，因此，基本上可以确认是程序生成或手
+K 的滚动动画，如下所示：</p>
+<figure>
+<img src="jiruhuo.gif" alt="“急如火”的滚动动画" />
+<figcaption aria-hidden="true">“急如火”的滚动动画</figcaption>
+</figure>
+<p>在这类敌人上，不可能使用 Motion
+Matching，只需使用动画状态机即可。</p>
+<h3 id="motion-matching-数据库分析">Motion Matching 数据库分析</h3>
+<p>FModel 可以反序列化出游科改动过的 <a
+target="_blank" rel="noopener" href="https://www.unrealengine.com/marketplace/en-US/product/motion-matching-system">Filmstorm
+开发的 Motion Matching 插件</a> 产生的 Motion Matching
+数据库，其类型名称为 <code>AnimationAnalyzer</code>，用于运行时查询
+Motion Matching 的最优动画匹配。它由搜索参数集、参数权重信息和压缩成 K-D
+tree 的动画数据集搜索空间构成。</p>
+<figure>
+<img src="demo-filmstorm.png"
+alt="游科分享中展示的 Motion Matching UI，与下方的反序列化结果完美匹配" />
+<figcaption aria-hidden="true">游科分享中展示的 Motion Matching
+UI，与下方的反序列化结果完美匹配</figcaption>
+</figure>
+<p>一个天命人的 locomotion 数据库的反序列化的示例结果如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AnimationAnalyzer&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AA_Wukong_V4_free&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Class&quot;</span><span class="punctuation">:</span> <span class="string">&quot;UScriptClass&#x27;AnimationAnalyzer&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;SelectedSkeleton&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;ObjectName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Skeleton&#x27;SKEL_Wukong_Skeleton&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;ObjectPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b1/Content/00MainHZ/Characters/Sunwukong/Meshs/Body/SKEL_Wukong_Skeleton.70&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;ControllerInputReactionSpeed&quot;</span><span class="punctuation">:</span> <span class="number">6.0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;ControllerRotateReactionSpeed&quot;</span><span class="punctuation">:</span> <span class="number">2.0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;MMKDTree&quot;</span><span class="punctuation">:</span> ...<span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;AnimationReferences&quot;</span><span class="punctuation">:</span> ...<span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;RefereIcedJoints&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;pelvis&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;spine_01&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;spine_02&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;hand_l&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;hand_r&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;calf_r&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;foot_r&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;calf_l&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;foot_l&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;JointWeights&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;4&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;5&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;6&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">2.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;7&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">1.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;8&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">2.0</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span> <span class="attr">&quot;Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;-1&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;Value&quot;</span><span class="punctuation">:</span> <span class="number">0.9534626</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;AnimationsInMemory&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;ObjectName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AnimSequence&#x27;AS_Wukong_V4_mm_zhefanpaoting&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;ObjectPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b1/Content/00Main/Animation/Player/Sunwukong/mm/AS_Wukong_V4_mm_zhefanpaoting.0&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;ObjectName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AnimSequence&#x27;AS_Wukong_V4_mm_zhefanpaobuting&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;ObjectPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b1/Content/00Main/Animation/Player/Sunwukong/mm/AS_Wukong_V4_mm_zhefanpaobuting.0&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;ObjectName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AnimSequence&#x27;AS_Wukong_V4_mm_yuan_l&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;ObjectPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b1/Content/00Main/Animation/Player/Sunwukong/mm/AS_Wukong_V4_mm_yuan_l.0&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;ObjectName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;AnimSequence&#x27;AS_Wukong_V4_mm_yuan_r&#x27;&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;ObjectPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b1/Content/00Main/Animation/Player/Sunwukong/mm/AS_Wukong_V4_mm_yuan_r.0&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+<p>可见，一个 Motion Matching 数据库包含以下内容：</p>
+<ul>
+<li>适用于该 Motion Matching 数据库的骨骼，即天命人骨骼
+<code>SKEL_Wukong_Skeleton</code></li>
+<li>Motion Matching 动画数据集，即 locomotion 动捕动画的资产
+<code>AnimationsInMemory</code></li>
+<li>Motion Matching 需要匹配的关键骨骼及其权重
+<code>RefereIcedJoints</code> 和 <code>JointWeights</code>。</li>
+<li>Motion Matching 匹配玩家输入的灵敏度
+<code>ControllerInputReactionSpeed</code> 和
+<code>ControllerRotateReactionSpeed</code>，这也是参数权重信息。</li>
+<li>压缩成 K-D tree 的 Motion Matching 搜索空间 <code>MMKDTree</code> 和
+<code>AnimationReferences</code>。这是数据库的主要部分，受空间所限无法一一列出内容。</li>
+</ul>
+<p>在编辑器中调整 Motion Matching
+资产后，程序会将动画资产中的每一帧（或取关键帧）根据参数集的维度建立 K-D
+tree，生成以上的数据库文件。运行时，Motion Matching
+就会读入当前角色的关键骨骼的位置信息，玩家角色当前的速度、加速度，以及玩家输入，将这一系列参数作为搜索参数集，在
+K-D tree
+中做查询以输出与搜索参数最匹配动画帧。随后，即可将当前角色动画混合到该动画帧，实现流畅的过渡。</p>
+<p>在翻阅资产时，可以发现天命人、孙悟空和人形敌人都具有以上的 Motion
+Matching
+数据库，建得有模有样。然而，正如上文所分析的，从游戏中的表现来看，天命人的角色动画不像是使用了
+Motion Matching 算法，所以天命人的 Motion Matching
+数据很可能仅仅是遗留在游戏文件里，实际并不会被使用。</p>
+<h2 id="c-脚本静态分析">C# 脚本静态分析</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/545559834">UE5 Distance
+Matching插件应用与源码解析 - 知乎</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/czastack/B1CSharpLoader?tab=readme-ov-file">czastack/B1CSharpLoader:
+CSharpLoader for BlackMythWukong</a></p>
+</blockquote>
+<p>总所周知，黑神话使用了 USharp 方案，用 C# 作为脚本系统。对黑神话的
+USharp 核心 DLL <code>BtlSvr.Main.dll</code>
+进行静态分析可以发现，游科实现了两套 locomotion 系统，一套是基于 Paragon
+的状态机，一套是 Motion Matching。</p>
+<figure>
+<img src="animation-humanoid.png" alt="有关人形角色动画的模块" />
+<figcaption aria-hidden="true">有关人形角色动画的模块</figcaption>
+</figure>
+<p><code>BUAnimHumanoidCS_PlayerLocomotion</code>
+模块设置了一个状态机，可控制玩家角色的移动。核心状态机逻辑如下：</p>
+<figure>
+<img src="reverse-player.png" alt="硬编码的状态机" />
+<figcaption aria-hidden="true">硬编码的状态机</figcaption>
+</figure>
+<p><code>BUAnimHumanoidSetting_AdvancedMonsterLocomotion</code>
+模块则控制人形敌人的移动。部分核心逻辑如下：</p>
+<figure>
+<img src="reverse.png"
+alt="基于 Distance Matching 的状态机 locomotion 动画" />
+<figcaption aria-hidden="true">基于 Distance Matching 的状态机
+locomotion 动画</figcaption>
+</figure>
+<p>下列是 Motion Matching
+相关的插件，实现了核心算法。不过可惜的是，Motion Matching 的核心算法都是
+C++ native 写的，这里并不能直接反编译看到。</p>
+<figure>
+<img src="b1-mm.png"
+alt="一套 Motion Matching 系统，反编译 C# 看不到核心代码" />
+<figcaption aria-hidden="true">一套 Motion Matching 系统，反编译 C#
+看不到核心代码</figcaption>
+</figure>
+<p>不过我们已经可以得出结论：游科开发了两种截然不同的 locomotion
+方案，一个是基于 Motion Matching
+的，一个是基于动画状态机的。至于游戏中用了哪个，只能是以下二者其一：</p>
+<ul>
+<li>只使用了动画状态机</li>
+<li>在行走、跑步动画中使用了 Motion
+Matching，其余如攻击、跳跃、技能等则使用了动画状态机。</li>
+</ul>
+<p>而从游戏中的实机表现来看，天命人的跑步姿势确实更接近状态机动画的
+locomotion，而非 Motion Matching
+的，所以，我更倾向于认为是前者。如果要完全确定，最稳妥的办法应该是在运行时调试，看看天命人角色动画到底有没有访问
+Motion Matching
+数据库了。对于人形敌人而言，由于游科也写了基于状态机的代码，所以他们的行走、跑步动画既可能用状态机，也可能用
+Motion Matching。</p>
+<h2
+id="游科为什么最后在主角动画上没用-motion-matching">游科为什么最后在主角动画上没用
+Motion Matching</h2>
+<p>好的 Motion Matching 确实可以提高 locomotion
+的动画质量，且避免复杂的动画状态机。但游科在最终的黑猴正式版游戏中却只在部分敌人中使用了
+Motion Matching，可能是出于以下几点考虑：</p>
+<ul>
+<li>动捕数据代价高昂，数据处理自动化困难（每个敌人分别动捕，但部分怪物难以动捕）。</li>
+<li>技能相关动画难以动捕获取，往往需要美术发挥设计能力手 K。</li>
+<li>Motion Matching 运行时性能问题。</li>
+</ul>
+<p>看来，即使是所谓的“先进”技术，在不同的项目背景下，也并非总是最佳选择。
+g'g</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/" title="解包揭秘黑神话的角色动画实现">https://zrephel.fun/2025/07/24/解包揭秘黑神话的角色动画实现/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%A8%E7%94%BB/" rel="tag"># 动画</a>
+              <a href="/tags/%E6%B8%B8%E6%88%8F/" rel="tag"># 游戏</a>
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/22/%E8%B7%9D%E7%A6%BB%E5%8F%98%E6%8D%A2%E7%AE%97%E6%B3%95/" rel="prev" title="距离变换算法">
+                  <i class="fa fa-angle-left"></i> 距离变换算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>

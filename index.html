@@ -121,13 +121,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">39</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -144,6 +144,105 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">解包揭秘黑神话的角色动画实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-24 10:39:59 / Modified: 11:28:10" itemprop="dateCreated datePublished" datetime="2025-07-24T10:39:59+08:00">2025-07-24</time>
+    </span>
+
+  
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1vYqHYnEN6/?spm_id_from=333.1387.list.card_archive.click&amp;vd_source=ab0586f168423aaa74273f6174610471">黑神话也在用的新一代游戏动画技术：MotionMatching讲解实践一条龙_哔哩哔哩_bilibili</a></p>
+<p><a
+target="_blank" rel="noopener" href="https://www.bilibili.com/opus/1004021632798294049?spm_id_from=333.1387.0.0">基于UE官方MotionMatching还原《黑神话悟空》Locomotion
+- 哔哩哔哩</a></p>
+</blockquote>
+<p>前一阵子看到游科在 2021 年分享过他们在黑神话项目中在 UE 里使用 Motion
+Matching 做角色动画，就很好奇正式发布的游戏里是怎么实现的。</p>
+<p>然而，经过一系列逆向分析，我发现了一个事实：黑神话项目中的 Motion
+Matching 并不典型，主角的角色动画就很可能完全没用到 Motion
+Matching，仍是传统的动画状态机技术，倒是部分敌人的 locomotion
+动画应该是用了 Motion Matching。</p>
+<p>先说结论：经过资产分析、代码静态分析并结合游戏实机表现，《黑神话：悟空》的</p>
+<ul>
+<li>主角（天命人、孙悟空）的所有角色动画都基于动画状态机（可能性高），或者行走、跑步动画中使用了
+Motion
+Matching，其余如攻击、跳跃、技能等则使用了动画状态机（可能性低）。</li>
+<li>部分敌人在行走、跑步动画中使用了 Motion
+Matching，其余如攻击、跳跃、技能等则使用了动画状态机。部分敌人则完全使用了动画状态机。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -181,9 +280,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-07-22 17:57:20 / Modified: 17:59:46" itemprop="dateCreated datePublished" datetime="2025-07-22T17:57:20+08:00">2025-07-22</time>
+      <time title="Created: 2025-07-22 17:57:20" itemprop="dateCreated datePublished" datetime="2025-07-22T17:57:20+08:00">2025-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-07-24 10:48:05" itemprop="dateModified" datetime="2025-07-24T10:48:05+08:00">2025-07-24</time>
     </span>
 
   
@@ -207,8 +312,8 @@ class="math inline">\(0\)</span> 或 <span
 class="math inline">\(1\)</span>，且 <span class="math inline">\(i \in
 [1,n], j \in [1,m]\)</span>。</p>
 <p>定义所有元素为 <span class="math inline">\(1\)</span> 的点集为 <span
-class="math inline">\(S= \{(i,j): a_{i,j} = 1\}\)</span>，其补 $S =
-{(i,j): a_{i,j} = 0} $。</p>
+class="math inline">\(S= \{(i,j): a_{i,j} = 1\}\)</span>，其补 <span
+class="math inline">\(\bar S = \{(i,j): a_{i,j} = 0\}\)</span>。</p>
 <p>定义距离度量函数</p>
 <p><span class="math display">\[
 ||(i,j)||_p = \left( |i|^p + |j|^p \right)^{1/p}
@@ -897,93 +1002,6 @@ href="https://zrephel.fun/2024/12/17/%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/04/18/%E6%9C%89%E5%90%91%E8%B7%9D%E7%A6%BB%E5%9C%BA%E7%9A%84%E6%9E%84%E5%BB%BA%E4%B8%8E%E5%BA%94%E7%94%A8/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mercury">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mercury's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Mercury's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">动画系统笔记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2025-04-13 11:34:20" itemprop="dateCreated datePublished" datetime="2025-04-13T11:34:20+08:00">2025-04-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-05-06 19:18:24" itemprop="dateModified" datetime="2025-05-06T19:18:24+08:00">2025-05-06</time>
-    </span>
-
-  
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这是笔者大三在游戏公司实习时做的的动画系统笔记，基于 <em>Game Engine
-Architecture, Third Edition</em>
-这本书的相关章节，挖出来给大家分享。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/04/13/%E5%8A%A8%E7%94%BB%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
