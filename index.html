@@ -189,7 +189,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-26 14:47:01" itemprop="dateModified" datetime="2025-07-26T14:47:01+08:00">2025-07-26</time>
+      <time title="Modified: 2025-07-26 17:55:21" itemprop="dateModified" datetime="2025-07-26T17:55:21+08:00">2025-07-26</time>
     </span>
 
   
@@ -217,11 +217,9 @@ Matching 做角色动画，就很好奇正式发布的游戏里是怎么实现�
 Matching 并不典型，主角的角色动画就很可能完全没用到 Motion
 Matching，仍是传统的动画状态机技术，倒是部分敌人的 locomotion
 动画应该是用了 Motion Matching。</p>
-<p>先说结论：经过资产分析、代码静态分析并结合游戏实机表现，《黑神话：悟空》的</p>
+<p>先说结论：经过资产分析、代码静态分析和动态分析，并结合游戏实机表现，《黑神话：悟空》的</p>
 <ul>
-<li>主角（天命人、孙悟空）的所有角色动画都基于动画状态机（可能性高），或者行走、跑步动画中使用了
-Motion
-Matching，其余如攻击、跳跃、技能等则使用了动画状态机（可能性低）。</li>
+<li>主角（天命人、孙悟空）的所有角色动画都基于动画状态机。</li>
 <li>部分敌人在行走、跑步动画中使用了 Motion
 Matching，其余如攻击、跳跃、技能等则使用了动画状态机。部分敌人则完全使用了动画状态机。</li>
 </ul>
