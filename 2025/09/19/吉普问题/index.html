@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Jeep_problem https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;7236950040  某吉普位于原点，在原点处有 \(n\) 单位燃油。吉普的油箱中最多可存储 \(m\) 单位燃油。吉普可以随时随地将任意单位燃油卸载于当地，或从当地载入油箱。吉普每单位时间可移动一单位长度，且移动时每单位时间必须消耗油箱中的一单位燃">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吉普问题">
+<meta property="og:url" content="https://zrephel.fun/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Jeep_problem https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;7236950040  某吉普位于原点，在原点处有 \(n\) 单位燃油。吉普的油箱中最多可存储 \(m\) 单位燃油。吉普可以随时随地将任意单位燃油卸载于当地，或从当地载入油箱。吉普每单位时间可移动一单位长度，且移动时每单位时间必须消耗油箱中的一单位燃">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-09-19T09:13:54.000Z">
+<meta property="article:modified_time" content="2025-09-19T09:16:52.355Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="优化">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/","path":"2025/09/19/吉普问题/","title":"吉普问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>吉普问题 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">引理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E7%87%83%E6%B2%B9%E7%9A%84%E6%9C%80%E5%A4%A7%E4%BD%8D%E7%A7%BB"><span class="nav-number">1.2.</span> <span class="nav-text">1：给定燃油的最大位移</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E4%BD%8D%E7%A7%BB%E7%9A%84%E6%9C%80%E5%A4%A7%E7%A7%BB%E5%8A%A8%E7%87%83%E6%B2%B9"><span class="nav-number">1.3.</span> <span class="nav-text">2：给定位移的最大移动燃油</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E8%B7%9D%E7%A6%BB%E7%9A%84%E6%9C%80%E5%B0%8F%E8%80%97%E6%B2%B9"><span class="nav-number">1.4.</span> <span class="nav-text">3：给定距离的最小耗油</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%85%E8%A1%8C%E5%95%86%E4%BA%BA"><span class="nav-number">1.5.</span> <span class="nav-text">4：旅行商人</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-3"><span class="nav-number">1.5.1.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="吉普问题 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          吉普问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-09-19 17:13:54 / Modified: 17:16:52" itemprop="dateCreated datePublished" datetime="2025-09-19T17:13:54+08:00">2025-09-19</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>https://en.wikipedia.org/wiki/Jeep_problem</p>
+<p>https://zhuanlan.zhihu.com/p/7236950040</p>
+</blockquote>
+<p>某吉普位于原点，在原点处有 <span class="math inline">\(n\)</span>
+单位燃油。吉普的油箱中最多可存储 <span class="math inline">\(m\)</span>
+单位燃油。吉普可以随时随地将任意单位燃油卸载于当地，或从当地载入油箱。吉普每单位时间可移动一单位长度，且移动时每单位时间必须消耗油箱中的一单位燃油。</p>
+<ol type="1">
+<li>求吉普能够移动的最大位移。</li>
+<li>现吉普需要将燃油尽可能多地搬运到位移 <span
+class="math inline">\(l\)</span> 处，求此处的燃油数的最大值。</li>
+<li>若 <span class="math inline">\(n =
++\infty\)</span>，现吉普需要到达位移 <span
+class="math inline">\(l\)</span> 处，求总过程的最小油耗。</li>
+<li>现吉普可以随时随地出售其油箱中存储的任意单位的燃油，在位移 <span
+class="math inline">\(l\)</span> 处的出售价格固定为每单位燃油 <span
+class="math inline">\(l\)</span>
+单位收益。吉普需要规划出售策略，并使其最终能够返回原点，求总过程可获得的收益的最大值。</li>
+</ol>
+<span id="more"></span>
+<p>推广：</p>
+<ul>
+<li>燃油消耗效率与载重量有关</li>
+<li>仅允许在给定的位置卸载/载入燃油</li>
+<li>仅允许在给定的次数内卸载/载入燃油</li>
+<li>非匀速吉普</li>
+</ul>
+<p>本文不讨论这些复杂的推广。</p>
+<h2 id="解答">解答</h2>
+<h3 id="引理">引理</h3>
+<p>记一个满油箱为 <span class="math inline">\(m\)</span>
+单位的燃油，起始时有 <span class="math inline">\(k\)</span>
+单位的满油箱。</p>
+<p>搬运是分批的，每一批的燃油最多存储一个满油箱，不足一个满油箱的非空燃油仍需算作一批。</p>
+<p>每阶段搬运，从位移 <span class="math inline">\(s_i\)</span> 处将
+<span class="math inline">\(n_i\)</span> 批燃油全部搬运到 <span
+class="math inline">\(s_{i+1} &gt; s_i\)</span> 处，记 <span
+class="math inline">\(\Delta s_i = s_{i+1} -
+s_i\)</span>。那么，搬运将涉及奇数次趟，其中去程趟从 <span
+class="math inline">\(s_i\)</span> 满载油箱到达 <span
+class="math inline">\(s_{i+1}\)</span>，返程趟从 <span
+class="math inline">\(s_{i+1}\)</span> 载油 <span
+class="math inline">\(\Delta s_i\)</span> 回到 <span
+class="math inline">\(s_i\)</span>，且最后一趟是去程。</p>
+<p>因此，<strong>将 <span class="math inline">\(n_i\)</span> 批燃油推进
+<span class="math inline">\(\Delta s_i\)</span> 距离，将往返 <span
+class="math inline">\(2 n_i - 1\)</span> 趟。</strong></p>
+<h3 id="给定燃油的最大位移">1：给定燃油的最大位移</h3>
+<blockquote>
+<p>https://mathworld.wolfram.com/JeepProblem.html</p>
+</blockquote>
+<p>记 <span class="math inline">\(n = km + t\)</span>，<span
+class="math inline">\(t \in [0, m), k \in \mathbb{N}\)</span>。</p>
+<p>一种贪心策略的思想是“尽量满载”，它分两个阶段，描述如下：</p>
+<ol type="1">
+<li>不足满油箱的运输。我们需要在消耗<strong>恰好 <span
+class="math inline">\(t\)</span> 单位的燃油</strong>下，将 <span
+class="math inline">\(k+1\)</span> 批燃油从原点全部搬运到某个 <span
+class="math inline">\(s_k &gt; 0\)</span> 处。</li>
+</ol>
+<p>由引理，这将往返 <span class="math inline">\(2 k + 1\)</span>
+趟，位移满足</p>
+<p><span class="math display">\[
+s_k = \frac{t}{2 k + 1}.
+\]</span></p>
+<ol start="2" type="1">
+<li>满油箱运输。将不足的油消耗完后，剩余 <span
+class="math inline">\(k\)</span> 个满油箱，随后共有 <span
+class="math inline">\(k\)</span> 个阶段的搬运。对每个倒数的 <span
+class="math inline">\(i \in \{k, k - 1, \dots, 1\}\)</span>：</li>
+</ol>
+<p>第 <span class="math inline">\(i\)</span> 阶段，从位移 <span
+class="math inline">\(s_i\)</span> 处将 <span
+class="math inline">\(i\)</span> 单位的满油箱全部搬运到 <span
+class="math inline">\(s_{i-1} &gt; s_i\)</span> 处。并且<strong>恰好消耗
+<span class="math inline">\(1\)</span> 单位满油箱</strong>，即 <span
+class="math inline">\(m\)</span> 单位的燃油。阶段结束时，在 <span
+class="math inline">\(s_{i+1}\)</span> 处共有 <span
+class="math inline">\(i - 1\)</span> 单位的满油箱。</p>
+<p>由引理，这将往返 <span class="math inline">\(2 i - 1\)</span>
+趟，因此每阶段的位移满足</p>
+<p><span class="math display">\[
+\Delta s_i = \frac{m}{2 i - 1}.
+\]</span></p>
+<p>故这将贡献位移</p>
+<p><span class="math display">\[
+\frac{m}{2k - 1} + \dots + \frac{m}{2 \cdot 1 - 1} = \sum_{i=1}^k
+\frac{m}{2 i - 1}.
+\]</span></p>
+<p>综上所述，该策略下的总位移为</p>
+<p><span class="math display">\[
+d = \frac{t}{2 k + 1} + \sum_{i=1}^k \frac{m}{2 i - 1}.
+\]</span></p>
+<blockquote>
+<p>这个解颇有调和级数的味道。可以证明，奇数项调和级数的前 <span
+class="math inline">\(k\)</span> 项和 <span
+class="math inline">\(\sum_{i=1}^k \frac{1}{2 i - 1} = \Theta(\log
+k)\)</span>。</p>
+</blockquote>
+<p>可以证明，这就是使得位移最大化的策略，但不会证。</p>
+<p>计算 <span class="math inline">\(d\)</span> 的时间复杂度一般是 <span
+class="math inline">\(O(k) = O(n/m)\)</span>。</p>
+<h4 id="例子">例子</h4>
+<p>设 <span class="math inline">\(n=2, m=1\)</span>，那么 <span
+class="math inline">\(k = 2, t =
+0\)</span>，没有不足满油箱的运输，满油箱运输需要进行 <span
+class="math inline">\(2\)</span> 个阶段的搬运。</p>
+<p>第 <span class="math inline">\(i=2\)</span> 阶段，从 <span
+class="math inline">\(0\)</span> 将 <span
+class="math inline">\(2\)</span> 个满油箱搬运到 <span
+class="math inline">\(\frac{1}{3}\)</span> 处，共 <span
+class="math inline">\(3\)</span> 趟。</p>
+<p>第 <span class="math inline">\(i=1\)</span> 阶段，从 <span
+class="math inline">\(\frac{1}{3}\)</span> 将 <span
+class="math inline">\(1\)</span> 个满油箱搬运到 <span
+class="math inline">\(\frac{4}{3}\)</span> 处，共 <span
+class="math inline">\(1\)</span> 趟，其实就是满载油全速前进。</p>
+<p>总位移为 <span class="math inline">\(4/3\)</span>。</p>
+<h3 id="给定位移的最大移动燃油">2：给定位移的最大移动燃油</h3>
+<blockquote>
+<p>https://math.stackexchange.com/questions/1604871/jeep-problem-variant-cross-the-desert-with-as-much-fuel-as-possible</p>
+</blockquote>
+<p>记 <span class="math inline">\(n = km + t\)</span>，<span
+class="math inline">\(t \in [0, m), k \in
+\mathbb{N}\)</span>。为简便起见，本小题我们仅考虑 <span
+class="math inline">\(t=0\)</span> 的情况，<span class="math inline">\(t
+&gt; 0\)</span> 的仅需进行一次不足满油箱的运输即可。</p>
+<p>设 <span class="math inline">\(f(x)\)</span> 表示吉普从原点将 <span
+class="math inline">\(n\)</span> 单位燃油搬运到位移 <span
+class="math inline">\(x\)</span> 处，最终在 <span
+class="math inline">\(x\)</span> 处的最大燃油数，那么答案在 <span
+class="math inline">\(f(l)\)</span>。</p>
+<p>从 <span class="math inline">\(0\)</span> 到 <span
+class="math inline">\(x\)</span> 处搬运 <span
+class="math inline">\(k\)</span> 个满油箱，将往返 <span
+class="math inline">\(2 k - 1\)</span> 趟。我们分段考虑：</p>
+<ul>
+<li><p>当 <span class="math inline">\(x \leq \frac{m}{2 k - 1}\)</span>
+时，直接做 1 阶段的搬运显然是最优策略。吉普将往返于 <span
+class="math inline">\(0\)</span> 和 <span
+class="math inline">\(x\)</span> 之间 <span class="math inline">\(2 k -
+1\)</span> 趟，每趟的去程尽量满载，返程只需载入 <span
+class="math inline">\(x\)</span> 单位燃油。因此，<span
+class="math inline">\(\forall x \in [0, \frac{m}{2 k -
+1}]\)</span>，有</p>
+<p><span class="math display">\[
+f(x) = n - (2k - 1) x.
+\]</span></p></li>
+<li><p>记 <span class="math inline">\(x_1 = \frac{m}{2 k -
+1}\)</span>。当 <span class="math inline">\(x \in (x_1, x_1 +
+\frac{m}{2(k-1) - 1}]\)</span> 时，需要做一阶段的搬运到 <span
+class="math inline">\(x_1\)</span> 处，然后再做一阶段的搬运到 <span
+class="math inline">\(x\)</span> 处。吉普将往返于 <span
+class="math inline">\(x_1\)</span> 和 <span
+class="math inline">\(x\)</span> 之间 <span class="math inline">\(2
+(k-1) - 1\)</span> 趟，每趟的去程尽量满载，返程只需载入 <span
+class="math inline">\(x - x_1\)</span> 单位燃油。因此，<span
+class="math inline">\(\forall x \in (x_1, x_1 + \frac{m}{2(k-1) -
+1}]\)</span>，有</p>
+<p><span class="math display">\[
+f(x) = (n - m) - (2 (k-1) - 1) (x - x_1).
+\]</span></p></li>
+<li><p>记 <span class="math inline">\(x_2 = x_1 + \frac{m}{2 (k-1) -
+1}\)</span>。当 <span class="math inline">\(x \in (x_2, x_2 +
+\frac{m}{2(k-2) - 1}]\)</span> 时，同理有</p>
+<p><span class="math display">\[
+f(x) = (n - 2m) - (2 (k-2) - 1) (x-x_2).
+\]</span></p></li>
+<li><p>以此类推，记 <span class="math inline">\(x_i = x_{i-1} +
+\frac{m}{2(k-(i-1)) - 1}\)</span>，在第 <span
+class="math inline">\(i\)</span> 个搬运区间，即 <span
+class="math inline">\(x \in (x_i, x_i + \frac{m}{2(k-i) - 1}]\)</span>
+时，有</p>
+<p><span class="math display">\[
+f(x) = (n - im) - (2 (k-i) - 1) (x-x_i).
+\]</span></p></li>
+<li><p>直到 <span class="math inline">\(i = k\)</span>
+时，无法继续搬运。即 <span class="math inline">\(f(x)\)</span>
+的支撑集为 <span class="math inline">\([0, \sum_{i=1}^k \frac{m}{2 i -
+1})\)</span>。<span class="math inline">\(f(x)\)</span>
+在其支撑集上是分段线性函数，每个分段区间的长度越来越长，斜率的绝对值越来越小，很有意思。</p></li>
+</ul>
+<p>求解时，我们只需计算 <span class="math inline">\(l\)</span>
+落在哪个搬运区间内，然后计算 <span class="math inline">\(f(l)\)</span>
+的值即可。时间复杂度 <span class="math inline">\(O(k) =
+O(n/m)\)</span>。</p>
+<h4 id="例子-1">例子</h4>
+<p><strong>猴子背香蕉问题</strong> 一个猴子身带 100 个香蕉，他距离家 50
+米。这个猴子要带香蕉回去，但是他一次最多只能背 50
+个香蕉，而且，每走一米他就要吃掉一个香蕉（往回走也要吃香蕉）。这个猴子最后最多可以带多少个香蕉到家？</p>
+<p><strong>解答</strong> <span class="math inline">\(n=100, m=50,
+l=50\)</span>，故 <span class="math inline">\(k=2,
+t=0\)</span>，故搬运区间端点为 <span class="math inline">\(x_1 =
+\frac{50}{3}, x_2 = \frac{50}{3} + 50\)</span>。</p>
+<p>猴子首先做一阶段搬运，将香蕉搬到 <span
+class="math inline">\(x_1\)</span> 处，此时剩余 <span
+class="math inline">\(n-m=50\)</span> 个香蕉。然后再做一阶段搬运，搬到
+<span class="math inline">\(l\)</span> 处，剩余香蕉数为</p>
+<p><span class="math display">\[
+f(l) = (n-m) - (2(k-1) - 1)(x - x_1) = 50 - \left(50 - \frac{50}{3}
+\right) = \frac{50}{3}.
+\]</span></p>
+<p>因此这个猴子最后最多可以带 <span
+class="math inline">\(\frac{50}{3}\)</span> 个香蕉到家。</p>
+<h3 id="给定距离的最小耗油">3：给定距离的最小耗油</h3>
+<blockquote>
+<p>https://blog.nowcoder.net/n/83802b6ba20e4137ba87f6d08a9ab9e4</p>
+</blockquote>
+<p>为了让吉普以最小的油耗通过，需要在区间 <span
+class="math inline">\([0, l)\)</span>
+中建立若干个临时加油站，且贪心地，每个加油站的油都恰好被使用完毕。进一步地，除起点加油站外，每个加油站的油量都是
+<span class="math inline">\(km\)</span>，其中 <span
+class="math inline">\(k \in \mathbb{N}^*\)</span>。</p>
+<p>我们考虑倒推：在最后一个加油站中，吉普车加满油后全速前进就到达了目的地。同理，在倒数第二个加油站中，吉普车需来回倒腾，直到其到达最后一个加油站时，该加油站的油恰好够其加满。</p>
+<p>进一步贪心地，我们发现，吉普车倒推设置加油站的过程，就是一系列阶段的搬运，除了从起点到首个加油站的搬运之外，每阶段的搬运恰好消耗一单位的满油箱，即
+<span class="math inline">\(m\)</span> 油量。</p>
+<p>设最后一个加油站为 <span class="math inline">\(1\)</span>
+号加油站，并且设起点位置为 <span
+class="math inline">\(l\)</span>，终点位置为 <span
+class="math inline">\(0\)</span>，依次编号：</p>
+<ul>
+<li><span class="math inline">\(1\)</span> 号加油站的位置为 <span
+class="math inline">\(x_1 = m\)</span>，油量为 <span
+class="math inline">\(m\)</span></li>
+<li><span class="math inline">\(2\)</span> 号加油站的位置为 <span
+class="math inline">\(x_2\)</span>，油量为 <span class="math inline">\(2
+m\)</span>。从该加油站搬运 <span class="math inline">\(2\)</span>
+个满油箱到 <span class="math inline">\(1\)</span> 号加油站，需要往返
+<span class="math inline">\(3\)</span> 趟，故 <span
+class="math display">\[
+x_2 = x_1 - \frac{m}{3}
+\]</span></li>
+<li>以此类推，<span class="math inline">\(i\)</span> 号加油站的位置为
+<span class="math inline">\(x_i\)</span>，油量为 <span
+class="math inline">\(im\)</span>。从该加油站搬运 <span
+class="math inline">\(i\)</span> 个满油箱到 <span
+class="math inline">\(i-1\)</span> 号加油站，需要往返 <span
+class="math inline">\(2 i - 1\)</span> 趟，故 <span
+class="math display">\[
+x_i = x_{i-1} - \frac{m}{2 i - 1}
+\]</span></li>
+<li>起点加油站的位置为 <span
+class="math inline">\(l\)</span>，其能在经过一阶段搬运后，在 <span
+class="math inline">\(k\)</span> 号加油站 <span
+class="math inline">\(x_k = \sum_{i=1}^k \frac{m}{2 i - 1}\)</span>
+处恰好获得 <span class="math inline">\(km\)</span> 油量，其中 <span
+class="math inline">\(k\)</span> 是使得 <span class="math inline">\(l -
+\sum_{i=1}^k \frac{m}{2 i - 1} \geq 0\)</span> 的最大的正整数。</li>
+</ul>
+<p>因此，吉普的策略可描述如下：</p>
+<ol type="1">
+<li>初次运输阶段，从起点 <span class="math inline">\(l\)</span>
+搬运若干油到 <span class="math inline">\(k\)</span> 号加油站，位置在
+<span class="math inline">\(\sum_{i=1}^k \frac{m}{2 i -
+1}\)</span>，其中 <span class="math inline">\(k\)</span> 是使得 <span
+class="math inline">\(l - \sum_{i=1}^k \frac{m}{2 i - 1} \geq 0\)</span>
+的最大的正整数。阶段结束时，吉普车位于 <span
+class="math inline">\(k\)</span> 号加油站，且此地恰有 <span
+class="math inline">\(km\)</span> 油量。这一阶段的总趟数为 <span
+class="math inline">\(2 k + 1\)</span>，总距离即总耗油量为 <span
+class="math inline">\((2k + 1) \left(l - \sum_{i=1}^k \frac{m}{2 i - 1}
+\right)\)</span>。</li>
+<li><span class="math inline">\(k\)</span> 次运输阶段，每次运输，从
+<span class="math inline">\(i\)</span> 号加油站将 <span
+class="math inline">\(im\)</span> 油搬运到 <span
+class="math inline">\(i-1\)</span> 号加油站，恰好消耗 <span
+class="math inline">\(m\)</span> 油量。</li>
+</ol>
+<p>故总的油量消耗，也是最小的油量消耗为</p>
+<p><span class="math display">\[
+(2k + 1) \left(l - \sum_{i=1}^k \frac{m}{2 i - 1} \right) + km
+\]</span></p>
+<p>其中 <span class="math inline">\(k\)</span> 是使得 <span
+class="math inline">\(l - \sum_{i=1}^k \frac{m}{2 i - 1} \geq 0\)</span>
+的最大的正整数。</p>
+<p>求解的时间复杂度为 <span class="math inline">\(O (k) = O (\mathrm
+e^{2(l/m)})\)</span>。</p>
+<h4 id="例子-2">例子</h4>
+<p>设 <span class="math inline">\(m = 500, l = 1000\)</span>，计算</p>
+<p><span class="math display">\[
+l - \sum_{i=1}^k \frac{m}{2 i - 1}
+\]</span></p>
+<p>注意到，<span class="math inline">\(k = 7\)</span> 时，上式的值约为
+<span class="math inline">\(22.4\)</span>，<span
+class="math inline">\(k=8\)</span> 时，上式的值将小于 <span
+class="math inline">\(0\)</span>，故取 <span
+class="math inline">\(k=7\)</span>。</p>
+<p>计算得到最小油耗为</p>
+<p><span class="math display">\[
+(2k + 1) \left(l - \sum_{i=1}^k \frac{m}{2 i - 1} \right) + km \approx
+15 \times 22.4 + 7 \times 500 = 3836.5
+\]</span></p>
+<h3 id="旅行商人">4：旅行商人</h3>
+<blockquote>
+<p>https://blog.csdn.net/fhqfjevfhp/article/details/115543229</p>
+<p>https://www.bilibili.com/video/BV1p84y1c7DK/</p>
+</blockquote>
+<p>记 <span class="math inline">\(n = km + t\)</span>，<span
+class="math inline">\(t \in [0, m), k \in
+\mathbb{N}\)</span>。为简便起见，本小题我们仅考虑 <span
+class="math inline">\(t=0\)</span> 的情况，<span class="math inline">\(t
+&gt; 0\)</span> 的仅需进行一次不足满油箱的运输即可。</p>
+<p>在本小题中，吉普前进的基本策略仍遵循“给定燃油的最大位移”，在途中设置若干个中转点，但其将在途中的某个/某些地方出售燃油，换取最大收益。</p>
+<p>贪心地，当吉普设置了最远的一个中转点后，将返回原点，途中每经过一个中转点，都将获取该中转点中保存的所有燃油，然后开回下一个距离原点更近的中转点，直到回到原点为止。每个中转点保存的燃油数恰好能让吉普开回下一个距离原点更近的中转点。</p>
+<p>由于我们考虑了最后的返程，因此，<strong>将 <span
+class="math inline">\(n_i\)</span> 批燃油推进 <span
+class="math inline">\(\Delta s_i\)</span> 距离，将往返 <span
+class="math inline">\(2 n_i\)</span> 趟。</strong></p>
+<p>暂时先不考虑如何出售燃油，我们的策略将包含若干阶段：</p>
+<ul>
+<li>第一阶段，将 <span class="math inline">\(k\)</span>
+单位的满油箱推进到第一个中转点 <span
+class="math inline">\(x_1\)</span>。结束时，该中转点保存 <span
+class="math inline">\(k-1\)</span> 单位的满油箱，其位置 <span
+class="math display">\[
+x_1 = \frac{m}{2k}.
+\]</span></li>
+<li>第二阶段，将 <span class="math inline">\(k - 1\)</span>
+单位的满油箱推进到第二个中转点 <span
+class="math inline">\(x_2\)</span>，满足 <span class="math display">\[
+x_2 = x_1 + \frac{m}{2(k-1)}.
+\]</span></li>
+<li>以此类推，直到满油箱数目为 <span
+class="math inline">\(0\)</span>，到达最后一个中转点 <span
+class="math inline">\(x_{k}\)</span>。</li>
+</ul>
+<p>接下来我们考虑出售燃油的位置。不妨设在最优策略中，每个搬运区间 <span
+class="math inline">\((x_{i-1}, x_{i}]\)</span> 都对应唯一的一个出售位置
+<span
+class="math inline">\(y_i\)</span>（不会证，猜的），并且，我们一旦决定了这个出售位置，就设置相应搬运阶段的中转点从
+<span class="math inline">\(x_{i}\)</span> 变为 <span
+class="math inline">\(y_1 + \dots +
+y_i\)</span>。在该出售位置，可供出售的燃油是那些“因为提前了中转点而可以在该阶段搬运完后出售的额外燃油”。出售完成，并留下返程所需的
+<span class="math inline">\(y_i - y_{i-1}\)</span>
+后，此时剩余的恰好仍是若干个满油箱，我们将它们搬运下一个出售中转点 <span
+class="math inline">\(y_{i+1}\)</span>
+出售并留下返程所需，以此类推。注意：</p>
+<ul>
+<li>若 <span class="math inline">\(y_i - y_{i-1} = x_i -
+x_{i-1}\)</span>，则该搬运区间实际上不出售任何燃油，相当于完整的跨大步走了一个搬运阶段。</li>
+</ul>
+<p>那么，我们枚举每个出售位置 <span class="math inline">\(y_1, \dots,
+y_k\)</span>：</p>
+<ul>
+<li>对第一个出售位置 <span class="math inline">\(y_1 \in (0,
+\frac{m}{2k}]\)</span>，出售的燃油数为 <span class="math inline">\(m -
+2ky_1\)</span>，收益为 <span class="math display">\[
+r_1 = (m - 2k y_1) y_1
+\]</span></li>
+<li>对第二个出售位置 <span class="math inline">\(y_2 \in (0,
+\frac{m}{2(k-1)}]\)</span>，收益为 <span class="math display">\[
+r_2 = (m - 2 (k-1) y_1) (y_1 + y_2)
+\]</span></li>
+<li>以此类推，对第 <span class="math inline">\(i\)</span> 个出售位置
+<span class="math inline">\(y_i \in (0,
+\frac{m}{2(k-i)}]\)</span>，收益为 <span class="math display">\[
+r_i = (m - 2 (k-i) y_i) \left(\sum_{j=1}^i y_j \right)
+\]</span></li>
+</ul>
+<p>故总收益为</p>
+<p><span class="math display">\[
+R(y_1, \dots, y_k) = \sum_{i=1}^{k-1} r_i = \sum_{i=1}^{k-1} \left((m -
+2 (k-i) y_i) \left(\sum_{j=1}^i y_j \right) \right)
+\]</span></p>
+<p>约束条件为</p>
+<p><span class="math display">\[
+\forall i, y_i \in \left(0, \frac{m}{2(k-i)} \right].
+\]</span></p>
+<p>这是一个关于 <span class="math inline">\(y_i\)</span>
+的多元函数，我们需要求其最大值。这看起来是一个二次优化问题，并没有什么好的方法……</p>
+<h4 id="例子-3">例子</h4>
+<p>设 <span class="math inline">\(n=240, m = 60\)</span>，那么 <span
+class="math inline">\(k=4, t=0\)</span>。</p>
+<p>中转点的位置为 $x_1 = , x_2 = x_1 + 10, x_3 = x_2 + 15, x_4 = x_3 +
+30 $。</p>
+<p>于是，总收益函数为</p>
+<p><span class="math display">\[
+(60 - 8 y_1) y_1 + (60 - 6 y_2) (y_1 + y_2) + (60 - 4 y_3) (y_1 + y_2 +
+y_3) + (60 - 2 y_4) (y_1 + y_2 + y_3 + y_4).
+\]</span></p>
+<p>约束条件为</p>
+<p><span class="math display">\[
+y_1 \leq \frac{15}{2}, y_2 \leq 10, y_3 \leq 15, y_4 \leq 30.
+\]</span></p>
+<p>我们直接暴力求偏导，求极值点，令四个偏导数为零得到一个线性方程组，解之得到
+<span class="math inline">\(y_1 &gt;
+\frac{15}{2}\)</span>，不满足约束。</p>
+<p>我们令 <span class="math inline">\(y_1 =
+\frac{15}{2}\)</span>，然后重新令三个偏导数为零，解之得到一个全部满足约束的组合</p>
+<p><span class="math display">\[
+y_2 = \frac{585}{68}, y_3 = \frac{405}{68}, y_4 = \frac{135}{34}.
+\]</span></p>
+<p>代回原收益函数，得到总收益为</p>
+<p><span class="math display">\[
+\frac{311175}{136} \approx 2288.05.
+\]</span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/" title="吉普问题">https://zrephel.fun/2025/09/19/吉普问题/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E4%BC%98%E5%8C%96/" rel="tag"># 优化</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/" rel="prev" title="解包揭秘黑神话的角色动画实现">
+                  <i class="fa fa-angle-left"></i> 解包揭秘黑神话的角色动画实现
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
