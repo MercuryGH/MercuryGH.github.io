@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="现有 \(n\) 个求职者，\(m\) 个公司，每个公司均招聘 \(t\) 人。每个公司可以均匀随机地给任意个求职者发放 offer，每个求职者会在其收到的所有公司的 offer 中均匀随机选择一个加入。设 \(n \geq mt\)。 求每个公司应该发放的 offer 数 \(o_i\)，使得该公司能招聘到的期望人数恰好为 \(t\)。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="offer 超发问题">
+<meta property="og:url" content="https://zrephel.fun/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="现有 \(n\) 个求职者，\(m\) 个公司，每个公司均招聘 \(t\) 人。每个公司可以均匀随机地给任意个求职者发放 offer，每个求职者会在其收到的所有公司的 offer 中均匀随机选择一个加入。设 \(n \geq mt\)。 求每个公司应该发放的 offer 数 \(o_i\)，使得该公司能招聘到的期望人数恰好为 \(t\)。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-10-09T08:51:45.000Z">
+<meta property="article:modified_time" content="2025-10-09T08:54:32.299Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="概率论">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/","path":"2025/10/09/offer-超发问题/","title":"offer 超发问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>offer 超发问题 | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Always playing around</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9D%87%E5%8C%80-hc-%E4%B8%8B%E7%9A%84%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">均匀 HC 下的解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">引理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.2.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E5%80%BC%E8%A7%82%E5%AF%9F"><span class="nav-number">1.2.1.</span> <span class="nav-text">特殊值观察</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E5%8C%96-n"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">变化 \(n\)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E5%8C%96-m"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">变化 \(m\)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E5%8C%96-t"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">变化 \(t\)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E5%8C%96%E5%B8%82%E5%9C%BA%E6%95%B4%E4%BD%93%E6%8A%A5%E5%BD%95%E6%AF%94"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">变化市场整体报录比</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%8E%A8%E5%B9%BF"><span class="nav-number">2.</span> <span class="nav-text">其他推广</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%9D%87%E5%8C%80-hcm2-%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-number">2.1.</span> <span class="nav-text">非均匀 HC：\(m&#x3D;2\) 的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E5%9D%87%E5%8C%80-hc%E4%B8%80%E8%88%AC%E6%83%85%E5%86%B5"><span class="nav-number">2.2.</span> <span class="nav-text">非均匀 HC：一般情况</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="offer 超发问题 | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          offer 超发问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-10-09 16:51:45 / Modified: 16:54:32" itemprop="dateCreated datePublished" datetime="2025-10-09T16:51:45+08:00">2025-10-09</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>现有 <span class="math inline">\(n\)</span> 个求职者，<span
+class="math inline">\(m\)</span> 个公司，每个公司均招聘 <span
+class="math inline">\(t\)</span>
+人。每个公司可以均匀随机地给任意个求职者发放
+offer，每个求职者会在其收到的所有公司的 offer 中均匀随机选择一个加入。设
+<span class="math inline">\(n \geq mt\)</span>。</p>
+<p>求每个公司应该发放的 offer 数 <span
+class="math inline">\(o_i\)</span>，使得该公司能招聘到的期望人数恰好为
+<span class="math inline">\(t\)</span>。</p>
+<span id="more"></span>
+<h2 id="均匀-hc-下的解答">均匀 HC 下的解答</h2>
+<h3 id="引理">引理</h3>
+<p>设随机变量 <span class="math inline">\(X \sim B(n,
+p)\)</span>，则</p>
+<p><span class="math display">\[
+E\left(\frac{1}{X+1} \right) = \frac{1 - (1-p)^{n+1}}{p(n+1)}.
+\]</span></p>
+<p>设随机变量 <span class="math inline">\(X \sim
+\text{Poisson}(\lambda)\)</span>，则</p>
+<p><span class="math display">\[
+E\left(\frac{1}{X+1} \right) = \frac{1 - \mathrm e^{-
+\lambda}}{\lambda}.
+\]</span></p>
+<p><strong>证明</strong> 仅以二项分布为例，泊松分布可同理得到。</p>
+<p><span class="math inline">\(X\)</span> 的概率生成函数为</p>
+<p><span class="math display">\[
+G_X(t) = E(t^X) = (1 - p + pt)^n,
+\]</span></p>
+<p>注意到</p>
+<p><span class="math display">\[
+\frac{1}{X+1} = \int_0^1 t^X \, \mathrm d t,
+\]</span></p>
+<p>那么</p>
+<p><span class="math display">\[
+\begin{aligned}
+E\left(\frac{1}{X+1} \right) &amp;= E\left( \int_0^1 t^X \, \mathrm d t
+\right) \\
+&amp;= \int_0^1 E(t^X) \, \mathrm d t \\
+&amp;= \int_0^1 (1 - p + pt)^n \, \mathrm d t \\
+&amp;= \frac{1 - (1-p)^{n+1}}{p(n+1)}.
+\end{aligned}
+\]</span></p>
+<h3 id="解答">解答</h3>
+<p>在均匀 HC 假设下，每个公司发放的 offer 数相等为 <span
+class="math inline">\(o\)</span>。</p>
+<p>对每个求职者，其等概率地收到来自每个公司的 offer，该概率为 <span
+class="math inline">\(\frac{o}{n}\)</span>。</p>
+<p>对于公司 <span class="math inline">\(i\)</span> 的一个特定
+offer，收到该 offer 的求职者收到其他公司的 offer 数 <span
+class="math inline">\(S_i\)</span> 服从二项分布，即 <span
+class="math inline">\(S_i \sim B(m - 1, \frac{o}{n})\)</span>。</p>
+<p>那么，求职者加入公司 <span class="math inline">\(i\)</span>
+的概率为</p>
+<p><span class="math display">\[
+E \left(\frac{1}{S_i+1} \right) = \frac{1 - (1 - \frac{o}{n})^m}{m \cdot
+\frac{o}{n}}.
+\]</span></p>
+<p>公司 <span class="math inline">\(i\)</span> 期望招聘到的人数为</p>
+<p><span class="math display">\[
+o \cdot E \left(\frac{1}{S_i+1} \right) = \frac{n}{m}\left(1 - \left(1 -
+\frac{o}{n} \right)^m \right).
+\]</span></p>
+<p>令上式 <span class="math inline">\(=t\)</span>，解方程得到</p>
+<p><span class="math display">\[
+o = n \left(1 - \left(1 - \frac{mt}{n} \right)^{1/m} \right).
+\]</span></p>
+<h4 id="特殊值观察">特殊值观察</h4>
+<h5 id="变化-n">变化 <span class="math inline">\(n\)</span></h5>
+<ul>
+<li><span class="math inline">\(n = \sum_{i=1}^m a_i = mt\)</span></li>
+</ul>
+<p>此时有 <span class="math inline">\(o =
+n\)</span>，即所有公司向所有求职者发放
+offer，此时所有求职者每个均匀随机选择一个公司加入。</p>
+<ul>
+<li><span class="math inline">\(n \to \infty\)</span></li>
+</ul>
+<p>注意到，当 <span class="math inline">\(x \to \infty\)</span> 时有
+<span class="math inline">\((1+x)^a \sim 1 + ax\)</span>，即 <span
+class="math inline">\((1 + x)^a - 1 \sim ax\)</span>，故</p>
+<p><span class="math display">\[
+\left(1 - \frac{mt}{n} \right)^{1/m} - 1 \sim \frac{1}{m}
+\left(-\frac{mt}{n} \right) = -\frac{t}{n}.
+\]</span></p>
+<p>故</p>
+<p><span class="math display">\[
+1 - \left(1 - \frac{mt}{n} \right)^{1/m}  \sim \frac{t}{n}.
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+\lim_{n \to \infty} o = t.
+\]</span></p>
+<p>即所有公司只需恰好发放 <span class="math inline">\(t\)</span> 个
+offer，由于求职者人数足够多，几乎不存在获取了多个 offer
+的求职者，因此每个公司都能招聘到 <span class="math inline">\(t\)</span>
+个求职者。</p>
+<p>对于给定的 <span class="math inline">\(n \in [\sum_{i=1}^m a_i,
++\infty)\)</span>，<span class="math inline">\(o(n)\)</span>
+单调递减。</p>
+<p>因此，在岗位供大于求的情况下，报录比越高，每个公司所需发放的 offer
+数越少。</p>
+<h5 id="变化-m">变化 <span class="math inline">\(m\)</span></h5>
+<p><span class="math inline">\(m\)</span> 的范围需要保证 <span
+class="math inline">\(n \geq \sum_{i=1}^m a_i = mt\)</span>，即 <span
+class="math inline">\(m \in [1, \frac{n}{t}]\)</span>，否则无意义。</p>
+<ul>
+<li><span class="math inline">\(m=1\)</span></li>
+</ul>
+<p>此时 <span class="math inline">\(o = t\)</span>，即不存在竞争。</p>
+<ul>
+<li><span class="math inline">\(m=2\)</span></li>
+</ul>
+<p>此时</p>
+<p><span class="math display">\[
+o = n \left(1 - \sqrt{1 - \frac{2t}{n}} \right).
+\]</span></p>
+<ul>
+<li>当 <span class="math inline">\(m = n/t\)</span> 时，<span
+class="math inline">\(o =
+n\)</span>，此时竞争最激烈，每个公司都需要向所有求职者发放 offer。</li>
+</ul>
+<p>对于给定的 <span class="math inline">\(m \in [1,
+\frac{n}{t}]\)</span>，<span class="math inline">\(o(m)\)</span>
+单调递增。</p>
+<p>因此，在岗位供大于求的情况下，同梯队公司越多，每个公司所需发放的
+offer 数越多。</p>
+<h5 id="变化-t">变化 <span class="math inline">\(t\)</span></h5>
+<p><span class="math inline">\(t\)</span> 的取值范围为 <span
+class="math inline">\([1, \frac{n}{m}]\)</span>。显然有 <span
+class="math inline">\(o(0) = 0, o(\frac{n}{m}) = n\)</span>。</p>
+<p>对于给定的 <span class="math inline">\(t \in [1,
+\frac{n}{m}]\)</span>，<span class="math inline">\(o(t)\)</span>
+单调递增。</p>
+<p>因此，在岗位供大于求的情况下，HC 越多，每个公司所需发放的 offer
+数越多。</p>
+<h5 id="变化市场整体报录比">变化市场整体报录比</h5>
+<p>市场整体报录比为 <span class="math inline">\(u =
+\frac{n}{mt}\)</span>，此时</p>
+<p><span class="math display">\[
+o = mtu \left(1 - \left(1 - \frac{1}{u} \right)^{1/m} \right).
+\]</span></p>
+<ul>
+<li><span class="math inline">\(u=1\)</span>，则 <span
+class="math inline">\(o = n = mt\)</span>，所有公司向所有求职者发放
+offer。</li>
+<li><span class="math inline">\(u \to \infty\)</span>，则 <span
+class="math inline">\(o \to t\)</span>。</li>
+</ul>
+<p>对给定的报录比，若所有公司统一发放 <span
+class="math inline">\(k\)</span> 倍 HC 的 offer，即 <span
+class="math inline">\(o = kt\)</span>，那么有</p>
+<p><span class="math display">\[
+k = mu \left(1 - \left(1 - \frac{1}{u} \right)^{1/m} \right)
+\]</span></p>
+<p>这就是在给定 <span class="math inline">\(m\)</span> 和报录比 <span
+class="math inline">\(u\)</span> 下，offer 发放的最优倍率。当 <span
+class="math inline">\(m\)</span> 增大时，<span
+class="math inline">\(k\)</span> 单调递增；<span
+class="math inline">\(u\)</span> 增大时，<span
+class="math inline">\(k\)</span> 单调递减。特别地，当 <span
+class="math inline">\(m \to \infty\)</span> 时，上式有极限</p>
+<p><span class="math display">\[
+\lim_{m \to \infty} k = u \ln \left( \frac{u}{u-1} \right)
+\]</span></p>
+<p>即，报录比越大，公司超发 offer 的比例越小；同梯队公司越多，公司超发
+offer 的比例越大。</p>
+<p>可以据此估计 <span class="math inline">\(m \to \infty\)</span>
+时公司超发 offer 的最优倍率。例如，当报录比 <span
+class="math inline">\(u = 1.25\)</span> 时，offer 发放的最优倍率为 <span
+class="math inline">\(k \approx 2.0\)</span>。</p>
+<h2 id="其他推广">其他推广</h2>
+<p>推广：</p>
+<ul>
+<li>非均匀 HC：第 <span class="math inline">\(i\)</span>
+个公司的招聘人数为 <span class="math inline">\(a_i\)</span>。</li>
+<li>加权选择公司：每个求职者会根据其收到的所有公司的
+offer，加权随机选择一个加入。例如，若公司 <span
+class="math inline">\(i\)</span> 的权重为 <span
+class="math inline">\(w_i\)</span>，则其加入公司 <span
+class="math inline">\(i\)</span> 的概率为 <span
+class="math inline">\(\frac{w_i}{\sum_{j \in r} w_j}\)</span>，其中
+<span class="math inline">\(r\)</span> 为该求职者收到的公司的 offer
+集合。该权重可能因求职者而异。</li>
+<li>有限投递：每个求职者仅投递若干家公司，因此只可能收到这些公司的
+offer。</li>
+<li>加权发放 offer：每个求职者具有权重 <span
+class="math inline">\(w_i\)</span>，每个公司对其发放 offer 的概率为
+<span class="math inline">\(\frac{w_i}{\sum_{j \in r}
+w_j}\)</span>，其中 <span class="math inline">\(r\)</span>
+为投递该公司的求职者集合。该权重可能因公司而异。</li>
+<li>完全信息博弈：对每个求职者，其每投递一个公司都将支付 <span
+class="math inline">\(c_1\)</span> 的代价，且最终获得的 offer 数 <span
+class="math inline">\(l\)</span> 将为其获取 <span
+class="math inline">\(f(l)\)</span>
+的收益；对每个公司，在其招聘人数的基础上每超出一个人入职都将支付 <span
+class="math inline">\(c_2\)</span> 的代价，而每缺少一个人入职都将支付
+<span class="math inline">\(c_3\)</span>
+的代价。为每个求职者和每个公司制定投递和 offer
+发放的策略，使得收益最大化。</li>
+<li>不完全信息博弈：在以上完全信息博弈的基础上，对每个求职者，求职者的总数、其他求职者投递的公司、其他求职者的权重、公司的招聘人数不完全可见；对每个公司，求职者的总数、其他公司的招聘人数不完全可见。</li>
+</ul>
+<h3 id="非均匀-hcm2-的例子">非均匀 HC：<span
+class="math inline">\(m=2\)</span> 的例子</h3>
+<p>现有 <span class="math inline">\(n\)</span> 个求职者，<span
+class="math inline">\(m = 2\)</span> 个公司，分别招聘 <span
+class="math inline">\(a_1 = 1, a_2 = 2\)</span>
+人。每个公司可以随机地给任意个求职者发放
+offer，每个求职者会在其收到的所有公司的 offer 中均匀随机选择一个加入。设
+<span class="math inline">\(n \geq \sum_{i=1}^m a_i\)</span>。</p>
+<p>求每个公司应该发放的 offer 数 <span
+class="math inline">\(o_i\)</span>，使得该公司期望能招聘到的人数恰好为
+<span class="math inline">\(a_i\)</span>。</p>
+<h4 id="解答-1">解答</h4>
+<p>对每个求职者，其收到来自第 <span class="math inline">\(i\)</span>
+个公司的 offer 的概率为 <span
+class="math inline">\(\frac{o_i}{n}\)</span>。</p>
+<p>只考虑收到了第 <span class="math inline">\(1\)</span> 个公司的 offer
+的求职者：</p>
+<ul>
+<li>若其总共只收到了第 <span class="math inline">\(1\)</span> 个公司的
+offer，则其加入概率为 <span class="math inline">\(1\)</span>；</li>
+<li>若其总共收到了 2 个公司的 offer，则其加入概率为 <span
+class="math inline">\(1/2\)</span>。</li>
+</ul>
+<p>故每个收到了第 <span class="math inline">\(1\)</span> 个公司的 offer
+的求职者加入第 <span class="math inline">\(1\)</span> 个公司的概率为</p>
+<p><span class="math display">\[
+p_1 = \left(1 - \frac{o_2}{n} \right) \cdot 1 + \frac{o_2}{n} \cdot
+\frac{1}{2} = 1 - \frac{o_2}{2n}.
+\]</span></p>
+<p>同理，每个收到了第 <span class="math inline">\(2\)</span> 个公司的
+offer 的求职者加入第 <span class="math inline">\(2\)</span>
+个公司的概率为 <span class="math inline">\(p_2 = 1 -
+\frac{o_1}{2n}\)</span>。故 <span class="math inline">\(\forall
+i\)</span>，列出方程组</p>
+<p><span class="math display">\[
+o_i p_i = a_i,
+\]</span></p>
+<p>排除不合适的解后，得</p>
+<p><span class="math display">\[
+o_1 = \frac{2n - 1 - \sqrt{4n^2 - 12n + 1}}{2},
+\]</span></p>
+<p><span class="math display">\[
+o_2 = \frac{2n + 1 - \sqrt{4n^2 - 12n + 1}}{2}.
+\]</span></p>
+<p>代入特殊值 <span class="math inline">\(n=3\)</span>，得到 <span
+class="math inline">\(o_1 = 2, o_2 = 3\)</span>，符合预期。</p>
+<p>对 <span class="math inline">\(m=2\)</span>
+的情况，可推出一般的解析式，且满足 <span class="math inline">\(o_2 - o_2
+= a_1 - a_2\)</span>，这里留作练习。</p>
+<h3 id="非均匀-hc一般情况">非均匀 HC：一般情况</h3>
+<p>对任意 <span class="math inline">\(m\)</span> 的情况，每个公司招聘
+<span class="math inline">\(a_i\)</span> 人，这是一个难题。</p>
+<p>对每个求职者，其收到来自第 <span class="math inline">\(i\)</span>
+个公司的 offer 的概率为 <span
+class="math inline">\(\frac{o_i}{n}\)</span>。</p>
+<p>对每个收到了第 <span class="math inline">\(i\)</span> 个公司的 offer
+的求职者，考虑他收到的其他公司的 offer 数 <span
+class="math inline">\(S_i\)</span>，那么</p>
+<p><span class="math display">\[
+S_i = \sum_{j \neq i} Y_j,
+\]</span></p>
+<p>其中 <span class="math inline">\(Y_j \in \{0, 1\}\)</span>
+表示该求职者收到的公司 <span class="math inline">\(j\)</span> 的 offer
+数，服从参数为 <span class="math inline">\(\frac{o_j}{n}\)</span> 的 0-1
+分布，有 <span class="math inline">\(E(Y_j) = \frac{o_j}{n}\)</span>，故
+<span class="math inline">\(E(S_i) = \frac{1}{n} \sum_{j \neq i}
+o_j\)</span>。</p>
+<p>那么，求职者加入公司 <span class="math inline">\(i\)</span>
+的概率为</p>
+<p><span class="math display">\[
+p_i = E \left(\frac{1}{S_i+1} \right).
+\]</span></p>
+<p>由于 <span class="math inline">\(S_i\)</span> 是 <span
+class="math inline">\(m-1\)</span> 个不同参数的 0-1
+分布之和，因此上式很难给出解析的结果，是一个积分方程。</p>
+<p>若考虑当 <span class="math inline">\(m\)</span> 很大，<span
+class="math inline">\(\frac{o_j}{n}\)</span> 很小时，<span
+class="math inline">\(S_i\)</span> 可近似为泊松分布，其 <span
+class="math inline">\(\lambda_i = E(S_i) = \frac{1}{n} \sum_{j \neq i}
+o_j\)</span>，那么</p>
+<p><span class="math display">\[
+p_i = E \left(\frac{1}{S_i+1} \right) = \frac{1 - \mathrm e^{-
+\lambda_i}}{\lambda_i}.
+\]</span></p>
+<p>最后列出方程组</p>
+<p><span class="math display">\[
+o_i p_i = a_i,
+\]</span></p>
+<p>求解之即可（这不是一个线性方程组，因此很不好解）。</p>
+<p>经过实验，很可能存在多解，但应该不会无解。</p>
+<p>可能可以进一步近似</p>
+<p><span class="math display">\[
+\lambda_i \approx \frac{1}{n} \sum_{j = 1}^m o_j
+\]</span></p>
+<p>即对所有 <span class="math inline">\(i\)</span>，<span
+class="math inline">\(\lambda_i\)</span> 近似相等。这需要 <span
+class="math inline">\(n,m\)</span> 很大，且所有的 <span
+class="math inline">\(o_j\)</span> 近似相等的假设。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/" title="offer 超发问题">https://zrephel.fun/2025/10/09/offer-超发问题/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/09/19/%E5%90%89%E6%99%AE%E9%97%AE%E9%A2%98/" rel="prev" title="吉普问题">
+                  <i class="fa fa-angle-left"></i> 吉普问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/10/09/offer-%E8%B6%85%E5%8F%91%E9%97%AE%E9%A2%98/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
