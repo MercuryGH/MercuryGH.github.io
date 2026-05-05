@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文使用 AI 辅助写作。  打工人到了新城市租房时，第一次看房总免不了紧张。你还在盘算通勤时间、检查热水器好不好用，房东或中介已经在一旁频频施压，话里话外就一个意思：今天不签，明天就没了。常见的话术有这些——  “这套房刚挂出来，上午已经有两拨人来看过了，您要是犹豫，晚上可能就被别人定了。” “我手头还有三个客户在等回话，谁先交定金就算谁的，真没法替您留。” “上个月这小区一套空房都没剩，现在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="量化分析破解房东的“饥饿营销”">
+<meta property="og:url" content="https://zrephel.fun/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/index.html">
+<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:description" content="本文使用 AI 辅助写作。  打工人到了新城市租房时，第一次看房总免不了紧张。你还在盘算通勤时间、检查热水器好不好用，房东或中介已经在一旁频频施压，话里话外就一个意思：今天不签，明天就没了。常见的话术有这些——  “这套房刚挂出来，上午已经有两拨人来看过了，您要是犹豫，晚上可能就被别人定了。” “我手头还有三个客户在等回话，谁先交定金就算谁的，真没法替您留。” “上个月这小区一套空房都没剩，现在">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-05T15:05:04.000Z">
+<meta property="article:modified_time" content="2026-05-05T15:07:59.355Z">
+<meta property="article:author" content="Mercury">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/","path":"2026/05/05/量化分析破解房东的“饥饿营销”/","title":"量化分析破解房东的“饥饿营销”"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>量化分析破解房东的“饥饿营销” | Mercury's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Mercury's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Down the rabbit hole</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">量化分析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mercury</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mercury">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="量化分析破解房东的“饥饿营销” | Mercury's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          量化分析破解房东的“饥饿营销”
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-05-05 23:05:04 / Modified: 23:07:59" itemprop="dateCreated datePublished" datetime="2026-05-05T23:05:04+08:00">2026-05-05</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>本文使用 AI 辅助写作。</p>
+</blockquote>
+<p>打工人到了新城市租房时，第一次看房总免不了紧张。你还在盘算通勤时间、检查热水器好不好用，房东或中介已经在一旁频频施压，话里话外就一个意思：今天不签，明天就没了。常见的话术有这些——</p>
+<ul>
+<li>“这套房刚挂出来，上午已经有两拨人来看过了，您要是犹豫，晚上可能就被别人定了。”</li>
+<li>“我手头还有三个客户在等回话，谁先交定金就算谁的，真没法替您留。”</li>
+<li>“上个月这小区一套空房都没剩，现在这套空了还不到三天，错过真的要等很久。”</li>
+</ul>
+<p>这些说辞万变不离其宗：制造稀缺感和紧迫感，让租客在信息不对称和焦虑中仓促做决定。可这些话经得起推敲吗？房源的流转速度到底有多快？下面就用一套简单的数学模型，把这件事量化清楚。</p>
+<span id="more"></span>
+<h2 id="量化分析">量化分析</h2>
+<p>不失一般性，我们以一间普通长租公寓为对象。假设该房型年平均入住率为
+<span
+class="math inline">\(\rho\)</span>。通常租赁合同一年一签，中途违约的情况比较少见，可近似认为每间房一年内只经历一段空置期。那么，一年中的平均空置天数
+<span class="math inline">\(T\)</span> 满足</p>
+<p><span class="math display">\[
+T = 365 \times (1 - \rho).
+\]</span></p>
+<p>以深圳的热门长租公寓为例，查阅资料可知这类公寓的年平均入住率 <span
+class="math inline">\(\rho\)</span> 大约在 <span
+class="math inline">\(95\%\)</span>
+左右，这是一个很高的数字。代入公式，得到</p>
+<p><span class="math display">\[
+T = 365 \times 0.05 \approx 19\ \text{天}.
+\]</span></p>
+<p>这意味着，即便是在看上去“很抢手”的公寓里，每间房每年平均也要空置大约
+19 天。这一段空置期可以被看作一个“找租客”的时间窗口。</p>
+<p>当房间空置时，租客寻找房源并最终签约，可以看作是随机且独立发生的小概率事件，即租出事件的发生可用泊松过程建模。令随机变量
+<span class="math inline">\(X\)</span>
+表示“从空置到租出所经过的天数”，则 <span
+class="math inline">\(X\)</span> 服从指数分布，且 <span
+class="math inline">\(E(X) = T\)</span>。那么泊松过程的参数 <span
+class="math inline">\(\lambda = \frac{1}{T}\)</span>。代入指数分布的 CDF
+可知，一间空房在未来 <span class="math inline">\(k\)</span>
+天内被租出去的概率为</p>
+<p><span class="math display">\[
+P(X \leq k) = 1 - \mathrm e^{-k/T},
+\]</span></p>
+<p>这里的 <span class="math inline">\(T\)</span>
+就是我们前面算出的平均空置天数，而不是房间实际已经空置的天数，这是因为指数分布具有无记忆性。代入数据
+<span class="math inline">\(T \approx
+19\)</span>（天），就可以算出房东口中“马上就要租掉”的说法有多少可信度了。可以直接计算得到，看房后的一周内，房子被其他租客租走的概率为</p>
+<p><span class="math display">\[
+P = 1 - \mathrm e^{-7/19} \approx 30.8 \%,
+\]</span></p>
+<p>也就是说，即使在年均入住率高达 95%
+的热门公寓里，我们看中的那间房在未来 7
+天内真的被租出去的可能性，也只有大约三成。反过来说，它有将近七成的概率在未来一周内依然空着，完全可以容你从容比较、冷静决策。</p>
+<p>如果我们把时间放宽到 3 天呢？概率会直接掉到 <span
+class="math inline">\(1 - \mathrm e^{-3/19} \approx
+14.6\%\)</span>。这意味着房东口中的“今晚就会被抢走”发生在现实中的概率其实非常低。至于“上午好几拨人看过”这种说法，哪怕每拨人都很满意，离真正签约也还隔着预算、通勤、室友、合同条款等一大堆变数，转化率远没有中介暗示的那么高。</p>
+<p>再往前走一步，这套模型还能给出另一个有趣结论：平均需要多少组客户看过，房子才会租出去。如果每组客户的出现是独立的，那么空置期间来访客户数的期望值其实就是总看房人次。现实中，热门公寓每成交一单，往往要带看十余组甚至更多组客户。这个数字与模型估计高度吻合——因为
+19 天的空置期中，假定每两天有一组客户看房，差不多就是 9 到 10
+组；而人群之间互相竞争压价的情况远少于中介渲染的“抢房大战”。</p>
+<p>知道了这些，再面对“今天不签明天就没了”的催促时，你大可以坦然一点。数据不会说谎：房源在短时间成交的概率远低于你的直觉，房东与中介营造出的稀缺感本质上是一种心理博弈。他们利用的是你对市场情况的不确定和对“错过”的恐惧。而一旦你把他们的“饥饿营销”翻译成具体的概率数字，这种恐惧就失去了力量。</p>
+<p>当然，量化模型描述的是整体规律，具体到每一间房总有特例。但作为租客，我们需要的恰恰不是赌对一个特例，而是在大概率事件中保护自己。如果一套房各方面的确让你满意，完全可以先回去仔细读一遍合同、查一查小区的真实评价，或者在白天和晚上再分别去看一次周边环境。真正好的决定，极少是在被催促中做出的。下次看房，如果还有人催你交定金，不妨在心里默默算一下这一串数字，然后礼貌地告诉他：“谢谢，我再考虑一下。如果有人急着要，那就把房子交给有需要的人吧。”你手中掌握的概率，比他嘴里的“紧迫”更硬气。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Mercury
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/" title="量化分析破解房东的“饥饿营销”">https://zrephel.fun/2026/05/05/量化分析破解房东的“饥饿营销”/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/02/20/%E4%B8%80%E9%A6%96%E4%B8%B2%E8%81%94%E4%B8%9C%E4%BA%9A%E9%9D%A9%E5%91%BD%E5%8F%B2%E7%9A%84%E6%97%A5%E6%9C%AC%E6%B1%89%E8%AF%97/" rel="prev" title="一首串联东亚革命史的日本汉诗">
+                  <i class="fa fa-angle-left"></i> 一首串联东亚革命史的日本汉诗
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2026/05/05/%E9%87%8F%E5%8C%96%E5%88%86%E6%9E%90%E7%A0%B4%E8%A7%A3%E6%88%BF%E4%B8%9C%E7%9A%84%E2%80%9C%E9%A5%A5%E9%A5%BF%E8%90%A5%E9%94%80%E2%80%9D/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
