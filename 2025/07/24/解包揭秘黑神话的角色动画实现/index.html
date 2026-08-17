@@ -23,7 +23,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="解包揭秘黑神话的角色动画实现">
 <meta property="og:url" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/index.html">
-<meta property="og:site_name" content="Mercury&#39;s Blog">
+<meta property="og:site_name" content="Lumière&#39;s Blog">
 <meta property="og:description" content="黑神话也在用的新一代游戏动画技术：MotionMatching讲解实践一条龙_哔哩哔哩_bilibili 基于UE官方MotionMatching还原《黑神话悟空》Locomotion - 哔哩哔哩  前一阵子看到游科在 2021 年分享过他们在黑神话项目中在 UE 里使用 Motion Matching 做角色动画，就很好奇正式发布的游戏里是怎么实现的。 然而，经过一系列逆向分析，我发现了一个">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/bad-naming.png">
@@ -45,7 +45,7 @@
 <meta property="og:image" content="https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/lang-archer.png">
 <meta property="article:published_time" content="2025-07-24T02:39:59.000Z">
 <meta property="article:modified_time" content="2025-07-26T09:55:21.208Z">
-<meta property="article:author" content="Mercury">
+<meta property="article:author" content="Lumière">
 <meta property="article:tag" content="动画">
 <meta property="article:tag" content="游戏">
 <meta property="article:tag" content="逆向">
@@ -60,7 +60,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2025/07/24/%E8%A7%A3%E5%8C%85%E6%8F%AD%E7%A7%98%E9%BB%91%E7%A5%9E%E8%AF%9D%E7%9A%84%E8%A7%92%E8%89%B2%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0/","path":"2025/07/24/解包揭秘黑神话的角色动画实现/","title":"解包揭秘黑神话的角色动画实现"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>解包揭秘黑神话的角色动画实现 | Mercury's Blog</title>
+<title>解包揭秘黑神话的角色动画实现 | Lumière's Blog</title>
   
 
 
@@ -93,7 +93,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">Mercury's Blog</p>
+      <p class="site-title">Lumière's Blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Down the rabbit hole</p>
@@ -140,14 +140,14 @@ Motion Matching</span></a></li></ol></div>
 
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Mercury</p>
+  <p class="site-author-name" itemprop="name">Lumière</p>
   <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -184,16 +184,16 @@ Motion Matching</span></a></li></ol></div>
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mercury">
+      <meta itemprop="name" content="Lumière">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mercury's Blog">
+      <meta itemprop="name" content="Lumière's Blog">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="解包揭秘黑神话的角色动画实现 | Mercury's Blog">
+      <meta itemprop="name" content="解包揭秘黑神话的角色动画实现 | Lumière's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -555,7 +555,7 @@ Motion Matching，可能是出于以下几点考虑：</p>
 <div class="post-copyright">
 <ul>
   <li class="post-copyright-author">
-      <strong>Post author:  </strong>Mercury
+      <strong>Post author:  </strong>Lumière
   </li>
   <li class="post-copyright-link">
       <strong>Post link: </strong>
@@ -618,7 +618,7 @@ Motion Matching，可能是出于以下几点考虑：</p>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">from Mercury</span>
+    <span class="author" itemprop="copyrightHolder">from Lumière</span>
   </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
   </div>

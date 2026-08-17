@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="有 \(n\) 名玩家参与一个猜测排名游戏。首先，玩家 \(i\) 获得一个独立同分布于 \(U(0, 1)\) 的随机数 \(X_i\)，该随机数不公开。随后进行若干轮：  玩家 \(i\) 依次猜测自己得到的随机数 \(X_i\) 的大小在所有玩家中的排名，并公开（每轮猜测的排名可以不同）。  若存在至少两个玩家猜测的排名相同，则进入下一轮，否则结束所有轮次。最后，公开所有 \(X_i\)，在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="猜测排名游戏">
+<meta property="og:url" content="https://zrephel.fun/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/index.html">
+<meta property="og:site_name" content="Lumière&#39;s Blog">
+<meta property="og:description" content="有 \(n\) 名玩家参与一个猜测排名游戏。首先，玩家 \(i\) 获得一个独立同分布于 \(U(0, 1)\) 的随机数 \(X_i\)，该随机数不公开。随后进行若干轮：  玩家 \(i\) 依次猜测自己得到的随机数 \(X_i\) 的大小在所有玩家中的排名，并公开（每轮猜测的排名可以不同）。  若存在至少两个玩家猜测的排名相同，则进入下一轮，否则结束所有轮次。最后，公开所有 \(X_i\)，在">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-08-17T09:54:35.000Z">
+<meta property="article:modified_time" content="2026-08-17T09:59:27.330Z">
+<meta property="article:author" content="Lumière">
+<meta property="article:tag" content="概率论">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/","path":"2026/08/17/猜测排名游戏/","title":"猜测排名游戏"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>猜测排名游戏 | Lumière's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lumière's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Down the rabbit hole</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E9%9D%9E%E5%9D%87%E5%8C%80%E5%88%86%E5%B8%83"><span class="nav-number">2.</span> <span class="nav-text">扩展：非均匀分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E7%A6%BB%E6%95%A3%E5%88%86%E5%B8%83"><span class="nav-number">3.</span> <span class="nav-text">扩展：离散分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AE%E6%95%B0%E6%9C%9F%E6%9C%9B%E7%9A%84%E6%B8%90%E8%BF%91%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">轮数期望的渐近分析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lumière</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lumière">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lumière's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="猜测排名游戏 | Lumière's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          猜测排名游戏
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-08-17 17:54:35 / Modified: 17:59:27" itemprop="dateCreated datePublished" datetime="2026-08-17T17:54:35+08:00">2026-08-17</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>有 <span class="math inline">\(n\)</span>
+名玩家参与一个猜测排名游戏。首先，玩家 <span
+class="math inline">\(i\)</span> 获得一个独立同分布于 <span
+class="math inline">\(U(0, 1)\)</span> 的随机数 <span
+class="math inline">\(X_i\)</span>，该随机数不公开。随后进行若干轮：</p>
+<ul>
+<li>玩家 <span class="math inline">\(i\)</span> 依次猜测自己得到的随机数
+<span class="math inline">\(X_i\)</span>
+的大小在所有玩家中的排名，并公开（每轮猜测的排名可以不同）。</li>
+</ul>
+<p>若存在至少两个玩家猜测的排名相同，则进入下一轮，否则结束所有轮次。最后，公开所有
+<span
+class="math inline">\(X_i\)</span>，在最后轮次中所有猜测排名正确的玩家获得奖励。</p>
+<p>在合作博弈假设下，每个玩家都希望所有玩家能够获得奖励。所有玩家在游戏开始前可以商议一个策略。在必胜的前提下，试提出一个策略，最大化每轮立即结束的概率。</p>
+<span id="more"></span>
+<p>扩展：</p>
+<ul>
+<li>推广到任意连续非均匀概率分布，例如 <span
+class="math inline">\(N(0,1)\)</span></li>
+<li>推广到任意离散概率分布（当有复数个玩家获得相同随机数时，他们的排名猜测连续即算猜测正确）</li>
+</ul>
+<h2 id="解答">解答</h2>
+<p>规定“第 <span class="math inline">\(1\)</span>
+名”表示随机数最小者；若排名方向相反，只需把名次编号反过来。</p>
+<p>这个策略整体上可以概括为：等分概率分布区间，每位玩家根据自己的随机数报出自己位于第几个区间，然后递归地等分尚未区分的玩家组。</p>
+<p>具体地，第一轮，把区间 <span class="math inline">\([0,1]\)</span>
+等分成 <span class="math inline">\(n\)</span> 个半开区间：</p>
+<p><span class="math display">\[
+I_k=\left[\frac{k-1}{n},\frac{k}{n}\right),\qquad k=1,\dots,n.
+\]</span></p>
+<p>若玩家 <span class="math inline">\(i\)</span> 的 <span
+class="math inline">\(X_i\in I_k\)</span>，则猜自己是第 <span
+class="math inline">\(k\)</span>
+名。如果所有人的猜测互不相同，那么每个小区间恰好有一名玩家。小区间从左到右排列，因此这些玩家的真实排名正好分别是
+<span
+class="math inline">\(1,\dots,n\)</span>，所以一旦本轮结束，所有人必然都猜对。</p>
+<p>如果第一轮有人猜重，则根据第一轮结果，把玩家分组。记某个小区间中有
+<span class="math inline">\(m\)</span>
+名玩家。由于其他小区间中的人数已经公开，这 <span
+class="math inline">\(m\)</span> 名玩家在总排名中必然占据某个连续名次块
+<span class="math inline">\(s+1,s+2,\dots,s+m\)</span>，其中 <span
+class="math inline">\(s\)</span>
+是所有更靠左区间中的玩家总数。现在把该组所在的区间继续等分成 <span
+class="math inline">\(m\)</span> 个等长子区间 <span
+class="math inline">\(J_1,\dots,J_m\)</span>。若该组某玩家的 <span
+class="math inline">\(X_i\in J_j\)</span>，则下一轮猜 <span
+class="math inline">\(s+j\)</span>。已经成为单人组的玩家，其真实排名已经确定，以后每轮都猜这个确定的排名。</p>
+<p>每轮结束后，同一子区间中的玩家继续构成一个未区分组。落入不同子区间的玩家之间的先后顺序已经确定，重新计算每个组对应的连续名次块，然后递归等分。</p>
+<p>可以发现，如果某个组尚未完全区分，那么至少有两个玩家落入同一子区间并猜同一名次，游戏就不会错误地结束，因此该策略是必胜的。</p>
+<p>设某轮开始时，尚未区分的各组大小为 <span
+class="math inline">\(m_1,m_2,\dots,m_g\)</span>，满足 <span
+class="math inline">\(\sum_{j=1}^g m_j=n\)</span>，其中单人组允许 <span
+class="math inline">\(m_j=1\)</span>。对于一个大小为 <span
+class="math inline">\(m\)</span> 的组，<span
+class="math inline">\(m\)</span> 名玩家独立均匀地落入 <span
+class="math inline">\(m\)</span>
+个等长子区间。该组在本轮被完全区分的概率为 <span
+class="math inline">\(\frac{m!}{m^m}\)</span>，不同组条件独立。因此，在当前公开历史条件下，本轮立即结束的概率是
+<span
+class="math inline">\(\prod_{j=1}^g\frac{m_j!}{m_j^{m_j}}\)</span>。特别地，第一轮只有一个大小为
+<span class="math inline">\(n\)</span> 的组，所以概率为 <span
+class="math inline">\(\frac{n!}{n^n}\)</span>。</p>
+<p>下面证明这个策略可以使上述概率最大化。</p>
+<p>考虑一个当前大小为 <span class="math inline">\(m\)</span>
+的未区分组。条件于已有公开信息，这 <span
+class="math inline">\(m\)</span>
+名玩家的数仍然独立均匀地分布在同一个区间内。固定一种可能的真实次序，例如
+<span
+class="math inline">\(x_{\pi(1)}&lt;x_{\pi(2)}&lt;\cdots&lt;x_{\pi(m)}\)</span>。</p>
+<p>如果本轮以这一真实次序正确结束，那么各玩家公开的猜测已经唯一确定：玩家
+<span class="math inline">\(\pi(j)\)</span> 必须猜该名次块中的第 <span
+class="math inline">\(j\)</span> 个名次。</p>
+<p>即使玩家依次猜测，对于这一固定的公开猜测序列，每名玩家是否作出指定猜测只取决于自己的数以及已经固定的先前公开信息。因此，对应的成功集合是一个笛卡尔积集合</p>
+<p><span class="math display">\[
+A_1\times A_2\times\cdots\times A_m,
+\]</span></p>
+<p>并且由于该策略是必胜的，因此该笛卡尔积必须完全位于相应的有序区域中，于是这些集合必须按数轴先后分离。设每个集合的长度分别为
+<span class="math inline">\(a_1,\dots,a_m\)</span>，则</p>
+<p><span class="math display">\[
+a_1+\cdots+a_m\le 1.
+\]</span></p>
+<p>可知，当前随机数分配取到这个笛卡尔积集合，即使用该策略可以直接结束的概率为
+<span class="math inline">\(a_1a_2\cdots
+a_m\)</span>。由算术—几何平均不等式，它满足</p>
+<p><span class="math display">\[
+a_1a_2\cdots a_m
+\le
+\left(\frac{a_1+\cdots+a_m}{m}\right)^m
+\le \frac1{m^m}.
+\]</span></p>
+<p>所以，对于每一种指定的真实次序，正确结束的概率至多是 <span
+class="math inline">\(1/m^m\)</span>。共有 <span
+class="math inline">\(m!\)</span> 种次序，故一个大小为 <span
+class="math inline">\(m\)</span> 的组在本轮完全解决的概率至多为 <span
+class="math inline">\(\frac{m!}{m^m}\)</span>。多个组必须同时解决，故总概率至多为
+<span
+class="math inline">\(\prod_{j=1}^g\frac{m_j!}{m_j^{m_j}}\)</span>。递归等分策略恰好达到这个上界，因此它在每一个公开历史之后，都最大化了下一轮立即结束的条件概率。</p>
+<h2 id="扩展非均匀分布">扩展：非均匀分布</h2>
+<p>设 <span class="math inline">\(X_i\)</span>
+独立同分布，累积分布函数为 <span class="math inline">\(F(x)=\Pr(X_i\le
+x)\)</span>，并假设 <span class="math inline">\(F\)</span> 连续。令
+<span class="math inline">\(U_i=F(X_i)\)</span>，由概率积分变换，<span
+class="math inline">\(U_i\overset{\mathrm{iid}}{\sim}U(0,1)\)</span>，而且除零概率事件外，<span
+class="math inline">\(X_i&lt;X_j\iff U_i&lt;U_j\)</span>，因此可以直接在
+<span class="math inline">\(U_i\)</span> 上运行均匀分布情形的策略。</p>
+<p>具体地，第一轮，取分位点</p>
+<p><span class="math display">\[
+q_k=F^{-1}\left(\frac{k}{n}\right),
+\qquad k=0,1,\dots,n,
+\]</span></p>
+<p>其中广义逆定义为</p>
+<p><span class="math display">\[
+F^{-1}(u)=\inf\{x:F(x)\ge u\}.
+\]</span></p>
+<p>玩家观察到 <span class="math inline">\(X_i\in(q_{k-1},q_k]\)</span>
+时，猜自己是第 <span class="math inline">\(k\)</span>
+名。每个分位区间的概率都是 <span
+class="math inline">\(1/n\)</span>，所以第一轮结束的概率仍为 <span
+class="math inline">\({\frac{n!}{n^n}}\)</span>。一旦所有猜测不同，每个分位区间恰好有一名玩家，分位区间的顺序与真实数值顺序相同，因此所有猜测都正确。若发生碰撞，后续轮次同理，不再赘述。</p>
+<p>由于变换 <span class="math inline">\(U=F(X)\)</span>
+把问题等价地化为均匀分布问题，原来的最优性证明完全适用。</p>
+<h2 id="扩展离散分布">扩展：离散分布</h2>
+<p>现在设 <span class="math inline">\(X_i\)</span>
+取值于一个有序的可数集合，记 <span
+class="math inline">\(p_x=\Pr(X_i=x)\)</span>，<span
+class="math inline">\(F(x^-)=\Pr(X_i&lt;x)\)</span>，由于 <span
+class="math inline">\(F(X_i)\)</span>
+不再服从均匀分布，需要使用“随机化概率积分变换”。</p>
+<p>让每名玩家额外使用一个相互独立的私人随机数 <span
+class="math inline">\(V_i\sim U(0,1)\)</span>，并令</p>
+<p><span class="math display">\[
+Y_i=F(X_i^-)+p_{x}V_i.
+\]</span></p>
+<p>那么可以证明 <span
+class="math inline">\({Y_i\overset{\mathrm{iid}}{\sim}U(0,1)}\)</span>。且：</p>
+<ul>
+<li>若 <span class="math inline">\(X_i&lt;X_j\)</span>，则必有 <span
+class="math inline">\(Y_i&lt;Y_j\)</span>；</li>
+<li>若 <span class="math inline">\(X_i=X_j=x\)</span>，则 <span
+class="math inline">\(Y_i,Y_j\)</span> 都位于原子 <span
+class="math inline">\(x\)</span> 对应的区间 <span
+class="math inline">\(\bigl(F(x^-),F(x)\bigr)\)</span>，它们的先后顺序只是在相同数值内部作随机排列。因此，按
+<span class="math inline">\(Y_i\)</span> 的排名猜测即可。</li>
+</ul>
+<p>假设恰有 <span class="math inline">\(m\)</span> 名玩家获得相同值
+<span class="math inline">\(x\)</span>，且有 <span
+class="math inline">\(s\)</span> 名玩家的值严格小于 <span
+class="math inline">\(x\)</span>。那么这 <span
+class="math inline">\(m\)</span> 名玩家对应的 <span
+class="math inline">\(Y_i\)</span> 全部满足 <span
+class="math inline">\(F(x^-)&lt;Y_i&lt;F(x)\)</span>，而所有更小的 <span
+class="math inline">\(X\)</span> 对应更小的 <span
+class="math inline">\(Y\)</span>，所有更大的 <span
+class="math inline">\(X\)</span> 对应更大的 <span
+class="math inline">\(Y\)</span>。所以这 <span
+class="math inline">\(m\)</span> 名并列玩家按 <span
+class="math inline">\(Y\)</span> 排序后，获得的名次恰好是 <span
+class="math inline">\(s+1,s+2,\dots,s+m\)</span>，即一组连续名次，正好满足题目对并列者的判定规则。于是，可以在
+<span class="math inline">\(Y_i\)</span>
+上完整地运行原来的递归等分策略。</p>
+<p>然而，对于离散分布而言，这一策略不一定是最优策略，某些分布通过精心构造可以获得更优的结果，即单轮结束概率大于
+<span
+class="math inline">\({\frac{n!}{n^n}}\)</span>。例如，对于退化分布
+<span class="math inline">\(\Pr(X_i=c) = 1\)</span>，只需规定第 <span
+class="math inline">\(i\)</span> 个玩家猜测第 <span
+class="math inline">\(i\)</span>
+名即可，从而第一轮必然结束。而使用上述随机化概率积分变换则仍可能发生“碰撞”，进而需要更多轮次才能结束。</p>
+<h2 id="轮数期望的渐近分析">轮数期望的渐近分析</h2>
+<p>使用以上递归策略，记总结束轮数为 <span
+class="math inline">\(T_n\)</span>，那么可以证明</p>
+<p><span class="math display">\[
+E(T_n) = \log_2 n + O(1).
+\]</span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Lumière
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/" title="猜测排名游戏">https://zrephel.fun/2026/08/17/猜测排名游戏/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%A6%82%E7%8E%87%E8%AE%BA/" rel="tag"># 概率论</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/08/05/%E7%94%B5%E7%83%AD%E6%B0%B4%E5%99%A8%E7%9A%84%E6%95%B0%E5%AD%A6%E7%89%A9%E7%90%86%E5%BB%BA%E6%A8%A1/" rel="prev" title="电热水器的数学物理建模">
+                  <i class="fa fa-angle-left"></i> 电热水器的数学物理建模
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Lumière</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2026/08/17/%E7%8C%9C%E6%B5%8B%E6%8E%92%E5%90%8D%E6%B8%B8%E6%88%8F/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
