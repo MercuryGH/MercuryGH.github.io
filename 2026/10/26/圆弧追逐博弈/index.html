@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.ico">
+  <link rel="mask-icon" href="/img/favicon-32.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"zrephel.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"style":null,"show_result":false},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="https:&#x2F;&#x2F;stason.org&#x2F;TULARC&#x2F;self-growth&#x2F;puzzles&#x2F;181-geometry-duck-and-fox-p.html https:&#x2F;&#x2F;www.maplesoft.com&#x2F;support&#x2F;help&#x2F;view.aspx?path&#x3D;MathApps&#x2F;TheDuckAndFoxPuzzle  鸭子在半径为 \(r&#x3D;1\) 的圆形湖的中心，可以在湖上自由移动。狐狸在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="圆弧追逐博弈">
+<meta property="og:url" content="https://zrephel.fun/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/index.html">
+<meta property="og:site_name" content="Lumière&#39;s Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;stason.org&#x2F;TULARC&#x2F;self-growth&#x2F;puzzles&#x2F;181-geometry-duck-and-fox-p.html https:&#x2F;&#x2F;www.maplesoft.com&#x2F;support&#x2F;help&#x2F;view.aspx?path&#x3D;MathApps&#x2F;TheDuckAndFoxPuzzle  鸭子在半径为 \(r&#x3D;1\) 的圆形湖的中心，可以在湖上自由移动。狐狸在">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-26T09:41:59.000Z">
+<meta property="article:modified_time" content="2026-10-26T09:52:50.726Z">
+<meta property="article:author" content="Lumière">
+<meta property="article:tag" content="博弈论">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://zrephel.fun/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://zrephel.fun/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/","path":"2026/10/26/圆弧追逐博弈/","title":"圆弧追逐博弈"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>圆弧追逐博弈 | Lumière's Blog</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.zrephel.fun/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Lumière's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Down the rabbit hole</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>Links</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">1.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#section"><span class="nav-number">1.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#section-1"><span class="nav-number">1.2.</span> <span class="nav-text">2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%85%E5%88%86%E6%80%A7"><span class="nav-number">1.2.1.</span> <span class="nav-text">充分性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%85%E8%A6%81%E6%80%A7"><span class="nav-number">1.2.2.</span> <span class="nav-text">必要性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#section-2"><span class="nav-number">1.3.</span> <span class="nav-text">3</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lumière</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">56</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://zrephel.fun/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lumière">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lumière's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="圆弧追逐博弈 | Lumière's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          圆弧追逐博弈
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-10-26 17:41:59 / Modified: 17:52:50" itemprop="dateCreated datePublished" datetime="2026-10-26T17:41:59+08:00">2026-10-26</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline: </span>
+  
+    <a title="waline" href="/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>https://stason.org/TULARC/self-growth/puzzles/181-geometry-duck-and-fox-p.html
+https://www.maplesoft.com/support/help/view.aspx?path=MathApps/TheDuckAndFoxPuzzle</p>
+</blockquote>
+<p>鸭子在半径为 <span class="math inline">\(r=1\)</span>
+的圆形湖的中心，可以在湖上自由移动。狐狸在湖岸，只能沿湖岸奔跑。鸭子、狐狸的最大速率分别为
+<span class="math inline">\(v=1\)</span> 和 <span
+class="math inline">\(kv \ (k &gt;
+1)\)</span>。鸭子到达岸边后就能立即飞走，在水中不能起飞。狐狸的目标是在鸭子到达岸边时抓到之，鸭子的目标是在到达岸边时避免被抓到。记某时刻鸭子与圆心的距离为
+<span
+class="math inline">\(\rho\)</span>，且鸭子所在半径与狐狸所在半径之间的较小夹角为
+<span class="math inline">\(\theta\)</span>。</p>
+<ol type="1">
+<li>求证：鸭子有策略到达状态 <span class="math inline">\((\rho, \theta)
+= (\frac{1}{k}, \pi)\)</span>。</li>
+<li>求证：鸭子有策略在到达岸边时避免被抓到，当且仅当 <span
+class="math inline">\(\sqrt{k^2 - 1} - \arccos (\frac{1}{k}) &lt;
+\pi\)</span>。</li>
+<li>若 <span class="math inline">\(k\)</span>
+满足狐狸恰好能够抓到鸭子，求直到抓到鸭子累积经过的时间。</li>
+</ol>
+<span id="more"></span>
+<p>提示：当鸭子到达状态 <span class="math inline">\((\frac{1}{k},
+\pi)\)</span>
+后，需要使用一个动态策略躲避狐狸的追捕。具体地，鸭子的速度为 <span
+class="math inline">\(\boldsymbol v_D = \sqrt{1 - \frac{1}{k^2 \rho^2}}
+\boldsymbol e_{\rho} + s \frac{1}{k \rho} \boldsymbol
+e_{\theta}\)</span>，其中 <span class="math inline">\(\boldsymbol
+e_{\rho}\)</span> 为径向向外的单位向量，<span
+class="math inline">\(\boldsymbol e_{\theta}\)</span>
+为切向单位向量，<span class="math inline">\(s = \pm 1\)</span>
+由狐狸和鸭子相对于圆心的角位置决定。</p>
+<p>PS：一种经典的答案是，在鸭子到达状态 <span
+class="math inline">\((\frac{1}{k}, \pi)\)</span>
+后，直接朝着对向方向移动，经过 <span
+class="math inline">\(1-\frac{1}{k}\)</span>
+距离后上岸。这要求狐狸的速度小于 <span class="math inline">\(\pi + 1
+\approx
+4.14\)</span>。实际上，使用如上的最优策略可以只要求狐狸的速度小于 <span
+class="math inline">\(k^* \approx 4.60\)</span>，其中 <span
+class="math inline">\(k^*\)</span> 是 <span
+class="math inline">\(\sqrt{k^2 - 1} - \arccos (\frac{1}{k}) =
+\pi\)</span> 的唯一正解。</p>
+<h2 id="解答">解答</h2>
+<p>设鸭子和狐狸相对于圆心的极角分别为 <span
+class="math inline">\(\alpha,\beta\)</span>，并令</p>
+<p><span class="math display">\[
+\theta=\min_{m\in\mathbb Z}|\alpha-\beta+2m\pi|\in[0,\pi].
+\]</span></p>
+<p>狐狸在单位圆周上，所以其角速度满足 <span
+class="math inline">\(|\dot\beta|\le k\)</span>。鸭子的速度分解为 <span
+class="math inline">\(\boldsymbol v_D=u\boldsymbol e_\rho+q\boldsymbol
+e_\theta, u^2+q^2\le1\)</span>，因而 <span
+class="math inline">\(\dot\rho=u, \dot\alpha=\frac q\rho\)</span>。</p>
+<h3 id="section">1</h3>
+<p>先任取 <span
+class="math inline">\(0&lt;a&lt;\frac1k\)</span>。鸭子先从圆心游到半径为
+<span class="math inline">\(a\)</span> 的圆周。然后保持 <span
+class="math inline">\(\rho=a\)</span>，以最大速度沿切向游动。鸭子的最大角速度为
+<span
+class="math inline">\(\frac1a&gt;k\)</span>，严格大于狐狸的最大角速度。因此，无论狐狸如何运动，鸭子都可以沿使
+<span class="math inline">\(\theta\)</span>
+增大的方向游动，并在有限时间内使 <span
+class="math inline">\(\theta=\pi\)</span>。</p>
+<p>现在鸭子和狐狸关于圆心恰好相对。接下来设狐狸的瞬时角速度为 <span
+class="math inline">\(\omega_F=\dot\beta\)</span>。鸭子采用</p>
+<p><span class="math display">\[
+\dot\alpha=\omega_F,
+\qquad
+\dot\rho=\sqrt{1-\rho^2\omega_F^2}.
+\]</span></p>
+<p>此时鸭子的切向速度为 <span
+class="math inline">\(\rho\omega_F\)</span>，总速度满足</p>
+<p><span class="math display">\[
+\dot\rho^2+\rho^2\dot\alpha^2
+=1.
+\]</span></p>
+<p>又因为在 <span class="math inline">\(\rho&lt;1/k\)</span> 时，<span
+class="math inline">\(\rho|\omega_F|\le
+k\rho&lt;1\)</span>，所以该策略合法。由于 <span
+class="math inline">\(\dot\alpha=\dot\beta\)</span>，鸭子和狐狸始终保持相对，即
+<span class="math inline">\(\theta=\pi\)</span>。并且</p>
+<p><span class="math display">\[
+\dot\rho
+=\sqrt{1-\rho^2\omega_F^2}
+\ge \sqrt{1-k^2\rho^2}.
+\]</span></p>
+<p>从 <span class="math inline">\(a\)</span> 到 <span
+class="math inline">\(1/k\)</span> 所需时间至多为</p>
+<p><span class="math display">\[
+\int_a^{1/k}\frac{\mathrm d \rho}{\sqrt{1-k^2\rho^2}}
+=
+\frac1k\left(\frac\pi2-\arcsin(ka)\right)&lt;\infty.
+\]</span></p>
+<p>故鸭子能在有限时间内到达 <span
+class="math inline">\({\left(\rho,\theta\right)=\left(\frac1k,\pi\right)}\)</span>。</p>
+<h3 id="section-1">2</h3>
+<h4 id="充分性">充分性</h4>
+<p>从状态 <span class="math inline">\(\left(\frac1k,\pi\right)\)</span>
+出发，鸭子采用题目所给策略：</p>
+<p><span class="math display">\[
+\boldsymbol v_D
+=
+\sqrt{1-\frac1{k^2\rho^2}}\boldsymbol e_\rho
++
+s\frac1{k\rho}\boldsymbol e_\theta.
+\]</span></p>
+<p>其中 <span class="math inline">\(s=\pm1\)</span>
+选成沿当前较短圆弧“远离狐狸”的方向。若恰好 <span
+class="math inline">\(\theta=\pi\)</span>，可任选一个方向；严格地说，可用任意小幅度的快速切换实现边界上的反馈。</p>
+<p>该策略下</p>
+<p><span class="math display">\[
+\dot\rho=\sqrt{1-\frac1{k^2\rho^2}},
+\]</span></p>
+<p>而鸭子的角速度大小为</p>
+<p><span class="math display">\[
+|\dot\alpha|
+=
+\frac{1}{k\rho^2}.
+\]</span></p>
+<p>狐狸若想最快缩小夹角，就应以角速度 <span
+class="math inline">\(k\)</span> 沿同一方向追赶。因此鸭子至少能保证</p>
+<p><span class="math display">\[
+\dot\theta
+\ge
+-\left(k-\frac1{k\rho^2}\right).
+\]</span></p>
+<p>于是从 <span class="math inline">\(\rho=1/k\)</span> 游到 <span
+class="math inline">\(\rho=1\)</span> 的过程中，夹角的最大损失不超过</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Delta
+&amp;=
+\int_{1/k}^{1}
+\frac{k-\frac1{k\rho^2}}
+{\sqrt{1-\frac1{k^2\rho^2}}}\mathrm d \rho.
+\end{aligned}
+\]</span></p>
+<p>令 <span class="math inline">\(x=k\rho\)</span>，求解定积分得</p>
+<p><span class="math display">\[
+\Delta
+=
+\int_1^k\sqrt{1-\frac1{x^2}}\mathrm d x
+=
+\sqrt{k^2-1}-\arccos\frac1k.
+\]</span></p>
+<p>到达岸边时，鸭子与狐狸的夹角满足</p>
+<p><span class="math display">\[
+\theta(1)\ge\pi-\Delta.
+\]</span></p>
+<p>因此，只要 <span
+class="math inline">\(\sqrt{k^2-1}-\arccos\frac1k&lt;\pi\)</span>，就有
+<span
+class="math inline">\(\theta(1)&gt;0\)</span>，狐狸与鸭子不在同一点，鸭子能够立即飞走。所以该不等式是充分条件。</p>
+<h4 id="必要性">必要性</h4>
+<p>现在证明上述策略实际上已经是最优的。定义</p>
+<p><span class="math display">\[
+G(\rho)
+=
+\int_{1/k}^{\rho}\sqrt{k^2-\frac1{x^2}}\mathrm d x.
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+G&#39;(\rho)=\sqrt{k^2-\frac1{\rho^2}},
+\]</span></p>
+<p>且</p>
+<p><span class="math display">\[
+G(1)
+=
+\sqrt{k^2-1}-\arccos\frac1k.
+\]</span></p>
+<p>考虑鸭子位于 <span class="math inline">\(\rho\ge1/k\)</span>
+的任意一段运动。设其径向速度为 <span
+class="math inline">\(u\)</span>，切向速度为 <span
+class="math inline">\(q\)</span>，满足</p>
+<p><span class="math display">\[
+u^2+q^2\le1.
+\]</span></p>
+<p>当 <span class="math inline">\(\theta&gt;0\)</span>
+时，狐狸始终沿较短圆弧全速追赶。即使鸭子将切向速度全部用于远离狐狸，也有</p>
+<p><span class="math display">\[
+\dot\theta\le\frac{|q|}{\rho}-k.
+\]</span></p>
+<p>于是</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac d{dt}\bigl(\theta+G(\rho)\bigr)
+&amp;=\dot\theta+G&#39;(\rho)\dot\rho\\
+&amp;\le
+\frac{|q|}{\rho}-k
++
+u\sqrt{k^2-\frac1{\rho^2}}.
+\end{aligned}
+\]</span></p>
+<p>由柯西不等式，</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{|q|}{\rho}
++
+u\sqrt{k^2-\frac1{\rho^2}}
+&amp;\le
+\sqrt{q^2+u^2}
+\sqrt{\frac1{\rho^2}+k^2-\frac1{\rho^2}}\\
+&amp;\le k.
+\end{aligned}
+\]</span></p>
+<p>所以</p>
+<p><span class="math display">\[
+{\frac d{dt}\bigl(\theta+G(\rho)\bigr)\le0}.
+\]</span></p>
+<p>也就是说，量 <span class="math inline">\(\theta+G(\rho)\)</span>
+在狐狸的最优追赶下不会增大。任何从圆心到达岸边的连续路径都必须经过 <span
+class="math inline">\(\rho=1/k\)</span>。取鸭子到达岸边之前最后一次经过
+<span class="math inline">\(\rho=1/k\)</span> 的时刻；此后始终有 <span
+class="math inline">\(\rho\ge1/k\)</span>。在该时刻显然有 <span
+class="math inline">\(\theta\le\pi\)</span> 且 <span
+class="math inline">\(G\left(\frac1k\right)=0\)</span>。因此到达岸边时</p>
+<p><span class="math display">\[
+\theta(1)+G(1)\le\pi,
+\]</span></p>
+<p>即</p>
+<p><span class="math display">\[
+\theta(1)
+\le
+\pi-
+\left(
+\sqrt{k^2-1}-\arccos\frac1k
+\right).
+\]</span></p>
+<p>若</p>
+<p><span class="math display">\[
+\sqrt{k^2-1}-\arccos\frac1k\ge\pi,
+\]</span></p>
+<p>则 <span class="math inline">\(\theta\)</span> 必须在到岸时或此前降到
+<span class="math inline">\(0\)</span>。一旦在 <span
+class="math inline">\(\rho\ge1/k\)</span> 时有 <span
+class="math inline">\(\theta=0\)</span>，由于鸭子的角速度至多为 <span
+class="math inline">\(\frac1\rho\le
+k\)</span>，狐狸可以始终与鸭子保持同一极角，直到鸭子到岸。因此鸭子必被抓到。等号情形下，狐狸恰好能赶到岸边点，鸭子同样无法逃脱。</p>
+<h3 id="section-2">3</h3>
+<p>第一阶段是从中心到达 <span
+class="math inline">\((1/k,\pi)\)</span>，鸭子先在距中心任意小的半径上取得与狐狸对径的位置；这一准备时间可以任意接近
+<span
+class="math inline">\(0\)</span>。如果狐狸故意不移动，鸭子可以直接沿半径方向远离狐狸。之后鸭子保持与狐狸对径。若狐狸以角速度
+<span class="math inline">\(k\)</span> 奔跑，鸭子的切向速度必须为 <span
+class="math inline">\(k\rho\)</span>，所以最大径向速度为</p>
+<p><span class="math display">\[
+\dot\rho=\sqrt{1-k^2\rho^2}.
+\]</span></p>
+<p>因此从 <span class="math inline">\(\rho=0\)</span> 到 <span
+class="math inline">\(\rho=1/k\)</span> 所需的最坏时间为</p>
+<p><span class="math display">\[
+T_1
+=
+\int_0^{1/k}\frac{\mathrm d \rho}{\sqrt{1-k^2\rho^2}}
+=
+\frac{\pi}{2k}.
+\]</span></p>
+<p>该轨迹是一个半径为 <span class="math inline">\(\frac{1}{2k}\)</span>
+的半圆。</p>
+<p>第二阶段是 从 <span class="math inline">\(\rho=1/k\)</span>
+沿动态策略到岸边。同样地，鸭子先在距起始点任意小的半径上与狐狸取得一个非
+<span class="math inline">\(\pi\)</span>
+的角度差；这一准备时间可以任意接近 <span
+class="math inline">\(0\)</span>。如果狐狸故意不移动，鸭子可以直接沿半径方向远离狐狸，径向速度为</p>
+<p><span class="math display">\[
+\dot\rho=\sqrt{1-\frac{1}{k^2\rho^2}}.
+\]</span></p>
+<p>故所需时间为</p>
+<p><span class="math display">\[
+\begin{aligned}
+T_2
+&amp;=
+\int_{1/k}^{1}
+\frac{\mathrm d \rho}{\sqrt{1-\frac{1}{k^2\rho^2}}} \\
+&amp;=
+\int_{1/k}^{1}
+\frac{k\rho}{\sqrt{k^2\rho^2-1}}\mathrm d \rho\\
+&amp;=
+\frac{\sqrt{k^2-1}}{k}
+=
+\sqrt{1-\frac1{k^2}}.
+\end{aligned}
+\]</span></p>
+<p>该轨迹沿着圆 <span class="math inline">\(\rho = 1/k\)</span>
+的一条切线。可见 <span class="math inline">\(T_2\)</span>
+就是切线段的长度，因为鸭子始终以单位速度游动。所以该最优保证逃生策略的最坏逃脱时间为</p>
+<p><span class="math display">\[
+{
+T_{\mathrm{esc}}
+=
+\frac{\pi}{2k}
++
+\sqrt{1-\frac1{k^2}}
+=
+\frac{\frac{\pi}{2}+\sqrt{k^2-1}}{k}
+}.
+\]</span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Lumière
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://zrephel.fun/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/" title="圆弧追逐博弈">https://zrephel.fun/2026/10/26/圆弧追逐博弈/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%8D%9A%E5%BC%88%E8%AE%BA/" rel="tag"># 博弈论</a>
+          </div>
+
+        
+  <div class="social-like a2a_kit a2a_kit_size_32 a2a_default_style">
+    <a class="a2a_dd" target="_blank" rel="noopener" href="https://www.addtoany.com/share"></a>
+      <a class="a2a_button_facebook"></a>
+      <a class="a2a_button_twitter"></a>
+      <a class="a2a_button_x"></a>
+      <a class="a2a_button_sina_weibo"></a>
+      <a class="a2a_button_qzone"></a>
+      <a class="a2a_button_wechat"></a>
+  </div>
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/10/10/%E6%B5%81%E8%A1%80-%E5%87%80%E5%8C%96%E5%8D%9A%E5%BC%88/" rel="prev" title="流血-净化博弈">
+                  <i class="fa fa-angle-left"></i> 流血-净化博弈
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">from Lumière</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  <script src="/js/third-party/addtoany.js"></script>
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.zrephel.fun/","cssUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css","commentCount":false,"pageview":false,"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.umd.min.js","locale":{"placeholder":"Say something..."},"meta":["nick","mail","link"],"requiredMeta":["nick"],"wordLimit":0,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2026/10/26/%E5%9C%86%E5%BC%A7%E8%BF%BD%E9%80%90%E5%8D%9A%E5%BC%88/"}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client@3.1.3/dist/waline.min.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+</body>
+</html>
